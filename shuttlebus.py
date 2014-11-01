@@ -25,41 +25,9 @@ def RegisterForBus():
 	app.logger.debug('A value for debugging')	
 	#resp = make_response(render_template('shuttlebus.html'))
 	#resp.headers['X-Something'] = 'A value'
-	testMongo()
+	
 	return "<div id='log'>Hello</div>"
 
-def testMongo():
-	SEED_DATA = [
-    {
-        'decade': '1970s',
-        'artist': 'Debby Boone',
-        'song': 'You Light Up My Life',
-        'weeksAtOne': 10
-    },
-    {
-        'decade': '1980s',
-        'artist': 'Olivia Newton-John',
-        'song': 'Physical',
-        'weeksAtOne': 10
-    },
-    {
-        'decade': '1990s',
-        'artist': 'Mariah Carey',
-        'song': 'One Sweet Day',
-        'weeksAtOne': 16
-    }
-	]
-
-	MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
-	client = pymongo.MongoClient(MONGODB_URI)
-	db = client.get_default_database()
-	songs = db['my_collection']
-	songs.insert(SEED_DATA)
-	query = {'song': 'One Sweet Day'}
-	songs.update(query, {'$set': {'artist': 'Mariah Carey ft. Boyz II Men'}})
-	cursor = songs.find({'weeksAtOne': {'$gte': 10}}).sort('decade', 1)
-
-	client.close()
 
 
 '''
