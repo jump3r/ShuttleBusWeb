@@ -1,0 +1,138 @@
+
+	<head>
+		<!-- Ajax  -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<!-- End Ajax  -->
+
+		<!-- Bootstrap  -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<!-- End Bootstrap  -->
+
+		<!-- Google Map  -->
+		<!--script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBeId-aJWa_EA6FwqCbDJOjjLL6Qe1gr9E&sensor=false"></script-->
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=weather"></script>
+		<!-- End Google Map  -->
+
+		<script>						
+			UFTLatLng = [43.662892,-79.395656];
+			UTMLatLng = [43.548043,-79.66095];
+
+			BUSES = {}; //BUSID: MAKER
+			
+			var mapref = null;
+
+			function addUni(latlng, title, map){
+				var marker = new google.maps.Marker(
+									{
+						  				position: new google.maps.LatLng(latlng[0], latlng[1]),
+						  				map: map,
+						  				title: title,						  				
+						  				icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
+						  			}
+	  						);
+
+				var infowindow = new google.maps.InfoWindow({
+				  	content: "",	  				  
+				  });
+
+				google.maps.event.addListener(marker, 'click', function() {
+    				infowindow.open(map,marker);
+  				});
+			}
+
+			function addBus(latlng, snapshot, title, map){
+
+				var marker = new google.maps.Marker(
+									{
+						  				position: new google.maps.LatLng(latlng[0], latlng[1]),
+						  				map: map,
+						  				title: title,
+						  				//animation: google.maps.Animation.BOUNCE // DROP
+						  				//icon: {url:'yo.jpg', size: new google.maps.Size(5, 5)},
+						  				//icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
+						  			}
+	  						);
+				
+				var contentString = "<img src=" + snapshot + " width='100' height='100'/>";
+
+				var infowindow = new google.maps.InfoWindow({
+				  	content: contentString,	  				  
+				  });
+
+				google.maps.event.addListener(marker, 'click', function() {
+    				infowindow.open(map,marker);
+  				});
+
+			}
+
+			function initWeather(map){
+				var weatherLayer = new google.maps.weather.WeatherLayer({
+							    temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS
+							  });
+				weatherLayer.setMap(map);
+
+			  	var cloudLayer = new google.maps.weather.CloudLayer();
+			  	cloudLayer.setMap(map);
+			}
+			
+			function initialize()
+			{
+				
+				var mapOptions = {
+					center: new google.maps.LatLng(43.6170021,-79.506403),				  
+				  	zoom: 11,
+				  	mapTypeId:google.maps.MapTypeId.ROADMAP,
+				  	disableDefaultUI: true,	
+				  	
+				  };
+
+
+				var map = new google.maps.Map(document.getElementById("googleMap"),mapOptions);
+
+				addBus( [43.6170021,-79.506403], "yo.jpg", "NONE", map );
+				addUni( UTMLatLng, "UTM", map ); //UTM
+				addUni( UFTLatLng, "UFT", map ); //UFT
+
+				initWeather(map);
+				//mapref = map;
+			}
+			
+			google.maps.event.addDomListener(window, 'load', initialize);
+
+		</script>
+
+		<script>
+
+			function ajaxTest(){
+
+				var request = $.ajax({
+									  url: "usercount",
+									  type: "POST",
+									  data: { 'id' : '12345' },
+									  dataType: "html"
+									});
+									 
+				request.done(function( msg ) {
+				  //$( "#log" ).html( msg );
+				  console.log( msg );
+				});
+				 
+				request.fail(function( jqXHR, textStatus ) {
+				  alert( "Request failed: " + textStatus );
+					});
+
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="content-main">
+			<div id="googleMap" class="col-sm-12 col-md-12 col-lg-10" style="width:1000px;height:800px;"></div>
+			<div class="col-sm-12 col-md-12 col-lg-2">
+				<button onclick="ajaxTest()" type="button" class="btn btn-success">Success</button>
+			</div>
+		</div>
+		
+	</body>
