@@ -21,7 +21,9 @@
 			var mapref = null;
 			var glob = null;
 
-			function addUni(latlng, title, map){
+			var bus_maker_map = {};
+
+			function addStopMarker(latlng, title, map){
 				var marker = new google.maps.Marker(
 									{
 						  				position: new google.maps.LatLng(latlng[0], latlng[1]),
@@ -40,11 +42,11 @@
   				});
 			}
 
-			function addBus(latlng, snapshot, title, map){
+			function addBusMarker(bus, snapshot, title, map){
 
 				var marker = new google.maps.Marker(
 									{
-						  				position: new google.maps.LatLng(latlng[0], latlng[1]),
+						  				position: new google.maps.LatLng(bus['lonlat'][0], bus['lonlat'][1]),
 						  				map: map,
 						  				title: title,
 						  				//animation: google.maps.Animation.BOUNCE // DROP
@@ -52,7 +54,7 @@
 						  				//icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
 						  			}
 	  						);
-				
+				bus_maker_map['busid'] = marker;
 				var contentString = "<img src=" + snapshot + " width='100' height='100'/>";
 
 				var infowindow = new google.maps.InfoWindow({
@@ -241,6 +243,20 @@
 				var trafficLayer = new google.maps.TrafficLayer();
   				trafficLayer.setMap(map);				
 			}
+
+			function addBusPanel(bus, map){
+				html_el = '<div onclick=""><div class="panel panel-default"> \
+				  <div class="panel-heading">'
+				  + 'Bus id: ' +  bus['bus_id'] + '</div> \
+				  <div class="panel-body"> \
+			    ' + bus['bus_id'] + ' ' + bus['lonlat']+
+				'</div> \
+				</div></div> ';
+
+				$("#buses-side-menu").append(html_el);
+				//infowindow.open(map,bus_maker_map[bus["bus_id"]]);
+
+			}
 			
 			function initBuses(map){
 
@@ -252,7 +268,8 @@
 				  buses_json = JSON.parse(msg);
 				  for(bus_index in buses_json){
 				  	bus = buses_json[bus_index];
-				  	addBus( bus['lonlat'], "yo.jpg", "NONE", map );
+				  	addBusMarker(bus, "yo.jpg", "NONE", map );
+				  	addBusPanel(bus, map);
 				  }
 				  console.log( msg );
 				});
@@ -262,7 +279,7 @@
 					});
 			}
 
-			function initCampuses(map){
+			function initStops(map){
 
 				var request = $.ajax({
 									  url: "StopsGeo",
@@ -272,7 +289,7 @@
 				  stops_json = JSON.parse(msg);
 				  for(stop_index in stops_json){
 				  	stop = stops_json[stop_index];
-				  	addUni( stop['lonlat'], stop['name'], map );				  	
+				  	addStopMarker( stop['lonlat'], stop['name'], map );				  	
 				  }
 				  console.log( msg );
 				});
@@ -322,7 +339,7 @@
 							
 				
 				initBuses(map);
-				initCampuses(map);
+				initStops(map);
 
 				initWeather(map);				
 				//mapref = map;
@@ -361,8 +378,8 @@
 
 			<div id="map-canvas" class="col-sm-12 col-md-12 col-lg-10" style="width:1000px;height:800px;"></div>
 
-			<div class="col-sm-12 col-md-12 col-lg-2">
-				<button onclick="ajaxTest()" type="button" class="btn btn-success">Success</button>
+			<div id='buses-side-menu' class="col-sm-12 col-md-12 col-lg-2">
+				
 			</div>
 
 		</div>
