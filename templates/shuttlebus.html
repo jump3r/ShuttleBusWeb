@@ -15,13 +15,15 @@
 		<!--script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBeId-aJWa_EA6FwqCbDJOjjLL6Qe1gr9E&sensor=false"></script-->
 		<script src="https://maps.googleapis.com/maps/api/js?libraries=weather&sensor=true"></script>
 		<!-- End Google Map  -->
-
+		
 		<script>						
 			
 			var mapref = null;
 			var glob = null;
 
 			var bus_maker_map = {};
+			var directionsService = null;// = new google.maps.DirectionsService();
+			var directionsDisplay = null;// = new google.maps.DirectionsRenderer();
 
 			function addStopMarker(latlng, title, map){
 				var marker = new google.maps.Marker(
@@ -39,6 +41,7 @@
 
 				google.maps.event.addListener(marker, 'click', function() {
     				infowindow.open(map,marker);
+    				//draw direction
   				});
 			}
 
@@ -52,10 +55,13 @@
 						  				//animation: google.maps.Animation.BOUNCE // DROP
 						  				//icon: {url:'yo.jpg', size: new google.maps.Size(5, 5)},
 						  				//icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
+						  				
 						  			}
 	  						);
 				bus_maker_map['busid'] = marker;
-				var contentString = "<img src=" + snapshot + " width='100' height='100'/>";
+
+				var contentString = "<div><img src="+snapshot+" width='100' height='100'/></div>";
+
 
 				var infowindow = new google.maps.InfoWindow({
 				  	content: contentString,	  				  
@@ -63,8 +69,44 @@
 
 				google.maps.event.addListener(marker, 'click', function() {
     				infowindow.open(map,marker);
+    				
+    				drawRoute(bus['lonlat'] , [43.6170021,-79.506403])
   				});
 
+			}
+
+			function drawRoute(start , end){
+				start = new google.maps.LatLng(start[0],start[1])
+				end = new google.maps.LatLng(end[0],end[1])
+				var request = {
+				    origin:start,
+				    destination:end,
+				    travelMode: google.maps.TravelMode.DRIVING
+				    
+				  };
+				  directionsService.route(request, function(result, status) {
+				    if (status == google.maps.DirectionsStatus.OK) {
+				    	console.log(result);
+				      directionsDisplay.setDirections(result);
+				    }
+			  	});
+
+				/*
+				{
+				  origin: LatLng | String,
+				  destination: LatLng | String,
+				  travelMode: TravelMode,
+				  transitOptions: TransitOptions,
+				  unitSystem: UnitSystem,
+				  durationInTraffic: Boolean,
+				  waypoints[]: DirectionsWaypoint,
+				  optimizeWaypoints: Boolean,
+				  provideRouteAlternatives: Boolean,
+				  avoidHighways: Boolean,
+				  avoidTolls: Boolean
+				  region: String
+				}
+				*/
 			}
 
 			function initWeather(map){
@@ -245,17 +287,13 @@
 			}
 
 			function addBusPanel(bus, map){
-				html_el = '<div onclick=""><div class="panel panel-success"> \
-				  <div class="panel-heading">'
-				  + 'Bus id: ' +  bus['bus_id'] + '</div> \
-				  <div class="panel-body"> \
-			    ' + bus['bus_id'] + ' ' + bus['lonlat']+
-				'</div> \
-				</div></div> ';
+				html_el = '<div style="width:100%" onclick=""><div class="panel panel-success"><div class="panel-heading">';
+				html_el +='Bus id: ' +  bus['bus_id'] ;
+				html_el +='</div> <div class="panel-body">' ;
+				html_el += bus['bus_id'] + ' ' + bus['lonlat']+ '</div></div></div> ';
 
 				$("#buses-side-menu").append(html_el);
 				//infowindow.open(map,bus_maker_map[bus["bus_id"]]);
-
 			}
 			
 			function initBuses(map){
@@ -268,7 +306,7 @@
 				  buses_json = JSON.parse(msg);
 				  for(bus_index in buses_json){
 				  	bus = buses_json[bus_index];
-				  	addBusMarker(bus, "yo.jpg", "NONE", map );
+				  	addBusMarker(bus, "no_image.gif", "NONE", map );
 				  	addBusPanel(bus, map);
 				  }
 				  console.log( msg );
@@ -336,7 +374,17 @@
 				var map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
 
 				map.setOptions({style: mapStyleBuilder()})
-							
+
+				directionsService = new google.maps.DirectionsService();
+
+				directionRendererOptions = {
+					preserveViewport: true,
+					suppressMarkers: true,
+					suppressInfoWindows: true,
+				}
+				directionsDisplay = new google.maps.DirectionsRenderer(directionRendererOptions);
+				
+				directionsDisplay.setMap(map);		
 				
 				initBuses(map);
 				initStops(map);
@@ -376,10 +424,15 @@
 	<body>
 		<div class="content-main">
 
-			<div id="map-canvas" class="col-sm-12 col-md-12 col-lg-10" style="width:1000px;height:800px;"></div>
+			<div id="map-holder" class="col-sm-12 col-md-10 col-lg-10" 
+								style="padding-left: 1px;padding-right:1">
 
-			<div id='buses-side-menu' class="col-sm-12 col-md-12 col-lg-2">
-				
+				<div id="map-canvas" class="col-sm-12 col-md-12 col-lg-12"
+									 style="height:700px;"></div>
+			</div>
+
+			<div id='buses-side-menu' class="col-sm-12 col-md-2 col-lg-2"
+						style="padding-left:0; padding-right:1; height:100%;">				
 			</div>
 
 		</div>

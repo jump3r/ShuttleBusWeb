@@ -59,20 +59,26 @@ def addStatus():
 	    {
 	        'bus_id': 1,	 
 	        'last_hb_time': datetime.datetime.utcnow(),
-	        'prev_loc': "",
+	        'route': ['UTM','UFT'],
+	        'last_stop': 'UTM'
 	        'lonlat': [43.662892,-79.395656]
+	        'status': ''
 	    },
 	    {
 	      	'bus_id': 2,
 	      	'last_hb_time': datetime.datetime.utcnow(),
-	      	'prev_loc': "",
+	      	'route': ['UTM','UFT'],
+	      	'last_stop': 'UFT'
 		    'lonlat': [43.548043,-79.66095]
+		    'status': ''
 	    },
 	    {
 	        'bus_id': 3,
 	        'last_hb_time': datetime.datetime.utcnow(),
-	        'prev_loc': "",
+	        'route': ['UFT','UFTS'],
+	        'last_stop': 'UFTS'
 	        'lonlat': [43.784712,-79.185998]
+	        'status': ''
 	    }
 	]
 
@@ -93,11 +99,6 @@ def clearAllCollections():
 	db.bus_status.remove({})
 
 	client.close()
-
-def HTTPpost():
-	payload = {'user': 'username'}
-	r = requests.get('http://localhost:5000/usercount',data=payload)
-	print r.text
 
 if __name__ == '__main__':
 	clearAllCollections()

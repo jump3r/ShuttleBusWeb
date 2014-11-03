@@ -22,17 +22,22 @@ def haversine(lon1, lat1, lon2, lat2):
 def HTTPpost():
 	payload = {'busid': 11}
 	r = requests.get('http://localhost:5000/UserCount',data=payload)
-	print r.text
+	
 
 
-def BusHB():
-	payload = {'busid': 11, 'lonlat': [1,1]}
+def BusHB(lonlat):
+	payload = {'busid': 11, 'lon': lonlat[0], 'lat':[1]}
 	r = requests.post('http://localhost:5000/BusHB',data=payload)
 	print r.text
 
+def BusRegisterRoute():
+    payload = {'busid': 11, 'route': 'UTM UFT'}
+    r = requests.post('http://localhost:5000/BusRouteChangeHB',data=payload)
+
 def BusesGeo():
     r = requests.get('http://localhost:5000/BusesGeo',data={})
-    print r.text    
+       
 
-BusesGeo()
-#BusHB()
+#BusesGeo()
+#BusHB([43.6170021,-79.506403])
+BusRegisterRoute()

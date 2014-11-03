@@ -7,30 +7,50 @@ MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo
 
 
 class QueryDAO:
+	@staticmethod
+	def getMappedId(busid, db):
+		
+		collection = db['busid_map']
+
+		busmap = collection.find({'bus_map': busid})
+		bus_id = busmap.next()['bus_id']
+		
+
+		return bus_id
+
+	@staticmethod
+	def BusRegisterRoute(busid, lonlat):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		bus_id = QueryDAO.getMappedId(busid, db)
+
+		client.close()
+		
+		return bus_id
 
 	@staticmethod
 	def BusHBLog(busid, lonlat):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
-
-		#Verify bus_id
+	
+		#VERIFY BUS_ID
 		collection = db['busid_map']
 		busmap = collection.find({'bus_map': busid})
 		
-		if busmap.count() == 0:
-			return
 		bus_id = busmap.next()['bus_id']
-	
-		#Update bus status
+		
+		#UPDATE BUS STATUS
 		dt = datetime.datetime.utcnow()
 		collection = db['bus_status']
+		
 		collection.update({'bus_id': bus_id}, {'$set': {'last_hb_time': dt, 'prev_loc' : '', 'lonlat' : lonlat}})
 
-		#Add new log
+		#ADD NEW LOG
 		buslog = [
 			{'bus_id': busid, 'lonlat': lonlat, 'hb_time' : dt}
 		]
-
+		
 		collection = db['bus_geo_log']
 		collection.insert(buslog)
 
@@ -42,7 +62,7 @@ class QueryDAO:
 		db = client.get_default_database()
 
 		collection = db['bus_stops']
-		print collection
+		#print collection
 				
 		stops = []				
 		records = collection.find()

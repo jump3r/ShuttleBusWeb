@@ -4,7 +4,7 @@ from flask import Flask, session, redirect, url_for, escape, request, render_tem
 
 import sys
 import pymongo
-
+from bson.json_util import dumps
 from queryDAO import QueryDAO
 
 #username = request.cookies.get('username')
@@ -13,47 +13,52 @@ from queryDAO import QueryDAO
 #return redirect(url_for('login'))
 #app.logger.debug('A value for debugging')
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path = "", static_folder = "static")
+
 
 @app.route('/', methods=['GET'])
-def Index():
-	print request.form
-
+def Index():	
 	return render_template('shuttlebus.html')
 
 
 @app.route('/UserCount', methods=['GET','POST', 'GET'])
-def UserCount():
-	print request.args.get('id')
-	app.logger.debug('A value for debugging')	
-	
+def UserCount():	
+	#app.logger.debug('A value for debugging')		
 	return "<div id='log'>Hello</div>"
 
 
 @app.route('/BusHB', methods=['POST'])
-def BusHB():
-	
-	busid = str(request.form['busid'])
-	lonlat = int(request.form['lonlat'])
-	app.logger.debug('Id:{}, Geo:{}'.format(busid, lonlat))
-	QueryDAO.BusHBLog(busid, lonlat)
+def BusHB():	
+	busid = int(request.form['busid'])
+	lon = float(request.form['lon'])
+	lat = float(request.form['lat'])
+		
+	QueryDAO.BusHBLog(busid, [lon, lat])
 
 	return "<div>True</div>"
 
 @app.route('/BusesGeo', methods=['GET'])
 def BusesGeo():
-	from bson.json_util import dumps
+	
 	buses_geo = QueryDAO.GetBusesGeo()
 		
 	return dumps(buses_geo)
 
 @app.route('/StopsGeo', methods=['GET'])
 def StopsGeo():
-	from bson.json_util import dumps
-	campuses_geo = QueryDAO.GetStopsGeo()
-	print campuses_geo
 	
-	return dumps(campuses_geo)	
+	campuses_geo = QueryDAO.GetStopsGeo()
+		
+	return dumps(campuses_geo)
+
+@app.route('/BusRouteChangeHB', methods=['POST'])
+def BusRouteChangeHB():	
+
+	stop1,stop2 = request.form['route'].split()
+	busid = int(request.form['busid'])
+	QueryDAO.BusRegisterRoute(busid, [stop1, stop2])
+
+	return "<div>True</div>"
 
 
 '''
