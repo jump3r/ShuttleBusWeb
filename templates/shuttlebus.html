@@ -377,10 +377,15 @@
 
 				directionsService = new google.maps.DirectionsService();
 
+
+			    polylineOptions = new google.maps.Polyline({
+			    	'strokeColor': '#FF0000'
+			    })
 				directionRendererOptions = {
 					preserveViewport: true,
 					suppressMarkers: true,
 					suppressInfoWindows: true,
+					polylineOptions: polylineOptions,
 				}
 				directionsDisplay = new google.maps.DirectionsRenderer(directionRendererOptions);
 				
