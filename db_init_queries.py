@@ -58,19 +58,19 @@ def addStatus():
 	SEED_DATA = [
 	    {
 	        'bus_id': 1,	 
-	        'last_hb': datetime.datetime.utcnow(),
+	        'last_hb_time': datetime.datetime.utcnow(),
 	        'prev_loc': "",
 	        'lonlat': [43.662892,-79.395656]
 	    },
 	    {
 	      	'bus_id': 2,
-	      	'last_hb': datetime.datetime.utcnow(),
+	      	'last_hb_time': datetime.datetime.utcnow(),
 	      	'prev_loc': "",
 		    'lonlat': [43.548043,-79.66095]
 	    },
 	    {
 	        'bus_id': 3,
-	        'last_hb': datetime.datetime.utcnow(),
+	        'last_hb_time': datetime.datetime.utcnow(),
 	        'prev_loc': "",
 	        'lonlat': [43.784712,-79.185998]
 	    }
@@ -93,20 +93,6 @@ def clearAllCollections():
 	db.bus_status.remove({})
 
 	client.close()
-
-'''
-	time() -- return current time in seconds since the Epoch as a float
-    clock() -- return CPU time since process start as a float
-    sleep() -- delay for a number of seconds given as a float
-    gmtime() -- convert seconds since Epoch to UTC tuple
-    localtime() -- convert seconds since Epoch to local time tuple
-    asctime() -- convert time tuple to string
-    ctime() -- convert time in seconds to string
-    mktime() -- convert local time tuple to seconds since Epoch
-    strftime() -- convert time tuple to string according to format specification
-    strptime() -- parse string to time tuple according to format specification
-    tzset() -- change the local timezone
-'''
 
 def HTTPpost():
 	payload = {'user': 'username'}

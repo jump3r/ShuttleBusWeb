@@ -1,5 +1,5 @@
 from math import radians, cos, sin, asin, sqrt
-
+import requests
 
 
 def haversine(lon1, lat1, lon2, lat2):
@@ -15,5 +15,24 @@ def haversine(lon1, lat1, lon2, lat2):
 
     # 6367 km is the radius of the Earth
     km = 6367 * c
-    
+
     return km 
+
+
+def HTTPpost():
+	payload = {'busid': 11}
+	r = requests.get('http://localhost:5000/UserCount',data=payload)
+	print r.text
+
+
+def BusHB():
+	payload = {'busid': 11, 'lonlat': [1,1]}
+	r = requests.post('http://localhost:5000/BusHB',data=payload)
+	print r.text
+
+def BusesGeo():
+    r = requests.get('http://localhost:5000/BusesGeo',data={})
+    print r.text    
+
+BusesGeo()
+#BusHB()

@@ -36,5 +36,55 @@ class QueryDAO:
 
 		client.close()
 
+	@staticmethod
+	def GetStopsGeo():
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		collection = db['bus_stops']
+		print collection
+				
+		stops = []				
+		records = collection.find()
+		for rec in records:
+
+			d = {'name' : rec['name'],
+				'lonlat' : rec['lonlat'],
+				}
+			stops.append(d)
+
+		client.close()
+
+		return stops
+		
+
+	@staticmethod
+	def GetBusesGeo():
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		collection = db['busid_map']
+		
+		records = collection.find()
+		key_map ={}		
+		for rec in records:
+			key_map[rec['bus_id']] = rec['bus_map']
+		
+		
+		collection = db['bus_status']
+				
+		buses = []		
+		records = collection.find()
+		for rec in records:
+
+			d = {'bus_id' : key_map[rec['bus_id']],
+				'lonlat' : rec['lonlat'],
+				'active' : 1}
+			buses.append(d)
+
+		client.close()
+
+		return buses
+
 
 #QueryDAO.BusHBLog(11,33)
