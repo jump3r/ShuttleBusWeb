@@ -45,6 +45,10 @@
   				});
 			}
 
+			function getInfoWindowContent(snapshot){
+				return "<div><img src="+snapshot+" width='100' height='100'/></div>";
+			}
+
 			function addBusMarker(bus, snapshot, title, map){
 
 				var marker = new google.maps.Marker(
@@ -55,13 +59,11 @@
 						  				//animation: google.maps.Animation.BOUNCE // DROP
 						  				//icon: {url:'yo.jpg', size: new google.maps.Size(5, 5)},
 						  				//icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
-						  				
 						  			}
 	  						);
 				bus_maker_map['busid'] = marker;
 
-				var contentString = "<div><img src="+snapshot+" width='100' height='100'/></div>";
-
+				var contentString = getInfoWindowContent(snapshot);
 
 				var infowindow = new google.maps.InfoWindow({
 				  	content: contentString,	  				  
@@ -302,8 +304,10 @@
 									  url: "BusesGeo",
 									  type: "GET",									 
 									});									 
-				request.done(function( msg ) {				  
+				request.done(function( msg ) {	
+
 				  buses_json = JSON.parse(msg);
+
 				  for(bus_index in buses_json){
 				  	bus = buses_json[bus_index];
 				  	addBusMarker(bus, "no_image.gif", "NONE", map );
@@ -324,7 +328,9 @@
 									  type: "GET",									 
 									});									 
 				request.done(function( msg ) {				  
+				  
 				  stops_json = JSON.parse(msg);
+
 				  for(stop_index in stops_json){
 				  	stop = stops_json[stop_index];
 				  	addStopMarker( stop['lonlat'], stop['name'], map );				  	
@@ -366,8 +372,7 @@
 				  	zoom: 11,
 				  	mapTypeId:google.maps.MapTypeId.ROADMAP,
 				  	disableDefaultUI: true,	
-				  	styles: stylearray,
-				  	
+				  	styles: stylearray,				  	
 				  };
 
 
