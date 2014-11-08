@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import Markup #Markup('<em>Marked up</em> &raquo; HTML').striptags()
+from flask import Markup 
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 
 import sys
@@ -18,6 +18,7 @@ app = Flask(__name__, static_url_path = "", static_folder = "static")
 
 @app.route('/', methods=['GET'])
 def Index():	
+	print "sada"
 	return render_template('shuttlebus.html')
 
 
@@ -28,12 +29,18 @@ def UserCount():
 
 
 @app.route('/BusHB', methods=['POST'])
-def BusHB():	
+def BusHB():
+	from bus_utils import check_next_bus_stop
+
 	busid = int(request.form['busid'])
 	lon = float(request.form['lon'])
 	lat = float(request.form['lat'])
 		
 	QueryDAO.BusHBLog(busid, [lon, lat])
+
+	bus = QueryDAO.GetBusByID(busid)
+
+	check_next_bus_stop(bus)
 
 	return "<div>True</div>"
 
@@ -41,6 +48,9 @@ def BusHB():
 def BusesGeo():
 	
 	buses_geo = QueryDAO.GetBusesGeo()
+
+	#check time of last hb, if 30 min ago 
+	#set status 	
 		
 	return dumps(buses_geo)
 

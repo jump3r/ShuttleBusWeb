@@ -30,25 +30,38 @@ class QueryDAO:
 		return bus_id
 
 	@staticmethod
-	def BusHBLog(busid, lonlat):
+	def GetBusByID(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
-	
+		
+		collection = db['bus_status']
+		bus = collection.find({'bus_id': bus_id})		
+		bus = bus.next()
+
+		client.close()
+
+		return bus
+
+	@staticmethod
+	def BusHBLog(bus_id, lonlat):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+		'''
 		#VERIFY BUS_ID
 		collection = db['busid_map']
 		busmap = collection.find({'bus_map': busid})
 		
 		bus_id = busmap.next()['bus_id']
-		
+		'''
 		#UPDATE BUS STATUS
 		dt = datetime.datetime.utcnow()
 		collection = db['bus_status']
 		
-		collection.update({'bus_id': bus_id}, {'$set': {'last_hb_time': dt, 'prev_loc' : '', 'lonlat' : lonlat}})
+		collection.update({'bus_id': bus_id}, {'$set': {'last_hb_time': dt, 'lonlat' : lonlat}})
 
 		#ADD NEW LOG
 		buslog = [
-			{'bus_id': busid, 'lonlat': lonlat, 'hb_time' : dt}
+			{'bus_id': bus_id, 'lonlat': lonlat, 'hb_time' : dt}
 		]
 		
 		collection = db['bus_geo_log']
@@ -82,14 +95,13 @@ class QueryDAO:
 	def GetBusesGeo():
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
-
-		collection = db['busid_map']
-		
+		'''
+		collection = db['busid_map']		
 		records = collection.find()
 		key_map ={}		
 		for rec in records:
 			key_map[rec['bus_id']] = rec['bus_map']
-		
+		'''
 		
 		collection = db['bus_status']
 				
@@ -97,14 +109,49 @@ class QueryDAO:
 		records = collection.find()
 		for rec in records:
 
-			d = {'bus_id' : key_map[rec['bus_id']],
+			d = {'bus_id' : rec['bus_id'],
 				'lonlat' : rec['lonlat'],
-				'active' : 1}
+				'status' : rec['status'],
+				'stops_list' : rec['stops_list'],
+				'next_stop_index' : rec['next_stop_index'],
+				'bus_id' : rec['bus_id'],
+				
+				}
 			buses.append(d)
 
 		client.close()
 
 		return buses
 
+	@staticmethod
+	def GetBusesStatus():
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
 
-#QueryDAO.BusHBLog(11,33)
+		collection = db['bus_status']
+				
+		all_buses = []		
+		records = collection.find()
+		for rec in records:
+			
+			all_buses.append(rec)
+
+		client.close()
+
+		return all_buses
+
+	@staticmethod
+	def UpdateBusStatus(bus):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		col = db['bus_status']
+		print col
+		col.update({'_id':bus['_id']},bus)
+
+		client.close()
+
+#QueryDAO.BusHBLog(1,33)
+
+#QueryDAO.GetBusesStatus()
+#QueryDAO.GetBusByID(1)
