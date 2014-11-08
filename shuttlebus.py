@@ -18,7 +18,7 @@ app = Flask(__name__, static_url_path = "", static_folder = "static")
 
 @app.route('/', methods=['GET'])
 def Index():	
-	print "sada"
+	
 	return render_template('shuttlebus.html')
 
 

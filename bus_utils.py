@@ -52,7 +52,9 @@ def HTTPpost():
 
 def BusHB(lonlat):
 	payload = {'busid': 1, 'lon': lonlat[0], 'lat':lonlat[1]}
+    print "BusHB1"
 	r = requests.post('http://localhost:5000/BusHB',data=payload)
+    print "BusHB2"
 	print r.text
 
 def BusRouteChangeHB():
