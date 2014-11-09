@@ -21,6 +21,11 @@ def Index():
 	
 	return render_template('shuttlebus.html')
 
+@app.route('/trans', methods=['GET'])
+def Trans():	
+	
+	return render_template('index2.html')
+
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
