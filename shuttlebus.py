@@ -7,6 +7,7 @@ import pymongo
 from bson.json_util import dumps
 from queryDAO import QueryDAO
 from bus_utils import check_next_bus_stop
+from bus_utils import process_user
 #username = request.cookies.get('username')
 #resp = make_response(render_template(...))
 #resp.set_cookie('username', 'the username')
@@ -18,6 +19,8 @@ app = Flask(__name__, static_url_path = "", static_folder = "static")
 
 @app.route('/', methods=['GET'])
 def Index():	
+	userip = request.remote_addr
+	print session
 	
 	return render_template('shuttlebus.html')
 
@@ -30,6 +33,17 @@ def Trans():
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug('A value for debugging')		
+	userip = request.remote_addr
+	print session
+
+	if  userip not in session:
+		session[userip] = []
+
+	busid = request.form['busid']
+	if busid not in session[userip]:
+		session[userip].append(busid)
+		QueryDAO.addNextTripBusLoad(busid)
+	
 	return "<div id='log'>Hello</div>"
 
 
@@ -44,7 +58,10 @@ def BusHB():
 
 	bus = QueryDAO.GetBusByID(busid)
 
-	check_next_bus_stop(bus)
+	is_changed = check_next_bus_stop(bus)
+
+	if is_changed:
+		pass
 	
 	return "<div>True</div>"
 
@@ -74,11 +91,6 @@ def BusRouteChangeHB():
 
 	return "<div>True</div>"
 
-
-@app.route('/Simple', methods=['POST'])
-def Simple():
-
-	return "<div>True</div>"
 
 '''
 @app.route('/logout')

@@ -461,13 +461,13 @@
 
 		<script>
 
-			function ajaxTest(){
+			function addUserCount(busid){
 
 				var request = $.ajax({
-									  url: "usercount",
-									  type: "POST",
-									  data: { 'id' : '12345' },
-									  dataType: "html"
+									  url: 'UserCount',
+									  type: 'POST',
+									  data: { 'busid' : busid },
+									  dataType: 'html'
 									});
 									 
 				request.done(function( msg ) {
@@ -497,7 +497,7 @@
 
 			<div id='buses-side-menu' class="col-sm-12 col-md-2 col-lg-2"
 						style="padding-left:0; padding-right:1; height:100%;">										
-
+				<a onclick='addUserCount(1)'>Add</a>
 			</div>
 		
 			

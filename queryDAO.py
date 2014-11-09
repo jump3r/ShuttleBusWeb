@@ -146,11 +146,27 @@ class QueryDAO:
 		db = client.get_default_database()
 
 		col = db['bus_status']
-		print col
+		
 		col.update({'_id':bus['_id']},bus)
 
 		client.close()
 
+	@staticmethod
+	def addNextTripBusLoad(bus_id):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		col = db['bus_status']
+
+		bus = QueryDAO.GetBusByID(bus_id)
+		bus['next_trip_bus_load'] += 1
+		col.update({'_id':bus['_id']}, bus)
+
+		client.close()
+
+		
+
+QueryDAO.addNextTripBusLoad(1)
 #QueryDAO.BusHBLog(1,33)
 
 #QueryDAO.GetBusesStatus()

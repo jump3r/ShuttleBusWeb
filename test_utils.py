@@ -1,11 +1,13 @@
 import requests
 
-def HTTPpost():
+def UserBusIntetion():
 	payload = {'busid': 1}
-	r = requests.get('http://localhost:5000/UserCount',data=payload)
-	
+	r = requests.post('http://localhost:5000/UserCount',data=payload)
+	print r.text
 
-def BusHB(busid=1,lonlat):
+
+
+def BusHB(lonlat, busid=1):
 	payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]}    
 	r = requests.post('http://localhost:5000/BusHB',data=payload)
     
@@ -25,6 +27,8 @@ def ArduinoSerialListener():
 	while True:
 		print ser.readline()
 		
+
+UserBusIntetion()
 #BusesGeo()
 #BusHB([43.548043,-79.66095])
 #BusRouteChangeHB()

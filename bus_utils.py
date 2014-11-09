@@ -21,9 +21,8 @@ def haversine(lonlat1, lonlat2):
 
     return km 
 
-def printByLine(json):
-    for val in json:
-        print val,':', json[val]
+def process_user(user):
+    pass
 
 def changeNextStopIndex(stop_index):
     if stop_index == 0:
@@ -41,5 +40,8 @@ def check_next_bus_stop(bus):
     if haversine(curr_loc, ns_loc) <= IS_BUS_CLOSE_ENOUGH:        
         bus['next_stop_index'] = changeNextStopIndex(bus['next_stop_index'])
         print "CHANGED STOP"
-        QueryDAO.UpdateBusStatus(bus)        
+        QueryDAO.UpdateBusStatus(bus) 
+        return True
+
+    return False       
 
