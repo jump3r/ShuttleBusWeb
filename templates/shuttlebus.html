@@ -52,9 +52,7 @@
 			}
 
 			function getInfoWindowContent(snapshot,bus){
-				
-				dist = localStorage.getItem(bus['bus_id']+'distance');
-				//console.log(dist);
+								
 				return "<div><img src="+snapshot+" width='100' height='100'/></div>";
 			}
 
@@ -72,12 +70,12 @@
 						  			}
 	  						);
 
-				bus_maker_map['busid'] = marker;
+				bus_maker_map[bus['bus_id']] = marker;
 				
 				google.maps.event.addListener(marker, 'click', function() {
     				drawRoute(bus['lonlat'] , bus['stops_list'][bus['next_stop_index']][1])
 
-    				//result = localStorage.getItem(bus['bus_id']+'route');
+    				//result = //sessionStorage.getItem(bus['bus_id']+'route');
     				//console.log("HERE", result);
     				//directionsDisplay.setDirections(result);
 
@@ -93,8 +91,10 @@
 			function preFetchDistance(bus){
 				start = bus['lonlat'];
 				start = new google.maps.LatLng(start[0],start[1]);
+
 				end = bus['stops_list'][bus['next_stop_index']][1];
 				end = new google.maps.LatLng(end[0], end[1]);
+
 				var request = {
 				    origin:start,
 				    destination:end,
@@ -104,11 +104,15 @@
 				directionsService.route(request, function(result, status) {
 				    if (status == google.maps.DirectionsStatus.OK) {
 				    	
-				    	var distance = result.routes[0].legs[0].distance;
-				    	var dt = distance.text;
+				    	var distance = result.routes[0].legs[0].distance.text;
+				    	var duration = result.routes[0].legs[0].duration.text;
 				    	
-				      	localStorage.setItem(bus['bus_id'] + 'distance', dt);
-				      	//localStorage.setItem(bus['bus_id'] + 'route', result);
+				    	$('#'+'distance'+bus['bus_id']).html('Distance: '+distance);
+				    	$('#'+'duration'+bus['bus_id']).html('Arrival Time: '+duration);
+				      	//sessionStorage.setItem(bus['bus_id'] + 'distance', distance);
+				      	//sessionStorage.setItem(bus['bus_id'] + 'duration', duration);
+
+				      	
 				    }
 				});
 			}
@@ -124,7 +128,7 @@
 				
 				directionsService.route(request, function(result, status) {
 				    if (status == google.maps.DirectionsStatus.OK) {
-				    	
+				    	glob = result;
 				    	var distance = result.routes[0].legs[0].distance;
 				    	var dt = distance.text;
 
@@ -321,13 +325,19 @@
 			}
 
 			function addBusPanel(bus, map){
-				
-				html_el = '<div style="width:100%" onclick=""><div class="panel panel-success"><div class="panel-heading">';
-				html_el +='Shuttle Bus #' +  bus['bus_id'] ;
-				html_el +='</div> <div class="panel-body">' ;
-				html_el += 'On the way to '+bus['stops_list'][bus['next_stop_index']][0]+'</div></div></div> ';
+								
+				var next_stop = bus['stops_list'][bus['next_stop_index']][0]
+				var bus_distance_id = 'distance'+bus['bus_id'];
+				var bus_duration_id = 'duration'+bus['bus_id'];
 
-				console.log(localStorage.getItem(bus['bus_id']+'distance'));
+				html_el = '<div style="width:100%" onclick="triggerMarker('+bus['bus_id']+')"><div class="panel panel-success"><div class="panel-heading">';
+				html_el +='Shuttle Bus #' +  bus['bus_id']+ ' to '+next_stop;
+				html_el +='</div> <div class="panel-body">' ;
+				html_el += '<p id='+bus_distance_id+'></p>';
+				html_el += '<p id='+bus_duration_id+'></p>';
+				html_el += '</div></div></div> ';
+
+				//console.log(//sessionStorage.getItem(bus['bus_id']+'distance'));
 
 				modal_html = '<div class="modal fade">'  
   				modal_html += '	<div class="modal-dialog"> '
@@ -339,9 +349,14 @@
 				modal_html += 			bus['lonlat'] 
     			modal_html += '</div></div></div></div>'
 
-
+    			
 				$("#buses-side-menu").append(html_el);
 				//infowindow.open(map,bus_maker_map[bus["bus_id"]]);
+				//new google.maps.event.trigger( bus_maker_map[bus['bus_id']], 'click' );
+			}
+
+			function triggerMarker(bus_id){
+				new google.maps.event.trigger( bus_maker_map[1], 'click' );
 			}
 			
 			function initBuses(map){
@@ -361,6 +376,7 @@
 				  	preFetchDistance(bus);
 
 				  	addBusMarker(bus, "no_image.gif", "NONE", map );
+				  	
 				  	addBusPanel(bus, map);
 				  }
 				  

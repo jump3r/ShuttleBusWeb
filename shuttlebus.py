@@ -6,7 +6,7 @@ import sys
 import pymongo
 from bson.json_util import dumps
 from queryDAO import QueryDAO
-
+from bus_utils import check_next_bus_stop
 #username = request.cookies.get('username')
 #resp = make_response(render_template(...))
 #resp.set_cookie('username', 'the username')
@@ -22,7 +22,7 @@ def Index():
 	return render_template('shuttlebus.html')
 
 
-@app.route('/UserCount', methods=['GET','POST', 'GET'])
+@app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug('A value for debugging')		
 	return "<div id='log'>Hello</div>"
@@ -30,8 +30,7 @@ def UserCount():
 
 @app.route('/BusHB', methods=['POST'])
 def BusHB():
-	from bus_utils import check_next_bus_stop
-
+	
 	busid = int(request.form['busid'])
 	lon = float(request.form['lon'])
 	lat = float(request.form['lat'])
@@ -41,7 +40,7 @@ def BusHB():
 	bus = QueryDAO.GetBusByID(busid)
 
 	check_next_bus_stop(bus)
-
+	
 	return "<div>True</div>"
 
 @app.route('/BusesGeo', methods=['GET'])
@@ -71,6 +70,11 @@ def BusRouteChangeHB():
 	return "<div>True</div>"
 
 
+@app.route('/Simple', methods=['POST'])
+def Simple():
+
+	return "<div>True</div>"
+
 '''
 @app.route('/logout')
 def logout():
@@ -86,5 +90,5 @@ def page_not_found(error):
 app.secret_key = '\xafrLJh\xbf\xf7\xdb\x83S\xa3\xa2\xb7\x0b.\xbao2%q4\xf8`\xff'
 if __name__ == '__main__':
 	app.debug = True
-	app.run()
+	app.run()#threaded=True)
 
