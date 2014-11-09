@@ -15,9 +15,8 @@
 		<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBeId-aJWa_EA6FwqCbDJOjjLL6Qe1gr9E&sensor=false">
 		</script>
 		<!--script src="https://maps.googleapis.com/maps/api/js?libraries=weather&sensor=true"></script-->
-
 		<!-- End Google Map  -->
-		
+
 		<script>						
 			
 			var mapref = null;
@@ -330,15 +329,12 @@
 				var bus_distance_id = 'distance'+bus['bus_id'];
 				var bus_duration_id = 'duration'+bus['bus_id'];
 
-				html_el  = '<div style="width:100%" onclick="triggerMarker('+bus['bus_id']+')">';
-				html_el += '<div class="panel panel-success"><div class="panel-heading">';
-				html_el += 'Shuttle Bus #' +  bus['bus_id']+ ' to '+next_stop;
-				html_el += '</div><div class="panel-body">' ;
+				html_el = '<div style="width:100%" onclick="triggerMarker('+bus['bus_id']+')"><div class="panel panel-success"><div class="panel-heading">';
+				html_el +='Shuttle Bus #' +  bus['bus_id']+ ' to '+next_stop;
+				html_el +='</div> <div class="panel-body">' ;
 				html_el += '<p id='+bus_distance_id+'></p>';
 				html_el += '<p id='+bus_duration_id+'></p>';
-				html_el += '</div>';
-				html_el += '<div class="panel-footer">'
-				html_el += '<button type="button" class="btn btn-primary" onclick="addUserCount('+bus['bus_id']+')"">Count Me In!</button></div></div> ';
+				html_el += '</div></div></div> ';
 				    			
 				$("#buses-side-menu").append(html_el);				
 			}
@@ -472,25 +468,24 @@
 									  data: { 'busid' : busid },
 									  dataType: 'html'
 									});
+									 
+				request.done(function( msg ) {
+				  //$( "#log" ).html( msg );
+				  console.log( msg );
+				});
 				 
 				request.fail(function( jqXHR, textStatus ) {
-					alert( "Request failed: " + textStatus );
-				});
-			}
+				  alert( "Request failed: " + textStatus );
+					});
 
-			function setUserReservations(){
-				var request = $.ajax({
-									  url: 'BusesReservations',
-									  type: 'GET',									  
-									  dataType: 'html'
-									});
-				request.done(function (msg){
-					res_json = JSON.parse(msg);
-				});
-				request.fail(function( jqXHR, textStatus ) {
-				  	alert( "Request failed: " + textStatus );
-				});
 			}
+		</script>
+
+		<script src="bigSlide.js"></script>
+		<script>
+			$(document).ready(function() {
+		        $('.menu-link').bigSlide();
+		    });
 		</script>
 
 	</head>
@@ -506,10 +501,19 @@
 									 style="height:700px;"></div>
 			</div>
 
-			<div id='buses-side-menu' class="col-sm-12 col-md-2 col-lg-2"
-						style="padding-left:0; padding-right:1; height:100%;">							
+			<div id='buses-side-menu2' class="col-sm-12 col-md-2 col-lg-2"
+						style="padding-left:0; padding-right:1; height:100%;">										
+				<a onclick='addUserCount(1)'>Add</a>
+
+				<a href="#menu" class="menu-link">&#9776;</a>
+
 			</div>
-		
+			
+			<nav id="menu" class="panel" role="navigation" style=>
+			    <ul id='buses-side-menu'>
+			        
+			    </ul>
+			</nav>
 			
 		</div>
 			

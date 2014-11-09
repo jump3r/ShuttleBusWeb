@@ -28,9 +28,9 @@ def ArduinoSerialListener():
 		print ser.readline()
 		
 
-UserBusIntetion()
+#UserBusIntetion()
 #BusesGeo()
-#BusHB([43.548043,-79.66095])
+BusHB([43.548043,-79.66095])
 #BusRouteChangeHB()
 #print haversine([43.548043,-79.66095], [43.662892,-79.395656])
 	

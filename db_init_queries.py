@@ -62,15 +62,26 @@ def addStatus():
         'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
         'next_stop_index': 0,
         'lonlat': [43.662892,-79.395656],
-        'status': '',
-        'next_trip_bus_load': 0
-    }]
+        'status': 'active',        
+    }
+    ]
 
 	client = pymongo.MongoClient(MONGODB_URI)
 	db = client.get_default_database()
 
-	songs = db['bus_status']
-	songs.insert(SEED_DATA)
+	bus_status = db['bus_status']
+	bus_status.insert(SEED_DATA)
+
+
+	bus_reservations = db['bus_reservations']
+	all_reservations = []
+	for bus in SEED_DATA:
+		d = {
+			'bus_id': bus['bus_id'],
+			'reserved_seats_by': [],
+		}
+		all_reservations.append(d)
+	bus_reservations.insert(all_reservations)
 
 	client.close()	
 
@@ -81,6 +92,7 @@ def clearAllCollections():
 	db.busid_map.remove({})
 	db.bus_stops.remove({})
 	db.bus_status.remove({})
+	db.bus_reservations.remove({})
 
 	client.close()
 

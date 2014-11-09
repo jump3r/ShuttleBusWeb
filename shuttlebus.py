@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import g
 from flask import Markup 
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 
@@ -21,29 +22,28 @@ app = Flask(__name__, static_url_path = "", static_folder = "static")
 def Index():	
 	userip = request.remote_addr
 	print session
-	
 	return render_template('shuttlebus.html')
 
 @app.route('/trans', methods=['GET'])
-def Trans():	
-	
-	return render_template('index2.html')
-
+def Trans():		
+	return render_template('newdesign1.html')
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug('A value for debugging')		
 	userip = request.remote_addr
-	print session
-
+	
 	if  userip not in session:
 		session[userip] = []
 
-	busid = request.form['busid']
-	if busid not in session[userip]:
-		session[userip].append(busid)
-		QueryDAO.addNextTripBusLoad(busid)
+	busid = int(request.form['busid'])
+
+	bus_res = QueryDAO.getBusReservationIPsByBus(busid)
+	if userip not in bus_res['reserved_seats_by']:
+		bus_res['reserved_seats_by'].append(userip)
+		QueryDAO.addNextTripBusLoad(bus_res)
 	
+
 	return "<div id='log'>Hello</div>"
 
 
@@ -61,7 +61,7 @@ def BusHB():
 	is_changed = check_next_bus_stop(bus)
 
 	if is_changed:
-		pass
+		QueryDAO.resetBusReservationIPsByBus(busid)		
 	
 	return "<div>True</div>"
 
@@ -91,6 +91,12 @@ def BusRouteChangeHB():
 
 	return "<div>True</div>"
 
+@app.route('/BusesReservations', methods=['GET'])
+def BusesReservations():
+	
+	buses_res = QueryDAO.GetAllBusReservations(request.remote_addr)
+
+	return dumps(buses_res)
 
 '''
 @app.route('/logout')

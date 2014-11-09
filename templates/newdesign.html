@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="no-js">
 	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<title>Perspective Page View Navigation</title>
+		<meta name="description" content="Perspective Page View Navigation: Transforms the page in 3D to reveal a menu" />
+		<meta name="keywords" content="3d page, menu, navigation, mobile, perspective, css transform, web development, web design" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<!-- csstransforms3d-shiv-cssclasses-prefixed-teststyles-testprop-testallprops-prefixes-domprefixes-load --> 
+		<script src="js/modernizr.custom.25376.js"></script>
+
 		<!-- Ajax  -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<!-- End Ajax  -->
-
-		<!-- Bootstrap  -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<!-- End Bootstrap  -->
-
 		<!-- Google Map  -->
 		<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBeId-aJWa_EA6FwqCbDJOjjLL6Qe1gr9E&sensor=false">
 		</script>
-		<!--script src="https://maps.googleapis.com/maps/api/js?libraries=weather&sensor=true"></script-->
-
-		<!-- End Google Map  -->
-		
 		<script>						
 			
 			var mapref = null;
@@ -461,13 +464,13 @@
 
 		<script>
 
-			function ajaxTest(){
+			function addUserCount(busid){
 
 				var request = $.ajax({
-									  url: "usercount",
-									  type: "POST",
-									  data: { 'id' : '12345' },
-									  dataType: "html"
+									  url: 'UserCount',
+									  type: 'POST',
+									  data: { 'busid' : busid },
+									  dataType: 'html'
 									});
 									 
 				request.done(function( msg ) {
@@ -481,63 +484,41 @@
 
 			}
 		</script>
+		<!-- Bootstrap  -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<!-- End Bootstrap  -->
 
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-		<meta name="viewport" content="width=device-width, initial-scale=1"> 
-		<title>Perspective Page View Navigation</title>
-		<meta name="description" content="Perspective Page View Navigation: Transforms the page in 3D to reveal a menu" />
-		<meta name="keywords" content="3d page, menu, navigation, mobile, perspective, css transform, web development, web design" />
-		<meta name="author" content="Codrops" />
-		<link rel="shortcut icon" href="../favicon.ico">
-		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
-		<link rel="stylesheet" type="text/css" href="css/demo.css" />
-		<link rel="stylesheet" type="text/css" href="css/component.css" />
-		<!-- csstransforms3d-shiv-cssclasses-prefixed-teststyles-testprop-testallprops-prefixes-domprefixes-load --> 
-		<script src="js/modernizr.custom.25376.js"></script>
+
 	</head>
-
 	<body>
 		<div id="perspective" class="perspective effect-moveleft">
-		<!--div class="content-main"-->
-
 			<div class="container">
-				<div class="wrapper"><!-- wrapper needed for scroll -->
-					<!-- Top Navigation -->					
+				<div class="wrapper">
+										
+					<div class="main clearfix ">	
+							
+							<div id="map-canvas" class="col-sm-12 col-md-10 col-lg-10" style="height:700px;"></div>
+							<div id="showMenu" class="col-sm-12 col-md-2 col-lg-2">
+								asdas
+							</div>
+							
+					</div><!-- /main -->
+				</div><!-- wrapper -->
+			</div><!-- /container -->
 
-					<div id="map-holder" class="col-sm-12 col-md-10 col-lg-10" 
-										style="padding-left: 1px;padding-right:1">
-
-						<div id="map-canvas" class="col-sm-12 col-md-12 col-lg-12"
-											 style="height:700px;"></div>
-					</div>
-
-					<div id='buses-side-menu' class="col-sm-12 col-md-2 col-lg-2"
-								style="padding-left:0; padding-right:1; height:100%;">										
-						
-								<div class="main clearfix">
-									<div class="column">
-										<p><button id="showMenu">Show Menu</button></p>										
-									</div>
-
-								</div><!-- /main -->
-
-					</div>
-				</div>
-			
-			</div>
-			<div id='buses-side-menu'class="column">
-				<nav class="outer-nav right vertical">
-					<a href="#" class="icon-home">Home</a>
-					<a href="#" class="icon-news">News</a>
-					<a href="#" class="icon-image">Images</a>
-					<a href="#" class="icon-upload">Uploads</a>
-					<a href="#" class="icon-star">Favorites</a>
-					<a href="#" class="icon-mail">Messages</a>
-					<a href="#" class="icon-lock">Security</a>
-				</nav>
-			</div>
-		</div>
+			<nav class="outer-nav right horizontal col-sm-12 col-md-12 col-lg-12">
+				<a  id="buses-side-menu" href="#" style="height:100%;"></a>		
+				<a href="#" class="icon-home">Home</a>
+				<a href="#" class="icon-news">News</a>
+				<a href="#" class="icon-image">Images</a>
+				<a href="#" class="icon-upload">Uploads</a>
+				<a href="#" class="icon-star">Favorites</a>
+				<a href="#" class="icon-mail">Messages</a>
+				<a href="#" class="icon-lock">Security</a>
+			</nav>
+		</div><!-- /perspective -->
 		<script src="js/classie.js"></script>
 		<script src="js/menu.js"></script>
 	</body>

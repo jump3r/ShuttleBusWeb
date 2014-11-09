@@ -35,8 +35,12 @@ class QueryDAO:
 		db = client.get_default_database()
 		
 		collection = db['bus_status']
-		bus = collection.find({'bus_id': bus_id})		
-		bus = bus.next()
+		bus = collection.find({'bus_id': bus_id})	
+		try:			
+			bus = bus.next()
+		except:
+			print "ERROR"
+			bus = {}
 
 		client.close()
 
@@ -95,13 +99,6 @@ class QueryDAO:
 	def GetBusesGeo():
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
-		'''
-		collection = db['busid_map']		
-		records = collection.find()
-		key_map ={}		
-		for rec in records:
-			key_map[rec['bus_id']] = rec['bus_map']
-		'''
 		
 		collection = db['bus_status']
 				
@@ -152,21 +149,69 @@ class QueryDAO:
 		client.close()
 
 	@staticmethod
-	def addNextTripBusLoad(bus_id):
+	def addNextTripBusLoad(bus_res):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
 
+
+		col = db['bus_reservations']
+		col.update({'_id': bus_res['_id']}, bus_res)
+		'''
 		col = db['bus_status']
 
 		bus = QueryDAO.GetBusByID(bus_id)
 		bus['next_trip_bus_load'] += 1
 		col.update({'_id':bus['_id']}, bus)
+		'''
+		client.close()
+
+	@staticmethod
+	def GetAllBusReservations(userid):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+		
+		collection = db['bus_reservations']
+				
+		reservations = []		
+		records = collection.find()		
+		for rec in records:
+
+			d = {'bus_id': rec['bus_id'],
+				'reservations': len(rec['reserved_seats_by']),
+				'user_reserved': 1 if userid in rec['reserved_seats_by'] else 0,
+				}
+			reservations.append(d)
+
+		client.close()
+
+		return reservations
+
+	@staticmethod
+	def getBusReservationIPsByBus(bus_id):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		col = db['bus_reservations']
+		all_reservations = col.find({'bus_id': bus_id})
+
+		return all_reservations.next()
+
+	@staticmethod
+	def resetBusReservationIPsByBus(bus_id):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		col = db['bus_reservations']
+		res = col.find({'bus_id': bus_id})
+		res = res.next()
+		res['reserved_seats_by'] = []
+		col.update({'_id':res['_id']}, res )
 
 		client.close()
 
 		
 
-QueryDAO.addNextTripBusLoad(1)
+#QueryDAO.addNextTripBusLoad(1)
 #QueryDAO.BusHBLog(1,33)
 
 #QueryDAO.GetBusesStatus()
