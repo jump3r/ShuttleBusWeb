@@ -59,9 +59,25 @@ def addStatus():
     {
         'bus_id': 1,	 
         'last_hb_time': datetime.datetime.utcnow(),
-        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+        'stops_list': [['UFTS', [43.784712,-79.185998]],['UFT',[43.662892,-79.395656]]],
         'next_stop_index': 0,
         'lonlat': [43.662892,-79.395656],
+        'status': 'active',        
+    },
+    {
+        'bus_id': 2,	 
+        'last_hb_time': datetime.datetime.utcnow(),
+        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+        'next_stop_index': 1,
+        'lonlat': [43.548043,-79.66095],
+        'status': 'active',        
+    },
+    {
+        'bus_id': 3,	 
+        'last_hb_time': datetime.datetime.utcnow(),
+        'stops_list': [['UTM',[43.548043,-79.66095]],['UFTS', [43.784712,-79.185998]]],
+        'next_stop_index': 0,
+        'lonlat': [43.784712,-79.185998],
         'status': 'active',        
     }
     ]

@@ -344,7 +344,7 @@
 			}
 
 			function triggerMarker(bus_id){
-				new google.maps.event.trigger( bus_maker_map[1], 'click' );
+				new google.maps.event.trigger( bus_maker_map[bus_id], 'click' );
 			}
 			
 			function initBuses(map){
@@ -499,15 +499,15 @@
 		
 		<div class="content-main">
 			
-			<div id="map-holder" class="col-sm-12 col-md-10 col-lg-10" 
-								style="padding-left: 1px;padding-right:1">
+			<div id="map-holder" class="col-xs-12 col-sm-10 col-md-10 col-lg-10" 
+								style="padding-left: 0px;padding-right: 0px">
 
 				<div id="map-canvas" class="col-sm-12 col-md-12 col-lg-12"
-									 style="height:700px;"></div>
+									 style="height:800px;"></div>
 			</div>
 
-			<div id='buses-side-menu' class="col-sm-12 col-md-2 col-lg-2"
-						style="padding-left:0; padding-right:1; height:100%;">							
+			<div id='buses-side-menu' class="col-xs-12 col-sm-2 col-md-2 col-lg-2"
+						style="padding-left: 0px; padding-right: 0px; height: 100%;">							
 			</div>
 		
 			
