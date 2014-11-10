@@ -78,13 +78,13 @@
     				//result = //sessionStorage.getItem(bus['bus_id']+'route');
     				//console.log("HERE", result);
     				//directionsDisplay.setDirections(result);
-
+    				
     				var contentString = getInfoWindowContent(snapshot, bus);
-    				var infoWindow = new google.maps.InfoWindow({
+    				marker.infoWindow = new google.maps.InfoWindow({
   										content: contentString,	  				  			
 				  						});
-
-				  	infoWindow.open(map,marker);
+    				
+				  	marker.infoWindow.open(map,marker);
   				});
   				  				
 			}
@@ -497,7 +497,7 @@
 
 	<body>
 		
-		<div class="content-main">
+		<div class="container-main">
 			
 			<div id="map-holder" class="col-xs-12 col-sm-10 col-md-10 col-lg-10" 
 								style="padding-left: 0px;padding-right: 0px">
