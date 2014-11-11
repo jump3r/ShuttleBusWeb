@@ -30,7 +30,7 @@ def ArduinoSerialListener():
 
 #UserBusIntetion()
 #BusesGeo()
-BusHB([43.548043,-79.66095])
+BusHB([43.548043,-79.66095], busid= 2)
 #BusRouteChangeHB()
 #print haversine([43.548043,-79.66095], [43.662892,-79.395656])
 	

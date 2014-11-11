@@ -1,7 +1,7 @@
-from flask import Flask
+from flask imort Flask
 from flask import g
 from flask import Markup 
-from flask import Flask, session, redirect, url_for, escape, request, render_template
+from flask import session, redirect, url_for, escape, request, render_template
 
 import sys
 import pymongo
