@@ -1,4 +1,4 @@
-from flask imort Flask
+from flask import Flask
 from flask import g
 from flask import Markup 
 from flask import session, redirect, url_for, escape, request, render_template
@@ -23,10 +23,6 @@ def Index():
 	userip = request.remote_addr
 	print session
 	return render_template('shuttlebus.html')
-
-@app.route('/trans', methods=['GET'])
-def Trans():		
-	return render_template('newdesign1.html')
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
