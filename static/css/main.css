@@ -41,3 +41,23 @@ body {
 .sidebar-nav {
     padding: 9px 0;
 }
+
+.panel{
+    background-color: #D0A5A5;
+}
+
+.panel-success>.panel-heading {
+    background-color: #B0E29B;
+}
+
+.panel-success>.panel-footer {
+    background-color: #B0E29B;
+}
+
+.panel-warning>.panel-heading {
+    background-color: #FAEEB0;
+}
+
+.panel-warning>.panel-footer {
+    background-color: #FAEEB0;
+}

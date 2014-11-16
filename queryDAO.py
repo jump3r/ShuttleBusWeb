@@ -149,6 +149,7 @@ class QueryDAO:
 		col.update({'bus_id':bus['bus_id']},bus)
 
 		client.close()
+	
 
 	@staticmethod
 	def addNextTripBusLoad(bus_res):
@@ -207,9 +208,22 @@ class QueryDAO:
 		res['trips_counter'] += 1
 		if res['trips_counter'] == 300:
 			res['trips_counter'] = 0
+		
+		res["status"] = "active"
 
-		if res["status"] == "inactive":
-			res["status"] = "active"
+		col.update({'_id':res['_id']}, res )
+
+		client.close()
+
+	@staticmethod
+	def resetBusToActive(bus_id):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		col = db['bus_reservations']
+		res = col.find({'bus_id': bus_id})
+		res = res.next()
+		res["status"] = "active"
 
 		col.update({'_id':res['_id']}, res )
 

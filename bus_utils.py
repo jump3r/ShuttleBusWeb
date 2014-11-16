@@ -5,6 +5,8 @@ from queryDAO import QueryDAO
 
 IS_BUS_CLOSE_ENOUGH = 0.3 #within 300 meters
 BUS_INACTIVE_MIN = 20 #number of minutes without HB after which bus becomes inactive
+TOOLTIP_FOR_QUESTION_MARK = "Number of students that showed their intention to be on the next bus"
+TOOLTIP_FOR_BUTTON = "If you want to disclose your intention to be on the next bus so that everyone can benefit by knowing an approximate bus load"
 
 def haversine(lonlat1, lonlat2):
         
@@ -42,7 +44,7 @@ def check_next_bus_stop(bus):
     if haversine(curr_loc, ns_loc) <= IS_BUS_CLOSE_ENOUGH:        
         bus['next_stop_index'] = changeNextStopIndex(bus['next_stop_index'])        
         QueryDAO.UpdateBusStatus(bus) 
-        
+
         return True
 
     return False  

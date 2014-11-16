@@ -9,6 +9,7 @@ from bson.json_util import dumps
 from queryDAO import QueryDAO
 from bus_utils import check_next_bus_stop
 from bus_utils import check_last_hb_within_min_time
+from bus_utils import TOOLTIP_FOR_QUESTION_MARK, TOOLTIP_FOR_BUTTON
 import map_styles 
 
 #username = request.cookies.get('username')
@@ -34,8 +35,10 @@ def Index():
 	
 	map_style_aray = map_styles.stylesArray1
 
-	print session
-	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, map_style_aray = map_style_aray, seats_by_bus=seats_by_bus)
+	tooltips = {}
+	tooltips['?'] = TOOLTIP_FOR_QUESTION_MARK
+	tooltips['btn'] = TOOLTIP_FOR_BUTTON
+	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, map_style_aray = map_style_aray, seats_by_bus=seats_by_bus, tooltips = tooltips)
 
 
 @app.route('/UserCount', methods=['POST'])
@@ -44,9 +47,14 @@ def UserCount():
 	app.logger.debug(session)		
 
 	busid = int(request.form['busid'])
+	bus = QueryDAO.GetBusByID(busid)
+	if bus['status'] == 'inactive':
+		return "<div id='log'>Inactive</div>"
+
 	bus_res = QueryDAO.getBusReservationIDsByBus(busid)
-	busid = str(busid)
-	if busid not in session:#needs to be a str
+	busid = str(busid) 
+
+	if busid not in session: # busid needs to be a str
 		session[busid] = bus_res['trips_counter']
 		bus_res['seats_counter'] +=1
 		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
@@ -80,7 +88,10 @@ def BusHB():
 	stop_is_changed = check_next_bus_stop(bus)
 
 	if stop_is_changed:
-		QueryDAO.resetBusSeatsCounterAndStatus(busid)		
+		QueryDAO.resetBusSeatsCounterAndStatus(busid)  #resets 	
+	elif bus['status'] == 'inactive':
+		bus['status'] = 'active'
+		QueryDAO.updateBusById(bus)
 	
 	return "<div>True</div>"
 

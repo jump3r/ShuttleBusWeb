@@ -7,6 +7,7 @@ var bus_maker_map = {};
 var directionsService = null;// = new google.maps.DirectionsService();
 var directionsDisplay = null;// = new google.maps.DirectionsRenderer();
 
+$('[data-toggle="tooltip"]').tooltip();
 
 function addStopMarker(latlng, title, map){
     var marker = new google.maps.Marker(
@@ -35,7 +36,7 @@ function addStopMarker(latlng, title, map){
 
 function getInfoWindowContent(snapshot,bus){
                     
-    return "<div><img src="+snapshot+" width='100' height='100'/></div>";
+    return "<div><img src="+snapshot+" width='150' height='150'/></div>";
 }
 
 function addBusMarker(bus, snapshot, title, map){
@@ -55,8 +56,11 @@ function addBusMarker(bus, snapshot, title, map){
     bus_maker_map[bus['bus_id']] = marker;
     
     google.maps.event.addListener(marker, 'click', function() {
-        drawRoute(bus['lonlat'] , bus['stops_list'][bus['next_stop_index']][1])
-        
+
+        if (bus['status'] == 'active'){
+            drawRoute(bus['lonlat'] , bus['stops_list'][bus['next_stop_index']][1])
+        }
+
         var contentString = getInfoWindowContent(snapshot, bus);
         marker.infoWindow = new google.maps.InfoWindow({
                             content: contentString,                             
