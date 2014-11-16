@@ -18,7 +18,7 @@ function addStopMarker(latlng, title, map){
                             animation: google.maps.Animation.DROP, // BOUNCE                                       
                             //icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
                             //icon: {url:'yo.jpg', size: new google.maps.Size(5, 5)},
-                            //icon:'glyphicons_263_bank.png'
+                            //icon:'library-icon-white.png'
                         }
                 );
 
