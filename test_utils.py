@@ -30,7 +30,13 @@ def ArduinoSerialListener():
 
 #UserBusIntetion()
 #BusesGeo()
-BusHB([43.662892,-79.395656], busid= 1) #43.548043,-79.66095
+#BusHB([43.662892,-79.395656], busid= 1) #43.548043,-79.66095
 #BusRouteChangeHB()
 #print haversine([43.548043,-79.66095], [43.662892,-79.395656])
+'''
+import datetime
+s = datetime.datetime.utcnow()
+e = datetime.datetime.utcnow()
+mins = str(e - s).split(':')[1]
+'''
 	

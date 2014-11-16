@@ -8,8 +8,9 @@ import pymongo
 from bson.json_util import dumps
 from queryDAO import QueryDAO
 from bus_utils import check_next_bus_stop
-from bus_utils import process_user
+from bus_utils import check_last_hb_within_min_time
 import map_styles 
+
 #username = request.cookies.get('username')
 #resp = make_response(render_template(...))
 #resp.set_cookie('username', 'the username')
@@ -22,9 +23,15 @@ app = Flask(__name__, static_url_path = "", static_folder = "static")
 @app.route('/', methods=['GET'])
 def Index():	
 	userip = request.remote_addr
-	buses_geo = QueryDAO.GetBusesGeo()
+	buses_geo = QueryDAO.GetBusesGeo()	
+	
+	#check if no hb for last 20 min
+	buses_geo = check_last_hb_within_min_time(buses_geo)
+	
 	stops_geo = QueryDAO.GetStopsGeo()
+	
 	seats_by_bus = QueryDAO.GetSeatsByBusID()
+	
 	map_style_aray = map_styles.stylesArray1
 
 	print session
@@ -70,10 +77,10 @@ def BusHB():
 
 	bus = QueryDAO.GetBusByID(busid)
 
-	is_changed = check_next_bus_stop(bus)
+	stop_is_changed = check_next_bus_stop(bus)
 
-	if is_changed:
-		QueryDAO.resetBusSeatsCounter(busid)		
+	if stop_is_changed:
+		QueryDAO.resetBusSeatsCounterAndStatus(busid)		
 	
 	return "<div>True</div>"
 

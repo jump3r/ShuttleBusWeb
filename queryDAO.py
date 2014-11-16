@@ -102,9 +102,8 @@ class QueryDAO:
 				'lonlat' : rec['lonlat'],
 				'status' : rec['status'],
 				'stops_list' : rec['stops_list'],
-				'next_stop_index' : rec['next_stop_index'],
-				'bus_id' : rec['bus_id'],
-				
+				'next_stop_index' : rec['next_stop_index'],								
+				'last_hb_time': rec['last_hb_time'],
 				}
 			buses.append(d)
 
@@ -137,6 +136,17 @@ class QueryDAO:
 		col = db['bus_status']
 		
 		col.update({'_id':bus['_id']},bus)
+
+		client.close()
+
+	@staticmethod
+	def updateBusById(bus):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client.get_default_database()
+
+		col = db['bus_status']
+		
+		col.update({'bus_id':bus['bus_id']},bus)
 
 		client.close()
 
@@ -184,7 +194,7 @@ class QueryDAO:
 		return all_reservations.next()
 
 	@staticmethod
-	def resetBusSeatsCounter(bus_id):
+	def resetBusSeatsCounterAndStatus(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
 
@@ -197,6 +207,9 @@ class QueryDAO:
 		res['trips_counter'] += 1
 		if res['trips_counter'] == 300:
 			res['trips_counter'] = 0
+
+		if res["status"] == "inactive":
+			res["status"] = "active"
 
 		col.update({'_id':res['_id']}, res )
 
