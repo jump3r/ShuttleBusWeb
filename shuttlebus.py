@@ -34,18 +34,25 @@ def Index():
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug('A value for debugging')		
-	userip = request.remote_addr
-	
-	#if  userip not in session:
-	#	session[userip] = []
+	#userip = request.remote_addr
 
 	busid = int(request.form['busid'])
+	bus_res = QueryDAO.getBusReservationIDsByBus(busid)
 
-	bus_res = QueryDAO.getBusReservationIPsByBus(busid)
-	#if userip not in bus_res['reserved_seats_by']:
-	bus_res['reserved_seats_count'] +=1
-	QueryDAO.addNextTripBusLoad(bus_res)
+	if busid not in session:
+		session[busid] = bus_res['trips_counter']
+		return "<div id='log'>True</div>"
 	
+	user_trip_counter = session[busid]		
+	bus_trip_counter = bus_res['trips_counter']
+
+	if user_trip_counter != bus_trip_counter:
+		session[busid] = bus_trip_counter #Update to what trip user is registering to
+		bus_res['seats_counter'] +=1
+		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
+	else:
+		#User already registered to this bus
+		pass
 
 	return "<div id='log'>True</div>"
 
@@ -68,6 +75,7 @@ def BusHB():
 	
 	return "<div>True</div>"
 
+'''
 @app.route('/BusesGeo', methods=['GET'])
 def BusesGeo():
 	
@@ -84,6 +92,7 @@ def StopsGeo():
 	campuses_geo = QueryDAO.GetStopsGeo()
 		
 	return dumps(campuses_geo)
+'''
 
 @app.route('/BusRouteChangeHB', methods=['POST'])
 def BusRouteChangeHB():	
@@ -94,13 +103,14 @@ def BusRouteChangeHB():
 
 	return "<div>True</div>"
 
+'''
 @app.route('/BusesReservations', methods=['GET'])
 def BusesReservations():
 	
 	#buses_res = QueryDAO.GetAllBusReservations(request.remote_addr)
 
 	return dumps(buses_res)
-
+'''
 '''
 @app.route('/logout')
 def logout():

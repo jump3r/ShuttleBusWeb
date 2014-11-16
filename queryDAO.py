@@ -165,27 +165,7 @@ class QueryDAO:
 		'''
 		client.close()
 
-	@staticmethod
-	def GetAllBusReservations(userid):
-		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
-		
-		collection = db['bus_reservations']
-				
-		reservations = []		
-		records = collection.find()		
-		for rec in records:
-
-			d = {'bus_id': rec['bus_id'],
-				'reservations': len(rec['reserved_seats_by']),
-				'user_reserved': 1 if userid in rec['reserved_seats_by'] else 0,
-				}
-			reservations.append(d)
-
-		client.close()
-
-		return reservations
-
+	
 	@staticmethod
 	def GetSeatsByBusID():
 		client = pymongo.MongoClient(MONGODB_URI)
@@ -196,13 +176,13 @@ class QueryDAO:
 		reservations = {}		
 		records = collection.find()		
 		for rec in records:
-			reservations[rec['bus_id']] = rec['reserved_seats_count']
+			reservations[rec['bus_id']] = rec['seats_count']
 
 		client.close()
 		return reservations
 
 	@staticmethod
-	def getBusReservationIPsByBus(bus_id):
+	def getBusReservationIDsByBus(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
 
@@ -219,7 +199,13 @@ class QueryDAO:
 		col = db['bus_reservations']
 		res = col.find({'bus_id': bus_id})
 		res = res.next()
-		res['reserved_seats_count'] = 0
+		
+		res['seats_counter'] = 0
+
+		res['trips_counter'] += 1
+		if res['trips_counter'] == 300:
+			res['trips_counter'] = 0
+
 		col.update({'_id':res['_id']}, res )
 
 		client.close()

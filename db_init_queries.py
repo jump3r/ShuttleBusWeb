@@ -94,7 +94,8 @@ def addStatus():
 	for bus in SEED_DATA:
 		d = {
 			'bus_id': bus['bus_id'],
-			'reserved_seats_count': 0,
+			'seats_counter': 0,
+			'trips_counter': 0,
 		}
 		all_reservations.append(d)
 	bus_reservations.insert(all_reservations)
