@@ -13,7 +13,8 @@ function addStopMarker(latlng, title, map){
                         {
                             position: new google.maps.LatLng(latlng[0], latlng[1]),
                             map: map,
-                            title: title,                                       
+                            title: title,
+                            animation: google.maps.Animation.DROP, // BOUNCE                                       
                             //icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
                             //icon: {url:'yo.jpg', size: new google.maps.Size(5, 5)},
                             //icon:'glyphicons_263_bank.png'
@@ -44,7 +45,7 @@ function addBusMarker(bus, snapshot, title, map){
                             position: new google.maps.LatLng(bus['lonlat'][0], bus['lonlat'][1]),
                             map: map,
                             title: title,
-                            //animation: google.maps.Animation.BOUNCE // DROP
+                            animation: google.maps.Animation.BOUNCE, // DROP
                             //icon: {url:'yo.jpg', size: new google.maps.Size(5, 5)},
                             //icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
                             icon:'glyphicons_031_bus.png'
@@ -55,10 +56,6 @@ function addBusMarker(bus, snapshot, title, map){
     
     google.maps.event.addListener(marker, 'click', function() {
         drawRoute(bus['lonlat'] , bus['stops_list'][bus['next_stop_index']][1])
-
-        //result = //sessionStorage.getItem(bus['bus_id']+'route');
-        //console.log("HERE", result);
-        //directionsDisplay.setDirections(result);
         
         var contentString = getInfoWindowContent(snapshot, bus);
         marker.infoWindow = new google.maps.InfoWindow({
@@ -66,9 +63,9 @@ function addBusMarker(bus, snapshot, title, map){
                             });
         
         marker.infoWindow.open(map,marker);
-    });
-                    
+    });                    
 }
+
 function preFetchDistance(bus){
     start = bus['lonlat'];
     start = new google.maps.LatLng(start[0],start[1]);
@@ -134,13 +131,6 @@ function drawRoute(start , end){
       region: String
     }
     */
-}
-
-function initWeather(map){
-    var weatherLayer = new google.maps.weather.WeatherLayer({
-                    temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS
-                  });
-    weatherLayer.setMap(map);           
 }
 
 function mapStyleBuilder(){
@@ -239,8 +229,6 @@ function initialize()
     initBuses(map);
     initStops(map);
 
-    //initWeather(map);             
-    //mapref = map;
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -255,20 +243,6 @@ function addUserCount(busid){
                           dataType: 'html'
                         });
      
-    request.fail(function( jqXHR, textStatus ) {
-        alert( "Request failed: " + textStatus );
-    });
-}
-
-function setUserReservations(){
-    var request = $.ajax({
-                          url: 'BusesReservations',
-                          type: 'GET',                                    
-                          dataType: 'html'
-                        });
-    request.done(function (msg){
-        res_json = JSON.parse(msg);
-    });
     request.fail(function( jqXHR, textStatus ) {
         alert( "Request failed: " + textStatus );
     });

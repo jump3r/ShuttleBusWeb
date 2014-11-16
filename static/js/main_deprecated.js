@@ -68,3 +68,10 @@ function addBusPanel(bus){
     $("#buses_container_id").append(html_el);              
     
 }
+
+function initWeather(map){
+    var weatherLayer = new google.maps.weather.WeatherLayer({
+                    temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS
+                  });
+    weatherLayer.setMap(map);           
+}

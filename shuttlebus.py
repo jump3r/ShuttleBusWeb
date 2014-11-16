@@ -73,7 +73,7 @@ def BusHB():
 	is_changed = check_next_bus_stop(bus)
 
 	if is_changed:
-		QueryDAO.resetBusReservationIPsByBus(busid)		
+		QueryDAO.resetBusSeatsCounter(busid)		
 	
 	return "<div>True</div>"
 
@@ -105,14 +105,7 @@ def BusRouteChangeHB():
 
 	return "<div>True</div>"
 
-'''
-@app.route('/BusesReservations', methods=['GET'])
-def BusesReservations():
-	
-	#buses_res = QueryDAO.GetAllBusReservations(request.remote_addr)
 
-	return dumps(buses_res)
-'''
 '''
 @app.route('/logout')
 def logout():

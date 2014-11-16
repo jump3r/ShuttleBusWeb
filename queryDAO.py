@@ -13,8 +13,7 @@ class QueryDAO:
 		collection = db['busid_map']
 
 		busmap = collection.find({'bus_map': busid})
-		bus_id = busmap.next()['bus_id']
-		
+		bus_id = busmap.next()['bus_id']		
 
 		return bus_id
 
@@ -38,8 +37,7 @@ class QueryDAO:
 		bus = collection.find({'bus_id': bus_id})	
 		try:			
 			bus = bus.next()
-		except:
-			print "ERROR"
+		except:			
 			bus = {}
 
 		client.close()
@@ -50,13 +48,7 @@ class QueryDAO:
 	def BusHBLog(bus_id, lonlat):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
-		'''
-		#VERIFY BUS_ID
-		collection = db['busid_map']
-		busmap = collection.find({'bus_map': busid})
 		
-		bus_id = busmap.next()['bus_id']
-		'''
 		#UPDATE BUS STATUS
 		dt = datetime.datetime.utcnow()
 		collection = db['bus_status']
@@ -192,7 +184,7 @@ class QueryDAO:
 		return all_reservations.next()
 
 	@staticmethod
-	def resetBusReservationIPsByBus(bus_id):
+	def resetBusSeatsCounter(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client.get_default_database()
 
