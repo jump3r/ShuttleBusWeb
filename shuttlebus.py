@@ -33,14 +33,16 @@ def Index():
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
-	#app.logger.debug('A value for debugging')		
-	#userip = request.remote_addr
+	app.logger.debug(request.remote_addr)		
+	app.logger.debug(session)		
 
 	busid = int(request.form['busid'])
 	bus_res = QueryDAO.getBusReservationIDsByBus(busid)
-
-	if busid not in session:
+	busid = str(busid)
+	if busid not in session:#needs to be a str
 		session[busid] = bus_res['trips_counter']
+		bus_res['seats_counter'] +=1
+		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
 		return "<div id='log'>True</div>"
 	
 	user_trip_counter = session[busid]		

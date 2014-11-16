@@ -176,7 +176,7 @@ class QueryDAO:
 		reservations = {}		
 		records = collection.find()		
 		for rec in records:
-			reservations[rec['bus_id']] = rec['seats_count']
+			reservations[rec['bus_id']] = rec['seats_counter']
 
 		client.close()
 		return reservations
@@ -199,7 +199,7 @@ class QueryDAO:
 		col = db['bus_reservations']
 		res = col.find({'bus_id': bus_id})
 		res = res.next()
-		
+
 		res['seats_counter'] = 0
 
 		res['trips_counter'] += 1
