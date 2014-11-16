@@ -7,6 +7,7 @@ var bus_maker_map = {};
 var directionsService = null;// = new google.maps.DirectionsService();
 var directionsDisplay = null;// = new google.maps.DirectionsRenderer();
 
+
 function addStopMarker(latlng, title, map){
     var marker = new google.maps.Marker(
                         {
@@ -89,9 +90,9 @@ function preFetchDistance(bus){
             
             $('#'+'distance'+bus['bus_id']).html('Distance: '+distance);
             $('#'+'duration'+bus['bus_id']).html('Arrival Time: '+duration);
-            //sessionStorage.setItem(bus['bus_id'] + 'distance', distance);
-            //sessionStorage.setItem(bus['bus_id'] + 'duration', duration);
 
+            $('#'+'distance_menu'+bus['bus_id']).html('Distance: '+distance);
+            $('#'+'duration_menu'+bus['bus_id']).html('Arrival Time: '+duration);
             
         }
     });
@@ -143,159 +144,7 @@ function initWeather(map){
 }
 
 function mapStyleBuilder(){
-    var stylesArray = [
-    {
-        "featureType": "landscape",
-        "stylers": [
-            {
-                "visibility": "simplified"
-            },
-            {
-                "color": "#000000"
-            },
-            {
-                "weight": 0.1
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "hue": "#ff0000"
-            },
-            {
-                "weight": 0.4
-            },
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "labels.text",
-        "stylers": [
-            {
-                "weight": 1.3
-            },
-            {
-                "color": "#FFFFFF"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#B52127"
-            },
-            {
-                "weight": 3
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#B52127"
-            },
-            {
-                "weight": 1.1
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#B52127"
-            },
-            {
-                "weight": 0.4
-            }
-        ]
-    },
-    {},
-    {
-        "featureType": "road.highway",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "weight": 0.8
-            },
-            {
-                "color": "#ffffff"
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "color": "#ffffff"
-            },
-            {
-                "weight": 0.7
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "stylers": [
-            {
-                "color": "#E6AB16"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "stylers": [
-            {
-                "color": "#00a9ca"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.line",
-        "stylers": [
-            {
-                "visibility": "on"
-            }
-        ]
-    }
-]
-
-    return stylesArray;
+    return GLOB_MAP_STYLE;
 }
 
 function addTraffic(map){
@@ -304,77 +153,33 @@ function addTraffic(map){
     trafficLayer.setMap(map);               
 }
 
-function addBusPanel(bus, map){
-                    
-    var next_stop = bus['stops_list'][bus['next_stop_index']][0]
-    var bus_distance_id = 'distance'+bus['bus_id'];
-    var bus_duration_id = 'duration'+bus['bus_id'];
-
-    html_el  = '<div style="width:100%" onclick="triggerMarker('+bus['bus_id']+')">';
-    html_el += '<div class="panel panel-success"><div class="panel-heading">';
-    html_el += 'Shuttle Bus #' +  bus['bus_id']+ ' to '+next_stop;
-    html_el += '</div><div class="panel-body">' ;
-    html_el += '<p id='+bus_distance_id+'></p>';
-    html_el += '<p id='+bus_duration_id+'></p>';
-    html_el += '</div>';
-    html_el += '<div class="panel-footer">'
-    html_el += '<button type="button" class="btn btn-primary" onclick="addUserCount('+bus['bus_id']+')"">Count Me In!</button></div></div> ';
-                    
-    $("#buses_container_id").append(html_el);              
-}
 
 function triggerMarker(bus_id){
     new google.maps.event.trigger( bus_maker_map[bus_id], 'click' );
+    
+}
+
+function unCollapseMenu(){
+    $('#collapsable_menu_navbar').removeClass('in');
 }
 
 function initBuses(map){
+    var buses_json = GLOB_BUSES;
 
-    var request = $.ajax({
-                          url: "BusesGeo",
-                          type: "GET",                                   
-                        });                                  
-    request.done(function( msg ) {  
-
-      buses_json = JSON.parse(msg);
-
-      for(bus_index in buses_json){
-
-        bus = buses_json[bus_index];
-        
+    for(bus_index in buses_json){
+        bus = buses_json[bus_index];        
         preFetchDistance(bus);
-
         addBusMarker(bus, "no_image.gif", "NONE", map );
-        
-        addBusPanel(bus, map);
-      }
-      
-    });
-     
-    request.fail(function( jqXHR, textStatus ) {
-      alert( "Request failed: " + textStatus );
-        });
+    }
 }
 
 function initStops(map){
-
-    var request = $.ajax({
-                          url: "StopsGeo",
-                          type: "GET",                                   
-                        });                                  
-    request.done(function( msg ) {                
-      
-      stops_json = JSON.parse(msg);
+    stops_json = GLOB_STOPS;
 
       for(stop_index in stops_json){
         stop = stops_json[stop_index];
         addStopMarker( stop['lonlat'], stop['name'], map );                 
       }
-      
-    });
-     
-    request.fail(function( jqXHR, textStatus ) {
-      alert( "Request failed: " + textStatus );
-        });
 }
 
 function initialize()
@@ -412,7 +217,7 @@ function initialize()
 
     var map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
 
-    map.setOptions({style: mapStyleBuilder()})
+    //map.setOptions({style: mapStyleBuilder()})
 
     directionsService = new google.maps.DirectionsService();
 

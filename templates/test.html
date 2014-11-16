@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">    
+    <head>
+        <meta charset="utf-8">
+ 	</head>
+    <body>
+
+    	<script type="text/javascript">
+    		var all_buses = [
+            {% for bus in buses_geo %} 
+                {{ bus }},
+            {% endfor %}
+            ]
+
+    	</script>
+
+	</body>

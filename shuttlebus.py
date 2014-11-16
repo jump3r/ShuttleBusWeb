@@ -9,6 +9,7 @@ from bson.json_util import dumps
 from queryDAO import QueryDAO
 from bus_utils import check_next_bus_stop
 from bus_utils import process_user
+import map_styles 
 #username = request.cookies.get('username')
 #resp = make_response(render_template(...))
 #resp.set_cookie('username', 'the username')
@@ -21,9 +22,20 @@ app = Flask(__name__, static_url_path = "", static_folder = "static")
 @app.route('/', methods=['GET'])
 def Index():	
 	userip = request.remote_addr
-	print session
-	return render_template('shuttlebus.html')
+	buses_geo = QueryDAO.GetBusesGeo()
+	stops_geo = QueryDAO.GetStopsGeo()
+	map_style_aray = map_styles.stylesArray1
 
+	print session
+	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, map_style_aray = map_style_aray)
+'''
+@app.route('/test', methods=['GET'])
+def index():	
+	
+	buses_geo = [{'1':"bla"},{'2':'bla2'}]
+	
+	return render_template('test.html', buses_geo = buses_geo)
+'''
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug('A value for debugging')		
