@@ -41,16 +41,18 @@
                             
                                 <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;padding-left: 0px;">
                                     
-                                        <span class="label label-danger">Bus #{{ bus['bus_id'] }}:</span>
+                                        <span class="label label-danger">Bus #{{ bus['bus_id'] }} to {{ bus['stops_list'][bus['next_stop_index']][0] }}</span>
                                         <span class="label label-warning" id="distance_menu{{ bus['bus_id'] }}"></span>
                                         <span class="label label-warning" id="duration_menu{{ bus['bus_id'] }}"></span>
+                                        <span class="label label-warning">Seats To Be Taken: {{ seats_by_bus[bus['bus_id']] }}</span>
+                                        
                                     
                                 </div>
                                 <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 1em">
                                     
                                         <button onclick="unCollapseMenu(); triggerMarker({{ bus['bus_id'] }})" type="button" class="btn btn-primary"  style="margin-top: 0px;margin-bottom: 0px;padding-left: 10px;padding-right: 10px;margin-right: 0px;margin-left: 0px;">Show On Map</button>
                                                                         
-                                        <button onclick="unCollapseMenu(); addUserCount({{ bus['bus_id'] }})" type="button" class="btn btn-success" style="margin-top: 0px;margin-bottom: 0px;padding-left: 10px;padding-right: 10px;margin-right: 0px;margin-left: 0px;">Add Myself</button>
+                                        <button onclick="unCollapseMenu(); addUserCount({{ bus['bus_id'] }})" type="button" class="btn btn-success" style="margin-top: 0px;margin-bottom: 0px;padding-left: 10px;padding-right: 10px;margin-right: 0px;margin-left: 0px;">Add Me</button>
                                     
                                    
                                 
@@ -91,6 +93,7 @@
                                                 <div class="panel-body" style="text-align: center;">
                                                     <h5 id="distance{{ bus['bus_id'] }}"></h5>
                                                     <h5 id="duration{{ bus['bus_id'] }}"></h5>
+                                                    <h5>Seats To Be Taken: {{ seats_by_bus[bus['bus_id']] }}</h5>
                                                 </div>
                                                 <div class="panel-footer">
                                                     <button style="margin:0 auto;display:block;" type="button" class="btn btn-primary" onclick="addUserCount({{ bus['bus_id'] }})">

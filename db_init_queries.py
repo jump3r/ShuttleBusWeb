@@ -59,7 +59,7 @@ def addStatus():
     {
         'bus_id': 1,	 
         'last_hb_time': datetime.datetime.utcnow(),
-        'stops_list': [['UFTS', [43.784712,-79.185998]],['UFT',[43.662892,-79.395656]]],
+        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
         'next_stop_index': 0,
         'lonlat': [43.662892,-79.395656],
         'status': 'active',        
@@ -75,9 +75,9 @@ def addStatus():
     {
         'bus_id': 3,	 
         'last_hb_time': datetime.datetime.utcnow(),
-        'stops_list': [['UTM',[43.548043,-79.66095]],['UFTS', [43.784712,-79.185998]]],
+        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
         'next_stop_index': 0,
-        'lonlat': [43.784712,-79.185998],
+        'lonlat': [43.6170021,-79.506403],
         'status': 'active',        
     }
     ]
@@ -94,7 +94,7 @@ def addStatus():
 	for bus in SEED_DATA:
 		d = {
 			'bus_id': bus['bus_id'],
-			'reserved_seats_by': [],
+			'reserved_seats_count': 0,
 		}
 		all_reservations.append(d)
 	bus_reservations.insert(all_reservations)

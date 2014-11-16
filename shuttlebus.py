@@ -24,35 +24,30 @@ def Index():
 	userip = request.remote_addr
 	buses_geo = QueryDAO.GetBusesGeo()
 	stops_geo = QueryDAO.GetStopsGeo()
+	seats_by_bus = QueryDAO.GetSeatsByBusID()
 	map_style_aray = map_styles.stylesArray1
 
 	print session
-	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, map_style_aray = map_style_aray)
-'''
-@app.route('/test', methods=['GET'])
-def index():	
-	
-	buses_geo = [{'1':"bla"},{'2':'bla2'}]
-	
-	return render_template('test.html', buses_geo = buses_geo)
-'''
+	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, map_style_aray = map_style_aray, seats_by_bus=seats_by_bus)
+
+
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug('A value for debugging')		
 	userip = request.remote_addr
 	
-	if  userip not in session:
-		session[userip] = []
+	#if  userip not in session:
+	#	session[userip] = []
 
 	busid = int(request.form['busid'])
 
 	bus_res = QueryDAO.getBusReservationIPsByBus(busid)
-	if userip not in bus_res['reserved_seats_by']:
-		bus_res['reserved_seats_by'].append(userip)
-		QueryDAO.addNextTripBusLoad(bus_res)
+	#if userip not in bus_res['reserved_seats_by']:
+	bus_res['reserved_seats_count'] +=1
+	QueryDAO.addNextTripBusLoad(bus_res)
 	
 
-	return "<div id='log'>Hello</div>"
+	return "<div id='log'>True</div>"
 
 
 @app.route('/BusHB', methods=['POST'])
@@ -102,7 +97,7 @@ def BusRouteChangeHB():
 @app.route('/BusesReservations', methods=['GET'])
 def BusesReservations():
 	
-	buses_res = QueryDAO.GetAllBusReservations(request.remote_addr)
+	#buses_res = QueryDAO.GetAllBusReservations(request.remote_addr)
 
 	return dumps(buses_res)
 
