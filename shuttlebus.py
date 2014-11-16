@@ -11,6 +11,7 @@ from bus_utils import check_next_bus_stop
 from bus_utils import check_last_hb_within_min_time
 from bus_utils import TOOLTIP_FOR_QUESTION_MARK, TOOLTIP_FOR_BUTTON
 import map_styles 
+from schedule import UFT_WEEKDAY_TIME, UTM_WEEKDAY_TIME
 
 #username = request.cookies.get('username')
 #resp = make_response(render_template(...))
@@ -38,7 +39,13 @@ def Index():
 	tooltips = {}
 	tooltips['?'] = TOOLTIP_FOR_QUESTION_MARK
 	tooltips['btn'] = TOOLTIP_FOR_BUTTON
-	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, map_style_aray = map_style_aray, seats_by_bus=seats_by_bus, tooltips = tooltips)
+
+	schedule = {}
+	schedule['UTM'] = {'AM': UTM_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UTM_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
+	schedule['UFT'] = {'AM': UFT_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UFT_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
+	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, 
+							map_style_aray = map_style_aray, seats_by_bus=seats_by_bus, 
+							tooltips = tooltips, schedule = schedule)
 
 
 @app.route('/UserCount', methods=['POST'])
