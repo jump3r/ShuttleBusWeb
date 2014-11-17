@@ -39,7 +39,7 @@
                     {% for bus in buses_geo %} 
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 0.5em;">
                             
-                                <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6" style="margin-right: 0em;">
+                                <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6" style="margin-right: 0em;padding-left: 0em;">
                                     
                                         <span class="label label-danger">Bus#{{ bus['bus_id'] }} to {{ bus['stops_list'][bus['next_stop_index']][0] }}( 
                                             {% if bus['status'] == 'active' %}
