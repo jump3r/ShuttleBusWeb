@@ -39,7 +39,7 @@
                     {% for bus in buses_geo %} 
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 0.5em;">
                             
-                                <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;padding-left: 0px;">
+                                <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6" style="margin-right: 0em;">
                                     
                                         <span class="label label-danger">Bus#{{ bus['bus_id'] }} to {{ bus['stops_list'][bus['next_stop_index']][0] }}({{ bus['status'] }})</span>
                                         <span class="label label-warning" id="distance_menu{{ bus['bus_id'] }}"></span>
@@ -48,17 +48,17 @@
                                         
                                     
                                 </div>
-                                <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="float: right;" >
+                                <div class="col-xs-8 col-sm-6 col-md-6 col-lg-6" style="margin-right: 0em; padding-right: 0em">
                                     
-                                        <button                                             
+                                        <button style="float: right; margin-bottom: 0.5em; margin-top: 0em;"                                              
                                             onclick="unCollapseMenu(); triggerMarker({{ bus['bus_id'] }})"
-                                            type="button" class="btn btn-primary"  style="margin-bottom: 1em; margin-top: 0em;padding-left: 10px;padding-right: 10px;margin-right: 0px;margin-left: 0px;">
+                                            type="button" class="btn btn-primary"  style="margin-bottom: 0em; margin-top: 0em;padding-left: 0em;padding-right: 0em;margin-right: 0px;margin-left: 0em;">
                                             Show On Map
                                         </button>
                                                                         
-                                        <button                                             
+                                        <button style="float: right; margin-bottom: 0.5em; margin-top: 0em;"                                             
                                             onclick="unCollapseMenu(); addUserCount({{ bus['bus_id'] }})"
-                                            type="button" class="btn btn-success" style="margin-bottom: 1em; margin-top: 0em;padding-left: 10px;padding-right: 10px;margin-right: 0px;margin-left: 0px;" 
+                                            type="button" class="btn btn-success" 
                                             {% if bus['status'] == 'inactive' %} 
                                                disabled 
                                             {% endif %}

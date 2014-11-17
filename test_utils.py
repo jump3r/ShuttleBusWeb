@@ -8,8 +8,10 @@ def UserBusIntetion():
 
 
 def BusHB(lonlat, busid=1):
-	payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]}    
-	r = requests.post('http://localhost:5000/BusHB',data=payload)
+	payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]} 
+	
+	#r = requests.post('http://localhost:5000/BusHB',data=payload)
+	r = requests.post('http://shuttlebus.herokuapp.com/BusHB',data=payload)
     
 	print r.text
 
@@ -30,7 +32,7 @@ def ArduinoSerialListener():
 
 #UserBusIntetion()
 #BusesGeo()
-BusHB([43.662892,-79.395656], busid= 1) #43.548043,-79.66095
+BusHB([43.662892,-79.395656], busid=1) #43.548043,-79.66095
 #BusRouteChangeHB()
 #print haversine([43.548043,-79.66095], [43.662892,-79.395656])
 '''
