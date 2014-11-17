@@ -8,7 +8,7 @@
 
         <link href="http://fezvrasta.github.io/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
         <link href="http://fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">
-                
+                        
         <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -56,12 +56,14 @@
                                             Show On Map
                                         </button>
                                                                         
-                                        <button style="float: right; margin-bottom: 0.5em; margin-top: 0em;"                                             
-                                            onclick="unCollapseMenu(); addUserCount({{ bus['bus_id'] }})"
+                                        <button style="float: right; margin-bottom: 0.5em; margin-top: 0em;"
                                             type="button" class="btn btn-success" 
-                                            {% if bus['status'] == 'inactive' %} 
-                                               disabled 
-                                            {% endif %}
+                                        {% if bus['status'] == 'active' %} 
+                                            onclick="addUserCount({{ bus['bus_id'] }}); javascript:$.snackbar({content: 'You were added to the shuttle bus. Thank you for sharing your intention.', time: 200});"
+                                        {% else %} 
+                                            onclick="javascript:$.snackbar({content: 'At the moment this shuttle bus is inactive and you cannot add yourself.', time: 200});"      
+                                        {% endif %}   
+                                            
                                             >Add Me
                                         </button>
                                     
@@ -123,8 +125,13 @@
                                                     </h5>
                                                 </div>
                                                 <div class="panel-footer">
-                                                    <button style="margin:0 auto;display:block;" type="button" class="btn btn-primary" onclick="addUserCount({{ bus['bus_id'] }})" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ tooltips['btn'] }}" >
-                                                        Add Myself To Next Bus
+                                                    <button style="margin:0 auto;display:block;" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ tooltips['btn'] }}" 
+                                                {% if bus['status'] == 'active' %} 
+                                                    onclick="addUserCount({{ bus['bus_id'] }});javascript:$.snackbar({content: 'You were added to the shuttle bus. Thank you for sharing your intention.', time: 200});"
+                                                {% else %} 
+                                                    onclick="javascript:$.snackbar({content: 'At the moment this shuttle bus is inactive and you cannot add yourself.', time: 200});"      
+                                                {% endif %}         
+                                                    >Add Myself To Next Bus
                                                     </button>
                                                 </div>
                                             </div>
@@ -174,6 +181,7 @@
         <hr class="soften">
         </div>
 
+
         
         <div id="footer">
              University of Toronto Shuttle Buses - The smartest way to get around.
@@ -183,7 +191,7 @@
         
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
+        <script src="http://fezvrasta.github.io/snackbarjs/dist/snackbar.min.js"></script>
         
         <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>        
 
