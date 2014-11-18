@@ -4,7 +4,7 @@ from queryDAO import QueryDAO
 
 
 IS_BUS_CLOSE_ENOUGH = 0.3 #within 300 meters
-BUS_INACTIVE_MIN = 20 #number of minutes without HB after which bus becomes inactive
+BUS_INACTIVE_MIN = 5 #number of minutes without HB after which bus becomes inactive
 TOOLTIP_FOR_QUESTION_MARK = "Number of students that showed their intention to be on the next bus"
 TOOLTIP_FOR_BUTTON = "If you want to disclose your intention to be on the next bus so that everyone can benefit by knowing an approximate bus load"
 

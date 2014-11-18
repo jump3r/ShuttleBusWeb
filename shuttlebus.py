@@ -24,6 +24,7 @@ app = Flask(__name__, static_url_path = "", static_folder = "static")
 
 @app.route('/', methods=['GET'])
 def Index():	
+
 	userip = request.remote_addr
 	buses_geo = QueryDAO.GetBusesGeo()	
 	
@@ -83,22 +84,71 @@ def UserCount():
 
 @app.route('/BusHB', methods=['POST'])
 def BusHB():
-	
-	busid = int(request.form['busid'])
-	lon = float(request.form['lon'])
-	lat = float(request.form['lat'])
-		
-	QueryDAO.BusHBLog(busid, [lon, lat])
+	exception_message = "EXCEPTION OCCURED"
+	try:
+		if len(request.form) == 1:
+			
+			key_val_list = request.form.keys()[0].split(',')
+									
+			busid,lon,lat = None, None, None
 
-	bus = QueryDAO.GetBusByID(busid)
+			for key_val in key_val_list:
 
-	stop_is_changed = check_next_bus_stop(bus)
+				k, v = key_val.split(':')
+				
+				if k == "busid":
+					busid = int(v)
 
-	if stop_is_changed:
-		QueryDAO.resetBusSeatsCounterAndStatus(busid)  #resets 	
-	elif bus['status'] == 'inactive':
-		bus['status'] = 'active'
-		QueryDAO.updateBusById(bus)
+				elif k == "lon":
+					lon = float(v)
+
+				elif k == "lat":
+					lat = float(v)
+			
+			if None in [busid, lon, lat]:
+				raise Exception("One of POST key is not found")
+
+
+			QueryDAO.BusHBLog(busid, [lon, lat])
+
+			bus = QueryDAO.GetBusByID(busid)
+
+			stop_is_changed = check_next_bus_stop(bus)
+
+			if stop_is_changed:
+				QueryDAO.resetBusSeatsCounterAndStatus(busid)  #resets 	
+			elif bus['status'] == 'inactive':
+				bus['status'] = 'active'
+				QueryDAO.updateBusById(bus)
+
+		else:
+			exception_message = "Number of arguments in POST list is not matching"
+			raise Exception(exception_message)
+
+		'''	
+		elif len(request.form) == 3:
+			print "here2"
+			busid = int(request.form['busid'])
+			
+			lon = float(request.form['lon'])
+			
+			lat = float(request.form['lat'])
+			
+				
+			QueryDAO.BusHBLog(busid, [lon, lat])
+
+			bus = QueryDAO.GetBusByID(busid)
+
+			stop_is_changed = check_next_bus_stop(bus)
+
+			if stop_is_changed:
+				QueryDAO.resetBusSeatsCounterAndStatus(busid)  #resets 	
+			elif bus['status'] == 'inactive':
+				bus['status'] = 'active'
+				QueryDAO.updateBusById(bus)
+		'''
+	except:
+		print exception_message
 	
 	return "<div>True</div>"
 

@@ -8,11 +8,12 @@ def UserBusIntetion():
 
 
 def BusHB(lonlat, busid=1):
-	payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]} 
-	
+	#payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]} 
+	payload = 'busid:{},lon:{},lat:{}'.format(busid,*lonlat)
+	headers = {'content-type': 'application/x-www-form-urlencoded'}
 	#r = requests.post('http://localhost:5000/BusHB',data=payload)
-	r = requests.post('http://shuttlebus.herokuapp.com/BusHB',data=payload)
-    
+	r = requests.post('http://shuttlebus.herokuapp.com/BusHB', headers=headers, data=payload)
+	#r = requests.post('http://localhost:5000/BusHB', headers=headers, data=payload)
 	print r.text
 
 def BusRouteChangeHB():
