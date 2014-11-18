@@ -151,6 +151,8 @@ function addTraffic(map){
 function triggerMarker(bus_id){
     new google.maps.event.trigger( bus_maker_map[bus_id], 'click' );
     
+    document.location.hash="google_map";    
+    
 }
 
 function unCollapseMenu(){

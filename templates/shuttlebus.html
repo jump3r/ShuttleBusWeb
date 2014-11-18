@@ -88,7 +88,7 @@
           </div>
         </div>
         <!-- END NAVABAR-->
-
+        <a name="google_map"></a>
         <div class="container">
                     <div class="row">
 
@@ -108,7 +108,7 @@
                                         <div onclick="triggerMarker({{ bus['bus_id'] }})">
                                             <div class="panel panel-success">
                                     {% else %}
-                                        <div onclick="">    
+                                        <div onclick="triggerMarker({{ bus['bus_id'] }})">    
                                             <div class="panel panel-warning">
                                     {% endif %}
                                                 <div class="panel-heading" style="text-align: center;">
