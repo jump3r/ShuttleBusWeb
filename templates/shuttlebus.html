@@ -50,7 +50,9 @@
                                              )</span>
                                         <span class="label label-warning" id="distance_menu{{ bus['bus_id'] }}"></span>
                                         <span class="label label-warning" id="duration_menu{{ bus['bus_id'] }}"></span>
-                                        <span class="label label-warning">Seats To Be Taken: {{ seats_by_bus[bus['bus_id']] }}</span>
+                                        <span class="label label-warning">Seats To Be Taken: 
+                                            <span id="seats_xs_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}</span>
+                                        </span>
                                         
                                     
                                 </div>
@@ -122,15 +124,15 @@
                                                         INACTIVE
                                                         {% endif %}
                                                     </h5>
-                                                    <h5 id="distance{{ bus['bus_id'] }}"></h5>
-                                                    <h5 id="duration{{ bus['bus_id'] }}"></h5>
-                                                    <h5>Seats To Be Taken: {{ seats_by_bus[bus['bus_id']] }}
+                                                    <h5>Distance: <span id="distance{{ bus['bus_id'] }}"></span></h5>
+                                                    <h5>Arrival Time: <span id="duration{{ bus['bus_id'] }}"></span></h5>
+                                                    <h5>Seats To Be Taken: <span id="seats_lg_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}</span>
                                                         <button class="btn btn-warning" style="margin-top: 0px; 
                                                                                                 margin-left: 0px;
                                                                                                 margin-bottom: 0px;
                                                                                                 margin-right: 0px;
-                                                                                                padding-right: 2px;
-                                                                                                padding-left: 2px;
+                                                                                                padding-right: 0.7px;
+                                                                                                padding-left: 0.7px;
                                                                                                 padding-top: 0px;
                                                                                                 padding-bottom: 0px;"
                                                         data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ tooltips['?'] }}" type="button">?</button>
@@ -139,7 +141,7 @@
                                                 <div class="panel-footer">
                                                     <button style="margin:0 auto;display:block;" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ tooltips['btn'] }}" 
                                                 {% if bus['status'] == 'active' %} 
-                                                    onclick="addUserCount({{ bus['bus_id'] }});javascript:$.snackbar({content: 'You were added to the shuttle bus. Thank you for sharing your intention.', time: 200});"
+                                                    onclick="addUserCount({{ bus['bus_id'] }});"
                                                 {% else %} 
                                                     onclick="javascript:$.snackbar({content: 'At the moment this shuttle bus is inactive and you cannot be added.', time: 200});"      
                                                 {% endif %}         

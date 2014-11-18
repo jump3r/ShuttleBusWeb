@@ -51,8 +51,8 @@ def Index():
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
-	app.logger.debug(request.remote_addr)		
-	app.logger.debug(session)		
+	#app.logger.debug(request.remote_addr)		
+	#app.logger.debug(session)		
 
 	busid = int(request.form['busid'])
 	bus = QueryDAO.GetBusByID(busid)
@@ -66,20 +66,23 @@ def UserCount():
 		session[busid] = bus_res['trips_counter']
 		bus_res['seats_counter'] +=1
 		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
-		return "<div id='log'>True</div>"
+		result = "<div id='seats_num'>"+str(bus_res['seats_counter'])+"</div>"
+		return result
 	
 	user_trip_counter = session[busid]		
 	bus_trip_counter = bus_res['trips_counter']
+	already_registered = False
 
 	if user_trip_counter != bus_trip_counter:
 		session[busid] = bus_trip_counter #Update to what trip user is registering to
 		bus_res['seats_counter'] +=1
 		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
-	else:
-		#User already registered to this bus
-		pass
-
-	return "<div id='log'>True</div>"
+	else:		
+		already_registered = True
+	
+	result = "<div id='seats_num'>"+str(bus_res['seats_counter'])+"</div>"
+	
+	return result
 
 
 @app.route('/BusHB', methods=['POST'])
@@ -98,10 +101,8 @@ def BusHB():
 				
 				if k == "busid":
 					busid = int(v)
-
 				elif k == "lon":
 					lon = float(v)
-
 				elif k == "lat":
 					lat = float(v)
 			

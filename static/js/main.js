@@ -89,8 +89,8 @@ function preFetchDistance(bus){
             var distance = result.routes[0].legs[0].distance.text;
             var duration = result.routes[0].legs[0].duration.text;
             
-            $('#'+'distance'+bus['bus_id']).html('Distance: '+distance);
-            $('#'+'duration'+bus['bus_id']).html('Arrival Time: '+duration);
+            $('#'+'distance'+bus['bus_id']).html(distance);
+            $('#'+'duration'+bus['bus_id']).html(duration);
 
             $('#'+'distance_menu'+bus['bus_id']).html('Distance: '+distance);
             $('#'+'duration_menu'+bus['bus_id']).html('Arrival Time: '+duration);
@@ -239,15 +239,29 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 function addUserCount(busid){
-
+    $.snackbar({content: 'Processing ...', time: 300});
     var request = $.ajax({
                           url: 'UserCount',
                           type: 'POST',
                           data: { 'busid' : busid },
                           dataType: 'html'
                         });
-     
-    request.fail(function( jqXHR, textStatus ) {
+    request.done(function(msg){  
+        var msg = $.parseHTML(msg)[0];      
+        var num = msg.innerHTML;        
+        
+        var prev_num = $('#'+'seats_lg_bus'+busid)[0].innerHTML;        
+        if (num != prev_num){
+            $('#'+'seats_lg_bus'+busid).html(num);
+            $('#'+'seats_xs_bus'+busid).html(num);    
+            $.snackbar({content: 'You were added to the shuttle bus. Thank you for sharing your intention.', time: 200});
+        }
+        else{
+            $.snackbar({content: 'You are already added to the shuttle bus.', time: 200});   
+        }
+        
+    });
+    request.fail(function(jqXHR, textStatus ) {
         alert( "Request failed: " + textStatus );
     });
 }
