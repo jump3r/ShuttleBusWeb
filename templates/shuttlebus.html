@@ -116,27 +116,39 @@
                                                         Shuttle Bus #{{ bus['bus_id'] }} to {{ bus['stops_list'][bus['next_stop_index']][0] }} Campus 
                                                     </h3>
                                                 </div>
-                                                <div class="panel-body" style="text-align: center;">
-                                                    <h5>Status: 
-                                                        {% if bus['status'] == 'active' %}
-                                                        ACTIVE
-                                                        {% else %}
-                                                        INACTIVE
-                                                        {% endif %}
-                                                    </h5>
-                                                    <h5>Distance: <span id="distance{{ bus['bus_id'] }}"></span></h5>
-                                                    <h5>Arrival Time: <span id="duration{{ bus['bus_id'] }}"></span></h5>
-                                                    <h5>Seats To Be Taken: <span id="seats_lg_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}</span>
-                                                        <button class="btn btn-warning" style="margin-top: 0px; 
-                                                                                                margin-left: 0px;
-                                                                                                margin-bottom: 0px;
-                                                                                                margin-right: 0px;
-                                                                                                padding-right: 0.7px;
-                                                                                                padding-left: 0.7px;
-                                                                                                padding-top: 0px;
-                                                                                                padding-bottom: 0px;"
-                                                        data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ tooltips['?'] }}" type="button">?</button>
-                                                    </h5>
+                                                <div class="panel-body" >
+                                                    <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="text-align: right;">                                                       
+                                                            <h5>Status: </h5>
+                                                            <h5>Distance: </h5>
+                                                            <h5>Arrival Time: </h5>
+                                                            <h5>Seats Reserved: </h5>
+                                                        </div>    
+                                                        <div class="col-lg-6" style="text-align: left;">  
+                                                            <h5>{% if bus['status'] == 'active' %}
+                                                                Active
+                                                                {% else %}
+                                                                Inactive
+                                                                {% endif %}
+                                                            </h5>
+                                                            <h5><span id="distance{{ bus['bus_id'] }}"></span></h5>
+                                                            <h5><span id="duration{{ bus['bus_id'] }}"></span></h5>
+                                                            <h5><span id="seats_lg_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}</span>
+                                                                <button class="btn btn-warning" style="margin-top: 0px; 
+                                                                                                        margin-left: 0px;
+                                                                                                        margin-bottom: 0px;
+                                                                                                        margin-right: 0px;
+                                                                                                        padding-right: 0.7px;
+                                                                                                        padding-left: 0.7px;
+                                                                                                        padding-top: 0px;
+                                                                                                        padding-bottom: 0px;"
+                                                                data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ tooltips['?'] }}" type="button">?</button>
+                                                            </h5>                                                     
+
+                                                        </div>    
+
+                                                    </div>
+                                                    
                                                 </div>
                                                 <div class="panel-footer">
                                                     <button style="margin:0 auto;display:block;" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ tooltips['btn'] }}" 
