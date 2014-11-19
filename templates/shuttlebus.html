@@ -38,9 +38,9 @@
                 <ul class="nav navbar-nav visible-xs">
                     {% for bus in buses_geo %} 
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 0.5em;">
-                            
+                                
                                 <div class="col-xs-4 col-sm-6 col-md-6 col-lg-6" style="margin-right: 0em;padding-left: 0em;">
-                                    
+                                        
                                         <span class="label label-danger">Bus#{{ bus['bus_id'] }} to {{ bus['stops_list'][bus['next_stop_index']][0] }}( 
                                             {% if bus['status'] == 'active' %}
                                                 ACTIVE
@@ -102,8 +102,18 @@
                             </div> <!-- /container -->
                                 
                             <div class="col-lg-12 visible-sm visible-md visible-lg">
+                               
                                 {% for bus in buses_geo %}  
-                                    <div class="col-sm-6 col-md-6 col-lg-4">
+                                    {% if buses_geo_len == 1 %}                                        
+                                        <div class="col-sm-3 col-md-3 col-lg-3"> </div>
+                                        <div class="col-sm-6 col-md-6 col-lg-6">
+                                    {% elif buses_geo_len == 2%}  
+                                        <div class="col-sm-0 col-md-3 col-lg-1 visible-lg visible-sm"> </div>
+                                        <div class="col-sm-6 col-md-6 col-lg-5">
+                                    {% else %}
+                                        <div class="col-sm-6 col-md-6 col-lg-4">
+                                    {% endif %}
+                                    
                                     {% if bus['status'] == 'active' %}                                    
                                         <div onclick="triggerMarker({{ bus['bus_id'] }})">
                                             <div class="panel panel-success">
@@ -118,13 +128,13 @@
                                                 </div>
                                                 <div class="panel-body" >
                                                     <div class="col-lg-12">
-                                                        <div class="col-lg-6" style="text-align: right;">                                                       
+                                                        <div class="col-sm-6 col-md-6 col-lg-6" style="text-align: right;">                                                       
                                                             <h5>Status: </h5>
                                                             <h5>Distance: </h5>
                                                             <h5>Arrival Time: </h5>
                                                             <h5>Seats Reserved: </h5>
                                                         </div>    
-                                                        <div class="col-lg-6" style="text-align: left;">  
+                                                        <div class="col-sm-6 col-md-6 col-lg-6" style="text-align: left;">  
                                                             <h5>{% if bus['status'] == 'active' %}
                                                                 Active
                                                                 {% else %}

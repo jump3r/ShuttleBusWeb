@@ -1,4 +1,3 @@
-
             
 var mapref = null;
 var glob = null;
@@ -234,6 +233,40 @@ function initialize()
     
     initBuses(map);
     initStops(map);
+
+
+    //bus_maker_map[1].setPosition(new google.maps.LatLng( 43.784712,-79.185948 ))
+
+    setInterval(function(){
+        
+
+        var request = $.ajax({
+                url: 'BusesGeo',
+                type: 'GET',
+        });
+
+        request.done(function( msg ) {  
+
+            buses_json = JSON.parse(msg);
+            
+            for(bus_index in buses_json){
+
+                var bus = buses_json[bus_index];
+                var lon = bus['lonlat'][0];
+                var lat = bus['lonlat'][1];
+                console.log(lon + ' ' + lat);
+                var bus_id = bus['bus_id'];
+                if (bus_id in bus_maker_map){
+                    bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
+                    preFetchDistance(bus);
+                }
+                
+            }
+            
+        });
+        
+
+    }, 3000);
 
 }
 

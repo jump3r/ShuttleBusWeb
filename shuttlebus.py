@@ -30,6 +30,7 @@ def Index():
 	
 	#check if no hb for last 20 min
 	buses_geo = check_last_hb_within_min_time(buses_geo)
+	buses_geo_len = len(buses_geo)
 	
 	stops_geo = QueryDAO.GetStopsGeo()
 	
@@ -44,7 +45,7 @@ def Index():
 	schedule = {}
 	schedule['UTM'] = {'AM': UTM_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UTM_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
 	schedule['UFT'] = {'AM': UFT_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UFT_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
-	return render_template('shuttlebus.html', buses_geo = buses_geo, stops_geo = stops_geo, 
+	return render_template('shuttlebus.html', buses_geo = buses_geo, buses_geo_len = buses_geo_len, stops_geo = stops_geo, 
 							map_style_aray = map_style_aray, seats_by_bus=seats_by_bus, 
 							tooltips = tooltips, schedule = schedule)
 
@@ -153,17 +154,15 @@ def BusHB():
 	
 	return "<div>True</div>"
 
-'''
+
 @app.route('/BusesGeo', methods=['GET'])
 def BusesGeo():
 	
 	buses_geo = QueryDAO.GetBusesGeo()
 
-	#check time of last hb, if 30 min ago 
-	#set status 	
-		
 	return dumps(buses_geo)
 
+'''
 @app.route('/StopsGeo', methods=['GET'])
 def StopsGeo():
 	
@@ -180,6 +179,7 @@ def BusRouteChangeHB():
 	QueryDAO.BusRegisterRoute(busid, [stop1, stop2])
 
 	return "<div>True</div>"
+
 
 
 '''

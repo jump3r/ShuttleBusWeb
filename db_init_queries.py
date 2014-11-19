@@ -63,15 +63,7 @@ def addStatus():
         'next_stop_index': 0,
         'lonlat': [43.662892,-79.395656],
         'status': 'active',        
-    },
-    {
-        'bus_id': 2,	 
-        'last_hb_time': datetime.datetime.utcnow(),
-        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
-        'next_stop_index': 1,
-        'lonlat': [43.548043,-79.66095], #43.6335225,-79.5410157
-        'status': 'active',        
-    },
+    },    
     {
         'bus_id': 3,	 
         'last_hb_time': datetime.datetime.utcnow(),
@@ -81,6 +73,7 @@ def addStatus():
         'status': 'active',        
     }
     ]
+
 
 	client = pymongo.MongoClient(MONGODB_URI)
 	db = client.get_default_database()
@@ -131,6 +124,17 @@ def clearAllCollections():
     'status': ''
 }
 ]
+
+
+    {
+        'bus_id': 2,	 
+        'last_hb_time': datetime.datetime.utcnow(),
+        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+        'next_stop_index': 1,
+        'lonlat': [43.548043,-79.66095], #43.6335225,-79.5410157
+        'status': 'active',        
+    },
+    
 '''
 if __name__ == '__main__':
 	clearAllCollections()
