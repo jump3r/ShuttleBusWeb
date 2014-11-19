@@ -2,8 +2,15 @@ import time
 import datetime
 import pymongo
 import requests
+import os
 
 MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
+if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
+	MONGODB_URI = 'mongodb://localhost:27017'
+
+MONGODB_URI = 'mongodb://localhost:27017'
+DEFAULT_DB = 'mongo_db1'
+
 
 def addBusMap():
 	SEED_DATA = [
@@ -22,8 +29,8 @@ def addBusMap():
 	]
 
 	client = pymongo.MongoClient(MONGODB_URI)
-	db = client.get_default_database()
-
+	db = client[DEFAULT_DB]
+	
 	songs = db['busid_map']
 	songs.insert(SEED_DATA)
 
@@ -47,7 +54,7 @@ def addBusStops():
 	]
 
 	client = pymongo.MongoClient(MONGODB_URI)
-	db = client.get_default_database()
+	db = client[DEFAULT_DB]
 
 	songs = db['bus_stops']
 	songs.insert(SEED_DATA)
@@ -76,7 +83,7 @@ def addStatus():
 
 
 	client = pymongo.MongoClient(MONGODB_URI)
-	db = client.get_default_database()
+	db = client[DEFAULT_DB]
 
 	bus_status = db['bus_status']
 	bus_status.insert(SEED_DATA)
@@ -97,7 +104,7 @@ def addStatus():
 
 def clearAllCollections():
 	client = pymongo.MongoClient(MONGODB_URI)
-	db = client.get_default_database()
+	db = client[DEFAULT_DB]
 
 	db.busid_map.remove({})
 	db.bus_stops.remove({})

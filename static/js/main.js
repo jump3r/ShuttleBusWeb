@@ -302,3 +302,13 @@ function addUserCount(busid){
     });
     */
 }
+
+
+function smsNotifications(onof){
+    $('#sms_not').html('SMS '+onof);
+    if (onof == 'ON'){
+        $('#phone_number').show();
+    }else{
+        $('#phone_number').hide();
+    }
+}

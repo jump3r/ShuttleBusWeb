@@ -2,9 +2,12 @@ import time
 import datetime
 import pymongo
 import requests
+import os
 
 MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
-
+if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
+	MONGODB_URI = 'mongodb://localhost:27017'
+DEFAULT_DB = 'mongo_db1'
 
 class QueryDAO:
 	@staticmethod
@@ -20,7 +23,7 @@ class QueryDAO:
 	@staticmethod
 	def BusRegisterRoute(busid, lonlat):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		bus_id = QueryDAO.getMappedId(busid, db)
 
@@ -31,7 +34,7 @@ class QueryDAO:
 	@staticmethod
 	def GetBusByID(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 		
 		collection = db['bus_status']
 		bus = collection.find({'bus_id': bus_id})	
@@ -47,7 +50,7 @@ class QueryDAO:
 	@staticmethod
 	def BusHBLog(bus_id, lonlat):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 		
 		#UPDATE BUS STATUS
 		dt = datetime.datetime.utcnow()
@@ -68,7 +71,7 @@ class QueryDAO:
 	@staticmethod
 	def GetStopsGeo():
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		collection = db['bus_stops']
 		#print collection
@@ -90,7 +93,7 @@ class QueryDAO:
 	@staticmethod
 	def GetBusesGeo():
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 		
 		collection = db['bus_status']
 				
@@ -114,7 +117,7 @@ class QueryDAO:
 	@staticmethod
 	def GetBusesStatus():
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		collection = db['bus_status']
 				
@@ -131,7 +134,7 @@ class QueryDAO:
 	@staticmethod
 	def UpdateBusStatus(bus):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		col = db['bus_status']
 		
@@ -142,7 +145,7 @@ class QueryDAO:
 	@staticmethod
 	def updateBusById(bus):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		col = db['bus_status']
 		
@@ -154,7 +157,7 @@ class QueryDAO:
 	@staticmethod
 	def addNextTripBusLoad(bus_res):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 
 		col = db['bus_reservations']
@@ -172,7 +175,7 @@ class QueryDAO:
 	@staticmethod
 	def GetSeatsByBusID():
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 		
 		collection = db['bus_reservations']
 				
@@ -187,7 +190,7 @@ class QueryDAO:
 	@staticmethod
 	def getBusReservationIDsByBus(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		col = db['bus_reservations']
 		all_reservations = col.find({'bus_id': bus_id})
@@ -197,7 +200,7 @@ class QueryDAO:
 	@staticmethod
 	def resetBusSeatsCounterAndStatus(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		col = db['bus_reservations']
 		res = col.find({'bus_id': bus_id})
@@ -218,7 +221,7 @@ class QueryDAO:
 	@staticmethod
 	def resetBusToActive(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
-		db = client.get_default_database()
+		db = client[DEFAULT_DB]
 
 		col = db['bus_reservations']
 		res = col.find({'bus_id': bus_id})
