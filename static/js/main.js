@@ -254,7 +254,7 @@ function initialize()
                 var bus = buses_json[bus_index];
                 var lon = bus['lonlat'][0];
                 var lat = bus['lonlat'][1];
-                console.log(lon + ' ' + lat);
+                
                 var bus_id = bus['bus_id'];
                 if (bus_id in bus_maker_map){
                     bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
@@ -296,7 +296,9 @@ function addUserCount(busid){
         }
         
     });
+    /*
     request.fail(function(jqXHR, textStatus ) {
         alert( "Request failed: " + textStatus );
     });
+    */
 }
