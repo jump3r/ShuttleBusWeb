@@ -86,6 +86,18 @@ def UserCount():
 	return result
 
 
+@app.route('/BusImageHB', methods=['POST'])
+def BusImageHB():
+
+	print request.form
+
+	try: 
+		QueryDAO.storeImagePiece(request.form.keys()[0])
+	except:
+		return "<div>COULD NOT GET PICTURE</div>"
+
+	return '<div>Got Image Part</div>'
+
 @app.route('/BusHB', methods=['POST'])
 def BusHB():
 	exception_message = "EXCEPTION OCCURED"

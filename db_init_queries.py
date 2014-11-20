@@ -8,7 +8,7 @@ MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo
 if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
 	MONGODB_URI = 'mongodb://localhost:27017'
 
-MONGODB_URI = 'mongodb://localhost:27017'
+#MONGODB_URI = 'mongodb://localhost:27017'
 DEFAULT_DB = 'mongo_db1'
 
 
@@ -61,6 +61,16 @@ def addBusStops():
 
 	client.close()	
 
+def addImageDB():
+	import datetime
+	client = pymongo.MongoClient(MONGODB_URI)
+	db = client[DEFAULT_DB]
+
+	songs = db['bus_images']
+	songs.insert([{'time': datetime.datetime.utcnow(), 'image': 'None'}])
+
+	client.close()
+
 def addStatus():
 	SEED_DATA = [
     {
@@ -110,6 +120,7 @@ def clearAllCollections():
 	db.bus_stops.remove({})
 	db.bus_status.remove({})
 	db.bus_reservations.remove({})
+	db.bus_images.remove({})
 
 	client.close()
 
@@ -148,3 +159,4 @@ if __name__ == '__main__':
 	addBusMap()
 	addBusStops()	
 	addStatus()
+	addImageDB()

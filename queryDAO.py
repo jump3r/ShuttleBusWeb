@@ -11,6 +11,21 @@ DEFAULT_DB = 'mongo_db1'
 
 class QueryDAO:
 	@staticmethod
+	def storeImagePiece(imgp):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+
+		collection = db['bus_images']
+
+		image = [			
+			{'time': datetime.datetime.utcnow(), 'image': imgp}
+		]		
+		
+		collection.insert(image)
+
+		client.close()
+
+	@staticmethod
 	def getMappedId(busid, db):
 		
 		collection = db['busid_map']
