@@ -89,33 +89,32 @@ def UserCount():
 @app.route('/BusImageHB', methods=['POST'])
 def BusImageHB():
 	import base64
-	s = ""
+	log = ""
 	try:
-		print "BEG>"
-		form_keys = request.form.keys()
-		print len(form_keys), "<END"			
-		#ucode = u''
-		for i in range(len(form_keys)):
-			 el = form_keys[i]
-			 print ">",type(el),
-			 print el, "<"
-			 if type(el) == list:
-			 	for j in range(len(el)):
-			 		ell = el[j]
-			 		print ">>", type(ell),
-			 		print ell,"<<"
-
-			#ucode += u''.join(form_keys[i])
-			#print base64.b64encode(i)
 		
-		#utf8_str = ucode.encode('utf8')
+		form_keys = request.form.keys()
+		
+		ucode_str = u''
+		if len(form_keys) == 1:
+			print len(form_keys[0])
+			ucode_str += form_keys[0]
+		else:
+			print "There are more then 1 keys"
+			ucode_str += u''.join(form_keys)
+
+
+		if ucode_str == u'':
+			print "ucode is empty"
+
+		b64_str = base64.b64encode(ucode_str)
 		
 		#QueryDAO.storeImagePiece(utf8_str)
+
 	except Exception as e:
 		print e
-		return "<div>COULD NOT GET PICTURE</div>"
+		return "<div>COULD NOT GET PICTURE" + log + "</div>"
 
-	return '<div>Got Image Part' +s +' </div>'
+	return '<div>Got Image Part</div>'
 
 @app.route('/TestImage', methods=['GET'])
 def BusTestImage():
