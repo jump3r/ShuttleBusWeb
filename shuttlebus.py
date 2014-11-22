@@ -88,15 +88,51 @@ def UserCount():
 
 @app.route('/BusImageHB', methods=['POST'])
 def BusImageHB():
+	import base64
+	s = ""
+	try:
+		print "BEG>"
+		form_keys = request.form.keys()
+		print len(form_keys), "<END"			
+		#ucode = u''
+		for i in range(len(form_keys)):
+			 el = form_keys[i]
+			 print ">",type(el),
+			 print el, "<"
+			 if type(el) == list:
+			 	for j in range(len(el)):
+			 		ell = el[j]
+			 		print ">>", type(ell),
+			 		print ell,"<<"
 
-	print request.form
-
-	try: 
-		QueryDAO.storeImagePiece(request.form.keys()[0])
-	except:
+			#ucode += u''.join(form_keys[i])
+			#print base64.b64encode(i)
+		
+		#utf8_str = ucode.encode('utf8')
+		
+		#QueryDAO.storeImagePiece(utf8_str)
+	except Exception as e:
+		print e
 		return "<div>COULD NOT GET PICTURE</div>"
 
-	return '<div>Got Image Part</div>'
+	return '<div>Got Image Part' +s +' </div>'
+
+@app.route('/TestImage', methods=['GET'])
+def BusTestImage():
+	MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
+	DEFAULT_DB = 'mongo_db1'
+	client = pymongo.MongoClient(MONGODB_URI)
+	db = client[DEFAULT_DB]
+	collection = db['bus_images']
+	#chunk = collection.find({'image_id':1}).next()['image']
+	chunk1 = collection.find({'image_id':11}).next()['image']
+	chunk2 = collection.find({'image_id':12}).next()['image']
+	print type(chunk1)
+	print type(chunk2)
+	#return '<img alt="sample" src="data:image/png;base64,{0}{1}">'.format(chunk1[0].decode(), chunk2[0].decode())
+	img = '<img alt="sample" src="data:image/png;base64,{}{}">'.format(chunk1, chunk2)
+	
+	return img
 
 @app.route('/BusHB', methods=['POST'])
 def BusHB():

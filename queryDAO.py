@@ -3,6 +3,7 @@ import datetime
 import pymongo
 import requests
 import os
+import base64
 
 MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
 if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
@@ -14,11 +15,11 @@ class QueryDAO:
 	def storeImagePiece(imgp):
 		client = pymongo.MongoClient(MONGODB_URI)
 		db = client[DEFAULT_DB]
-
+		
 		collection = db['bus_images']
-
+		img_chunk = base64.b64encode(imgp)
 		image = [			
-			{'time': datetime.datetime.utcnow(), 'image': imgp}
+			{'time': datetime.datetime.utcnow(), 'image': img_chunk}
 		]		
 		
 		collection.insert(image)
