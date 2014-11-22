@@ -89,47 +89,91 @@ def UserCount():
 @app.route('/BusImageHB', methods=['POST'])
 def BusImageHB():
 	import base64
+	from bson.binary import Binary
+	import bson
+	print request.files
 	log = ""
 	try:
 		
 		form_keys = request.form.keys()
+		QueryDAO.testGridFS(form_keys)
 		
-		ucode_str = u''
+		bson_bin = ""
+		utf8_str = ""
 		if len(form_keys) == 1:
 			print len(form_keys[0])
-			ucode_str += form_keys[0]
+			log += "-Log len=1:"+str(len(form_keys[0]))
+			utf8_str += form_keys[0].encode('utf8')
+			#bson_bin = Binary(base64.b64encode(utf8_str))
+			bson_bin = Binary(form_keys[0].encode('utf8'))
+			try:
+				log += "-Trying to print1:" 
+				print "-Trying to print1:",form_keys[0]
+				log += str(form_keys[0])
+				print "-Trying to print2:",bson_bin
+				log += "-Trying to print2:"+bson_bin
+			except:
+				print "-Failed to print1,2"
+				log += "-Failed to print1,2"
+			
+			#bson_bin = base64.b64encode(form_keys[0])
 		else:
-			print "There are more then 1 keys"
-			ucode_str += u''.join(form_keys)
+			print "There are {} keys".format(len(form_keys))
+			log += "-There are {} keys".format(len(form_keys))
+			#utf8_lst = [unicode_str.encode('utf8') for unicode_str in form_keys]			
+			#utf8_str += "".join(utf8_lst)
+			#bson_bin = Binary(base64.b64encode(utf8_str))
+			
+			try:					
+				print type(form_keys[0])
+				log += "-Key of type:"+str(type(form_keys[0]))
+			except:
+				print "error"
+			#b64 = [base64.b64encode(unicode_str) for unicode_str in form_keys]
+			bson = [Binary(unicode_str.encode('utf8')) for unicode_str in form_keys]
+			
+			bson_bin = "".join(bson)
+			open('imagenew.png','wb').write(bson_bin)
 
+		#if ucode_str == u'':
+		#	print "ucode is empty"
 
-		if ucode_str == u'':
-			print "ucode is empty"
-
-		b64_str = base64.b64encode(ucode_str)
+		#b64_str = base64.b64encode(utf8_str)
 		
-		#QueryDAO.storeImagePiece(utf8_str)
+		#QueryDAO.storeImagePiece(bson_bin)
 
 	except Exception as e:
 		print e
-		return "<div>COULD NOT GET PICTURE" + log + "</div>"
+		return "<div>Exception: {0}; Log: {1}</div>".format(e,log)
 
-	return '<div>Got Image Part</div>'
+	return "<div>Got Image Part:{0}</div>".format(log)
 
 @app.route('/TestImage', methods=['GET'])
 def BusTestImage():
+	import base64
 	MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
 	DEFAULT_DB = 'mongo_db1'
 	client = pymongo.MongoClient(MONGODB_URI)
 	db = client[DEFAULT_DB]
 	collection = db['bus_images']
-	#chunk = collection.find({'image_id':1}).next()['image']
-	chunk1 = collection.find({'image_id':11}).next()['image']
-	chunk2 = collection.find({'image_id':12}).next()['image']
-	print type(chunk1)
-	print type(chunk2)
+	chunk = collection.find().next()['image']
+	#chunk1 = collection.find({'image_id':11}).next()['image']
+	#chunk2 = collection.find({'image_id':12}).next()['image']	
+	#chunk1 = chunk1.decode()
+	#chunk2 = chunk2.decode()
+	#chunk1 = base64.b64decode(chunk1).decode()
+	#chunk2 = base64.b64decode(chunk2).decode()
+	f = open('write.png', 'wb')
+	print ">",type(base64.b64decode(chunk))
+	f.write(chunk.decode())
+	#f.write(chunk1.decode()+chunk2.decode())
+	f.close()
+	
+	#print type(chunk1)
+	#print type(chunk2)
 	#return '<img alt="sample" src="data:image/png;base64,{0}{1}">'.format(chunk1[0].decode(), chunk2[0].decode())
-	img = '<img alt="sample" src="data:image/png;base64,{}{}">'.format(chunk1, chunk2)
+	#img = '<img alt="sample" src="data:image/png;base64,{0}{1}">'.format(chunk1, chunk2)
+	img = '<img alt="sample" src="data:image/png;charset=utf-8;base64,{0}">'.format(chunk)
 	
 	return img
 

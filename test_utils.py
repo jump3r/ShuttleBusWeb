@@ -34,19 +34,21 @@ def BusImageHB():
 	fr = open("icon.png", "rb")
 	f = fr.read()
 
-	l = len(f)
+	#l = len(f)
 	#chunk = base64.b64encode(f)
-	chunk1 = f[:27231]
-	chunk2 = f[27231:]
+	#chunk1 = f[:27231]
+	#chunk2 = f[27231:]
 
 	#chunk1 = base64.b64encode(chunk1)
 	#chunk2 = base64.b64encode(chunk2)
 	headers = {'content-type': 'application/x-www-form-urlencoded'}
-	#'http://shuttlebus.herokuapp.com/BusImageHB'
-	#http://localhost:5000/BusImageHB
-	r = requests.post('http://shuttlebus.herokuapp.com/BusImageHB', headers=headers, data=chunk1)
+	#website = "http://shuttlebus.herokuapp.com/BusImageHB"
+	website = "http://localhost:5000/BusImageHB"
+	r = requests.post(website, headers=headers, data=f)
 	print r.text
-	#r = requests.post('http://shuttlebus.herokuapp.com/BusImageHB', headers=headers, data=chunk2)
+	#r = requests.post(website, headers=headers, data=chunk1)
+	#print r.text
+	#r = requests.post(website, headers=headers, data=chunk2)
 	#print r.text
 
 #BusHB([43.662892,-79.395656], busid=1) #43.548043,-79.66095
