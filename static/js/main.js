@@ -263,11 +263,8 @@ function initialize()
                 
             }
             
-        });
-        
-
+        });       
     }, 3000);
-
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -275,6 +272,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 function addUserCount(busid){
     $.snackbar({content: 'Processing ...', time: 300});
+
+    var is_sms = $('#sms_not').html() == 'SMS ON';
+
     var request = $.ajax({
                           url: 'UserCount',
                           type: 'POST',
@@ -303,12 +303,36 @@ function addUserCount(busid){
     */
 }
 
-
 function smsNotifications(onof){
     $('#sms_not').html('SMS '+onof);
     if (onof == 'ON'){
-        $('#phone_number').show();
+        $('#phone_number_form').show();
     }else{
-        $('#phone_number').hide();
+        $('#phone_number_form').hide();
     }
 }
+
+function savePhoneNumber(){
+    var number = $('#phone_number_field')[0].value;
+    var request = $.ajax({
+            url: 'SavePhoneNumber',
+            type: 'POST',
+            data: { 'phone_number' : number },
+            dataType: 'html'
+        });
+
+    request.done(function( msg ) {  
+        console.log(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus ) {
+        alert( "Request failed: " + textStatus );
+    });
+}
+
+$(document).ready(function(){
+    $('#phone_number_field').keypress(function(e){
+        if(e.keyCode==13)
+            savePhoneNumber();
+    });
+});

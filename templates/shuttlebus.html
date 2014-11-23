@@ -51,11 +51,11 @@
                             <li><a onclick="smsNotifications('OFF')">OFF</a></li>
                         </ul>
                     </li>
-                    <form id="phone_number" class="navbar-form navbar-left">
+                    <form id="phone_number_form" class="navbar-form navbar-left" onfocusout="savePhoneNumber()">
                         
-                                <input type="text" class="form-control" 
-                                        {% if 'number' in session %}
-                                            placeholder="{{ session['number'] }}"
+                                <input id="phone_number_field" type="text" class="form-control" 
+                                        {% if 'phone_number' in session %}
+                                            value="{{ session['phone_number'] }}"
                                         {% else %}
                                             placeholder="Enter Cellphone Here"
                                         {% endif %}
@@ -168,8 +168,8 @@
                                                                 Inactive
                                                                 {% endif %}
                                                             </h5>
-                                                            <h5><span id="distance{{ bus['bus_id'] }}"></span></h5>
-                                                            <h5><span id="duration{{ bus['bus_id'] }}"></span></h5>
+                                                            <h5><span id="distance{{ bus['bus_id'] }}">Unknown</span></h5>
+                                                            <h5><span id="duration{{ bus['bus_id'] }}">Unknown</span></h5>
                                                             <h5><span id="seats_lg_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}</span>
                                                                 <button class="btn btn-warning" style="margin-top: 0px; 
                                                                                                         margin-left: 0px;

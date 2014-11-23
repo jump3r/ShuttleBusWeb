@@ -63,3 +63,35 @@ def check_last_hb_within_min_time(buses_geo):
     return buses_geo
 
 
+def parse_bushb_gsm(bushb):
+    #mode:gsm,busid:1, -79,43,2014//11/23,20:04:50
+    busid,lon,lat = None, None, None
+    
+    busid = int(bushb[0].strip().split(':')[1])
+    lon = float(bushb[1].strip())
+    lat = float(bushb[2].strip())
+
+    return (busid,lon,lat)
+
+def parse_bushb_gps(bushb_list):
+    #mode:gps,busid:1,lon:12.3,lat:12.3
+    #adjust lon lat
+    busid,lon,lat = None, None, None
+    for key_val in key_val_list:
+
+        k, v = key_val.split(':')
+        k, v = k.strip(), v.strip()
+
+        if k == "busid":
+            busid = int(v)
+        elif k == "lon":
+            lon = float(v)
+            lon = lon/100 + 0.26600651
+        elif k == "lat":
+            lat = float(v)
+            lat = lat/100 + 0.21974639
+    
+    return (busid,lon,lat)
+   
+
+    

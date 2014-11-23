@@ -7,9 +7,12 @@ import sys
 import pymongo
 from bson.json_util import dumps
 from queryDAO import QueryDAO
+
 from bus_utils import check_next_bus_stop
 from bus_utils import check_last_hb_within_min_time
 from bus_utils import TOOLTIP_FOR_QUESTION_MARK, TOOLTIP_FOR_BUTTON
+from bus_utils import parse_bushb_gsm, parse_bushb_gps
+
 import map_styles 
 from schedule import UFT_WEEKDAY_TIME, UTM_WEEKDAY_TIME
 
@@ -31,17 +34,18 @@ def Index():
 	#check if no hb for last 20 min
 	buses_geo = check_last_hb_within_min_time(buses_geo)
 	buses_geo_len = len(buses_geo)
-	
+	#STOPS
 	stops_geo = QueryDAO.GetStopsGeo()
-	
+	#SEATS FOR EACH BUS
 	seats_by_bus = QueryDAO.GetSeatsByBusID()
-	
+	#MAP STYLE
 	map_style_aray = map_styles.stylesArray1
-
+	#INFO FOR INFO BOXES
 	tooltips = {}
 	tooltips['?'] = TOOLTIP_FOR_QUESTION_MARK
 	tooltips['btn'] = TOOLTIP_FOR_BUTTON
 
+	#SCHEDULE FROM
 	schedule = {}
 	schedule['UTM'] = {'AM': UTM_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UTM_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
 	schedule['UFT'] = {'AM': UFT_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UFT_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
@@ -49,6 +53,14 @@ def Index():
 							map_style_aray = map_style_aray, seats_by_bus=seats_by_bus, 
 							tooltips = tooltips, schedule = schedule)
 
+@app.route('/SavePhoneNumber', methods=['POST'])
+def SavePhoneNumber():
+
+	phone_number = request.form['phone_number']
+
+	session['phone_number'] = phone_number
+
+	return "<div>True</div>"
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
@@ -179,29 +191,22 @@ def BusTestImage():
 
 @app.route('/BusHB', methods=['POST'])
 def BusHB():
+	
 	exception_message = "EXCEPTION OCCURED"
 	try:
 		if len(request.form) == 1:
 			
 			key_val_list = request.form.keys()[0].split(',')
-									
+
 			busid,lon,lat = None, None, None
-
-			for key_val in key_val_list:
-
-				k, v = key_val.split(':')
-				
-				if k == "busid":
-					busid = int(v)
-				elif k == "lon":
-					lon = float(v)
-				elif k == "lat":
-					lat = float(v)
+			if key_val_list[0] == "mode:gsm":
+				busid,lon,lat = parse_bushb_gsm(key_val_list[1:])
+			else:
+				busid,lon,lat = parse_bushb_gps(key_val_list[1:])									
 			
 			if None in [busid, lon, lat]:
 				raise Exception("One of POST key is not found")
-
-
+			
 			QueryDAO.BusHBLog(busid, [lon, lat])
 
 			bus = QueryDAO.GetBusByID(busid)
@@ -217,31 +222,10 @@ def BusHB():
 		else:
 			exception_message = "Number of arguments in POST list is not matching"
 			raise Exception(exception_message)
-
-		'''	
-		elif len(request.form) == 3:
-			print "here2"
-			busid = int(request.form['busid'])
-			
-			lon = float(request.form['lon'])
-			
-			lat = float(request.form['lat'])
-			
-				
-			QueryDAO.BusHBLog(busid, [lon, lat])
-
-			bus = QueryDAO.GetBusByID(busid)
-
-			stop_is_changed = check_next_bus_stop(bus)
-
-			if stop_is_changed:
-				QueryDAO.resetBusSeatsCounterAndStatus(busid)  #resets 	
-			elif bus['status'] == 'inactive':
-				bus['status'] = 'active'
-				QueryDAO.updateBusById(bus)
-		'''
-	except:
+		
+	except Exception as e:
 		print exception_message
+		print e
 	
 	return "<div>True</div>"
 
