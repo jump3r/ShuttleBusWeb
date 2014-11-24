@@ -48,8 +48,8 @@ def addBusStops():
 		    'lonlat': [43.548043,-79.66095]
 	    },
 	    {
-	        'name': 'UFTS',
-	        'lonlat': [43.784712,-79.185998]
+	        'name': 'SHER',
+	        'lonlat': [43.468645,-79.699958]
 	    }
 	]
 
@@ -78,7 +78,7 @@ def addStatus():
         'last_hb_time': datetime.datetime.utcnow(),
         'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
         'next_stop_index': 0,
-        'lonlat': [43.662892,-79.395656],
+        'lonlat': [43.662048, -79.396069],
         'status': 'active',        
     },    
     {
@@ -88,7 +88,15 @@ def addStatus():
         'next_stop_index': 0,
         'lonlat': [43.6170021,-79.506403],
         'status': 'active',        
-    }
+    }, 
+    {
+	  	'bus_id': 2,
+	  	'last_hb_time': datetime.datetime.utcnow(),
+	  	'stops_list': [['SHER',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+	  	'next_stop_index': 1,
+	    'lonlat': [43.487488, -79.687614],
+	    'status': 'active'
+	}
     ]
 
 
@@ -106,6 +114,7 @@ def addStatus():
 			'bus_id': bus['bus_id'],
 			'seats_counter': 0,
 			'trips_counter': 0,
+			'sms_listeners': [],
 		}
 		all_reservations.append(d)
 	bus_reservations.insert(all_reservations)

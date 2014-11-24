@@ -109,7 +109,7 @@ function drawRoute(start , end){
     
     directionsService.route(request, function(result, status) {
         if (status == google.maps.DirectionsStatus.OK) {
-            glob = result;
+            
             var distance = result.routes[0].legs[0].distance;
             var dt = distance.text;
 
@@ -178,35 +178,13 @@ function initStops(map){
 }
 
 function initialize()
-{
-    stylearray = [
-        {
-            "stylers": [
-                {
-                    "hue": "#007fff"
-                },
-                {
-                    "saturation": 89
-                }
-            ]
-        },                  
-        {
-            "featureType": "administrative.country",
-            "elementType": "labels",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        }
-    ]
-    
+{   
     var mapOptions = {
-        center: new google.maps.LatLng(43.6170021,-79.506403),                
+        center: new google.maps.LatLng(43.572523, -79.583995), //43.6170021,-79.506403),                
         zoom: 11,
         mapTypeId:google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true, 
-        styles: stylearray,                 
+        styles: GLOB_MAP_STYLE,                 
       };
 
 
@@ -234,7 +212,7 @@ function initialize()
     initBuses(map);
     initStops(map);
 
-
+    //addStopMarker([43.572523, -79.583995],"qwer",map)
     //bus_maker_map[1].setPosition(new google.maps.LatLng( 43.784712,-79.185948 ))
 
     setInterval(function(){
@@ -264,7 +242,7 @@ function initialize()
             }
             
         });       
-    }, 3000);
+    }, 10000);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -274,25 +252,30 @@ function addUserCount(busid){
     $.snackbar({content: 'Processing ...', time: 300});
 
     var is_sms = $('#sms_not').html() == 'SMS ON';
+    var subscribe = 0
+    if (is_sms){ subscribe = 1;}
 
     var request = $.ajax({
                           url: 'UserCount',
                           type: 'POST',
-                          data: { 'busid' : busid },
+                          data: { 'busid' : busid, 'subscribe': subscribe },
                           dataType: 'html'
                         });
-    request.done(function(msg){  
-        var msg = $.parseHTML(msg)[0];      
-        var num = msg.innerHTML;        
+    request.done(function(msg){ 
         
+        msg = JSON.parse(msg);;        
+        //var msg = $.parseHTML(msg)[0];      
+        var num = msg['seats_num'];//msg.innerHTML;        
+        var notification = msg['snackbar_notification'];
+
         var prev_num = $('#'+'seats_lg_bus'+busid)[0].innerHTML;        
         if (num != prev_num){
             $('#'+'seats_lg_bus'+busid).html(num);
             $('#'+'seats_xs_bus'+busid).html(num);    
-            $.snackbar({content: 'You were added to the shuttle bus. Thank you for sharing your intention.', time: 200});
+            $.snackbar({content: notification, time: 200});
         }
         else{
-            $.snackbar({content: 'You are already added to the shuttle bus.', time: 200});   
+            $.snackbar({content: notification, time: 200});   
         }
         
     });
@@ -320,9 +303,13 @@ function savePhoneNumber(){
             data: { 'phone_number' : number },
             dataType: 'html'
         });
-
+    $.snackbar({content: 'Processing ...', time: 300});
     request.done(function( msg ) {  
-        console.log(msg);
+        
+        var msg = $.parseHTML(msg)[0];      
+        var msg = msg.innerHTML;        
+                
+        $.snackbar({content: msg, time: 300});
     });
 
     request.fail(function(jqXHR, textStatus ) {

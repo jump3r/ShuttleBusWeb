@@ -56,10 +56,11 @@ def check_last_hb_within_min_time(buses_geo):
         last_hb = buses_geo[bi]['last_hb_time']
         now_time = datetime.datetime.utcnow()
         mins = int(str(now_time - last_hb).split(':')[1]) #get minutes only
+        '''
         if mins >= BUS_INACTIVE_MIN and buses_geo[bi]['status'] == "active": #if it is inactive dont have to change it again
             buses_geo[bi]['status'] = "inactive"
             QueryDAO.updateBusById(buses_geo[bi])
-
+        '''
     return buses_geo
 
 
@@ -93,5 +94,12 @@ def parse_bushb_gps(bushb_list):
     
     return (busid,lon,lat)
    
-
-    
+def getBusesSubscribedTo(session):
+    ''' int(k) makes sure that we only fetch buses and not other info'''
+    busids = {}
+    for k in session:
+        try:            
+            busids[int(k)] = session[k]
+        except:
+            continue
+    return busids    

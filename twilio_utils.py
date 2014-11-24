@@ -10,8 +10,8 @@ class Twilio:
 		self.token = "e611d70513cd12ffaf92c28cc9fa1e8f"
 		self.client = TwilioRestClient(self.sid, self.token)		
 
-	def notifyUsers(numbers, bus = None, message = "The bus has arrived"):
-
+	def notifyUsers(numbers, bus = None, message = "The bus #{} has arrived."):
+		message = message.format(bus)
 		for number in numbers:
 			if "+1" not in number:
 				number = "+1" + number

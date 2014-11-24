@@ -4,6 +4,7 @@ import pymongo
 import requests
 import os
 import base64
+import twilio_utils
 
 MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
 if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
@@ -31,7 +32,7 @@ class QueryDAO:
 		db = client[DEFAULT_DB]
 		
 		collection = db['bus_images']
-		img_chunk = base64.b64encode(imgp)
+		#img_chunk = base64.b64encode(imgp)
 		image = [			
 			{'time': datetime.datetime.utcnow(), 'image': img_chunk}
 		]		
@@ -244,10 +245,15 @@ class QueryDAO:
 		
 		res["status"] = "active"
 
+		t = twilio_utils.Twilio()
+		t.notifyUsers(res['sms_listeners'])
+		res['sms_listeners'] = []
+
 		col.update({'_id':res['_id']}, res )
 
 		client.close()
 
+	
 	@staticmethod
 	def resetBusToActive(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
@@ -262,8 +268,63 @@ class QueryDAO:
 
 		client.close()
 
-		
 
+	@staticmethod
+	def GetAllBusReservations():
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+		
+		collection = db['bus_reservations']
+			
+		records = collection.find()	
+
+		reservations = []
+		for rec in records:
+			if rec['sms_listeners'] != []:
+				reservations.append({'bus_id': rec['bus_id'],'sms_listeners': rec['sms_listeners']})
+
+		client.close()
+		return reservations
+
+
+	@staticmethod
+	def UpdateBusSMSListeners(bus_res):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+		
+		col = db['bus_reservations']
+
+		for res in bus_res:
+			col.update({'bus_id':res['bus_id']}, {'$set': { "sms_listeners": res["sms_listeners"] }})
+			
+		client.close()
+
+	@staticmethod
+	def GetSubscribedToBusesNotArrivedYet(busid_counter_dict):
+		''' Get buses user is subscribed to and not have arrived yet (current trip counter matches the one in user session.
+		busid_counter = {bus_id: trip counter user is subscribed to}
+		'''
+
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+		
+		col = db['bus_reservations']
+
+		records = collection.find()	
+
+		subscribed_not_arrived = []
+		for rec in records:
+			bus_id = rec['bus_id']
+			trips_counter = rec['trips_counter']
+			if bus_id in busid_counter and busid_counter_dict[bus_id] == trips_counter:
+				subscribed_not_arrived.append({'bus_id': bus_id})
+
+		return subscribed_not_arrived
+
+
+
+
+#print QueryDAO.GetAllBusReservations()
 #QueryDAO.addNextTripBusLoad(1)
 #QueryDAO.BusHBLog(1,33)
 

@@ -15,7 +15,7 @@ from bus_utils import parse_bushb_gsm, parse_bushb_gps
 
 import map_styles 
 from schedule import UFT_WEEKDAY_TIME, UTM_WEEKDAY_TIME
-
+import time
 #username = request.cookies.get('username')
 #resp = make_response(render_template(...))
 #resp.set_cookie('username', 'the username')
@@ -25,21 +25,42 @@ from schedule import UFT_WEEKDAY_TIME, UTM_WEEKDAY_TIME
 app = Flask(__name__, static_url_path = "", static_folder = "static")
 
 
+@app.route('/ForgetMe', methods=['GET'])
+def ForgetMe():
+	
+	keys_to_del = []
+
+	for k in session:
+		keys_to_del.append(k)
+
+	for k in keys_to_del:
+		session.pop(k)
+
+	return redirect(url_for('Index'))
+
 @app.route('/', methods=['GET'])
 def Index():	
-
+	print session
 	userip = request.remote_addr
 	buses_geo = QueryDAO.GetBusesGeo()	
 	
 	#check if no hb for last 20 min
 	buses_geo = check_last_hb_within_min_time(buses_geo)
 	buses_geo_len = len(buses_geo)
+	
 	#STOPS
 	stops_geo = QueryDAO.GetStopsGeo()
+	
 	#SEATS FOR EACH BUS
 	seats_by_bus = QueryDAO.GetSeatsByBusID()
+	
 	#MAP STYLE
-	map_style_aray = map_styles.stylesArray1
+	local_time = time.localtime().tm_hour	
+	if local_time > 18 or local_time < 5:
+		map_style_aray = map_styles.greyStyleArray
+	elif local_time >= 5 or local_time <= 18:
+		map_style_aray = map_styles.dayStyleArray
+
 	#INFO FOR INFO BOXES
 	tooltips = {}
 	tooltips['?'] = TOOLTIP_FOR_QUESTION_MARK
@@ -56,22 +77,57 @@ def Index():
 @app.route('/SavePhoneNumber', methods=['POST'])
 def SavePhoneNumber():
 
-	phone_number = request.form['phone_number']
+	new_number = request.form['phone_number']
+	
+	#Change all sms listeners to the new nubmer
+	#all_subscribed_buses = []
+	bus_res_to_update = []
+	if "phone_number" in session:
 
-	session['phone_number'] = phone_number
+		old_number = session["phone_number"]
+		bus_res = QueryDAO.GetAllBusReservations()
+		
+		for bus in bus_res:
+			if old_number in bus["sms_listeners"]:
+				bus['sms_listeners'].remove(old_number)
+				bus['sms_listeners'].append(new_number)
+				bus_res_to_update.append({'bus_id':bus['bus_id'], 'sms_listeners':bus['sms_listeners']})
+			#all_subscribed_buses.append(bus['bus_id'])
 
-	return "<div>True</div>"
+		if len(bus_res_to_update) != 0:
+			QueryDAO.UpdateBusSMSListeners(bus_res_to_update)
+	else:
+		from bus_utils import getBusesSubscribedTo
+		
+		session["phone_number"] = new_number
+		#bus_res_to_update = getBusesSubscribedTo(session) #buses user is subscribed to and they have not arrived
+		#subscribedto_not_arrived = GetSubscribedToBusesNotArrivedYet()
+		
+	
+	#Get all phone numbers
+	#Find current
+	result = "<div>Your phone number has been updated. Currently you are not subscribed to any bus SMS notifications</div>"	
+	if len(bus_res_to_update) != 0:
+		result = "<div>Your phone number has been updated. Currently you are subscribed to SMS notification for bus"
+		result += " #{}"*len(bus_res_to_update) + "."
+		result = result.format(*[bus['bus_id'] for bus in bus_res_to_update])	
+
+	return result
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug(request.remote_addr)		
 	#app.logger.debug(session)		
-
+	
+	result = {}
 	busid = int(request.form['busid'])
+	to_sms_subscribe = bool(str(request.form['subscribe']) == "1")
+	
 	bus = QueryDAO.GetBusByID(busid)
-	if bus['status'] == 'inactive':
-		return "<div id='log'>Inactive</div>"
-
+	if bus['status'] == 'inactive':		
+		result['status'] = "Inactive"
+		return dumps(result)
+	
 	bus_res = QueryDAO.getBusReservationIDsByBus(busid)
 	busid = str(busid) 
 
@@ -79,23 +135,45 @@ def UserCount():
 		session[busid] = bus_res['trips_counter']
 		bus_res['seats_counter'] +=1
 		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
-		result = "<div id='seats_num'>"+str(bus_res['seats_counter'])+"</div>"
-		return result
+		#result = "<div id='seats_num'>"+str(bus_res['seats_counter'])+"</div>"
+		result['seats_num'] = str(bus_res['seats_counter'])
+		if to_sms_subscribe and "phone_number" in session:
+			bus_res['sms_listeners'].append(session["phone_number"])
+			result['snackbar_notification'] = "You were successfully subscribed to SMS notification for bus #"+busid
+			QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
+		else:
+			result['snackbar_notification'] = "You were added to the shuttle bus. Thank you for sharing your intention."
+		result['wtf'] = 'wtf3'
+		return dumps(result)
 	
 	user_trip_counter = session[busid]		
-	bus_trip_counter = bus_res['trips_counter']
-	already_registered = False
-
+	bus_trip_counter = bus_res['trips_counter']	
+	
 	if user_trip_counter != bus_trip_counter:
+		
 		session[busid] = bus_trip_counter #Update to what trip user is registering to
-		bus_res['seats_counter'] +=1
+		bus_res['seats_counter'] +=1		
+		if to_sms_subscribe:
+			bus_res['sms_listeners'].append(session["phone_number"])
 		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
-	else:		
-		already_registered = True
+		
+
+	elif user_trip_counter == bus_trip_counter and to_sms_subscribe:
+		
+		if "phone_number" in session and  session["phone_number"] not in bus_res['sms_listeners']:
+			
+			bus_res['sms_listeners'].append(session["phone_number"])
+			QueryDAO.addNextTripBusLoad(bus_res) #Add number to sms	listeners
+			result['snackbar_notification'] = "You were successfully subscribed to SMS notification for bus #"+busid
+		else:
+			result['snackbar_notification'] = "You are already added to the shuttle bus."
+		
+	else:
+		result['snackbar_notification'] = "You are already added to the shuttle bus."
 	
-	result = "<div id='seats_num'>"+str(bus_res['seats_counter'])+"</div>"
+	result['seats_num'] = str(bus_res['seats_counter'])
 	
-	return result
+	return dumps(result)
 
 
 @app.route('/BusImageHB', methods=['POST'])
