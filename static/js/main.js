@@ -220,8 +220,7 @@ function initialize()
     //addStopMarker([43.572523, -79.583995],"qwer",map)
     //bus_maker_map[1].setPosition(new google.maps.LatLng( 43.784712,-79.185948 ))
 
-    setInterval(function(){
-        
+    setInterval(function(){       
 
         var request = $.ajax({
                 url: 'BusesGeo',
@@ -239,15 +238,43 @@ function initialize()
                 var lat = bus['lonlat'][1];
                 
                 var bus_id = bus['bus_id'];
+                //var seats_num = bus['']
                 if (bus_id in bus_maker_map){
                     bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
                     preFetchDistance(bus);
+
+                    //$('#'+'seats_lg_bus'+bus_id).html(num);
+                    //$('#'+'seats_xs_bus'+bus_id).html(num);    
                 }
                 
             }
             
         });       
     }, 100);//10000);
+
+    setInterval(function(){       
+
+        var request = $.ajax({
+                url: 'SeatsCounter',
+                type: 'GET',
+        });
+
+        request.done(function( msg ) {              
+            var buses_json = JSON.parse(msg);
+            
+            for(bus_id in buses_json){
+                var seats_num = buses_json[bus_id];                
+                
+                $('#'+'seats_lg_bus'+bus_id).html(seats_num);
+                $('#'+'seats_xs_bus'+bus_id).html(seats_num);    
+            }
+            
+        });
+        request.fail(function(jqXHR, textStatus ) {
+        
+        console.log("SeatsCounter Failed. Error: "+textStatus);
+        });
+    }, 3000);//10000);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

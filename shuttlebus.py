@@ -38,8 +38,13 @@ def ForgetMe():
 
 	return redirect(url_for('Index'))
 
+@app.route('/night', methods=['GET'])
+def IndexNight():	
+	return Index(night = True)
+
+
 @app.route('/', methods=['GET'])
-def Index():	
+def Index(night = False):	
 	print session
 	userip = request.remote_addr
 	buses_geo = QueryDAO.GetBusesGeo()	
@@ -56,7 +61,7 @@ def Index():
 	
 	#MAP STYLE
 	local_time = time.localtime().tm_hour	
-	if local_time > 18 or local_time < 5:
+	if local_time > 18 or local_time < 5 or night:
 		map_style_aray = map_styles.greyStyleArray
 	elif local_time >= 5 or local_time <= 18:
 		map_style_aray = map_styles.dayStyleArray
@@ -115,6 +120,12 @@ def SavePhoneNumber():
 
 	return dumps(result)
 	
+@app.route('/SeatsCounter', methods=['GET'])
+def GetSeatsCounter():
+	bus_reservations = QueryDAO.GetSeatsByBusID()
+
+	return dumps(bus_reservations)
+
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug(request.remote_addr)		
@@ -291,13 +302,13 @@ def BusHB():
 
 			if lon == 0.0 or lat == 0.0:
 				raise Exception("Lon or Lat is zero. Keeping previous location")
-			else:
-				QueryDAO.BusHBLog(busid, [lon, lat])
+			#else:
+			#	QueryDAO.BusHBLog(busid, [lon, lat])
 
 			bus = QueryDAO.GetBusByID(busid)
 
 			stop_is_changed = check_next_bus_stop(bus)
-			print "STOP IS CHANGED? "+str(stop_is_changed)
+			
 			if stop_is_changed:
 				QueryDAO.resetBusSeatsCounterAndStatus(busid)  
 			elif bus['status'] == 'inactive':
