@@ -65,6 +65,12 @@ def Index(night = False):
 		map_style_aray = map_styles.greyStyleArray
 	elif local_time >= 5 or local_time <= 18:
 		map_style_aray = map_styles.dayStyleArray
+	#Server is not on east coast
+	if time.tzname != ('EST', 'EDT'):
+		map_style_aray = map_styles.dayStyleArray
+	#Overwrite time
+	if night:
+		map_style_aray = map_styles.greyStyleArray
 
 	#INFO FOR INFO BOXES
 	tooltips = {}

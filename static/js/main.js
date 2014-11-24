@@ -222,15 +222,15 @@ function initialize()
 
     setInterval(function(){       
 
-        var request = $.ajax({
+        var requestBusesGeo = $.ajax({
                 url: 'BusesGeo',
                 type: 'GET',
         });
 
-        request.done(function( msg ) {  
-
-            buses_json = JSON.parse(msg);
+        requestBusesGeo.done(function( msg ) {  
             
+            buses_json = JSON.parse(msg);
+            console.log(buses_json);
             for(bus_index in buses_json){
 
                 var bus = buses_json[bus_index];
@@ -238,28 +238,27 @@ function initialize()
                 var lat = bus['lonlat'][1];
                 
                 var bus_id = bus['bus_id'];
-                //var seats_num = bus['']
-                if (bus_id in bus_maker_map){
+                
+                if (bus_id in bus_maker_map){                    
                     bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
                     preFetchDistance(bus);
 
-                    //$('#'+'seats_lg_bus'+bus_id).html(num);
-                    //$('#'+'seats_xs_bus'+bus_id).html(num);    
-                }
-                
+                }                
             }
             
         });       
-    }, 100);//10000);
+        requestBusesGeo.fail(function(jqXHR, textStatus ) {
+        
+            console.log("BusesGeo Failed. Error: "+textStatus);
+        });
 
-    setInterval(function(){       
-
-        var request = $.ajax({
+/*
+        var requestSeatsCounter = $.ajax({
                 url: 'SeatsCounter',
                 type: 'GET',
         });
 
-        request.done(function( msg ) {              
+        requestSeatsCounter.done(function( msg ) {              
             var buses_json = JSON.parse(msg);
             
             for(bus_id in buses_json){
@@ -270,11 +269,14 @@ function initialize()
             }
             
         });
-        request.fail(function(jqXHR, textStatus ) {
+        requestSeatsCounter.fail(function(jqXHR, textStatus ) {
         
         console.log("SeatsCounter Failed. Error: "+textStatus);
         });
-    }, 3000);//10000);
+*/
+
+    }, 1000);//10000);
+    
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

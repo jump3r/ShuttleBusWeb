@@ -1,0 +1,756 @@
+    1  ls
+    2  google-chrome
+    3  google-chrome-stable 
+    4  python
+    5  google-chrome-stable 
+    6  cd Sublime\ Text\ 2/
+    7  ls
+    8  chmod 755 sublime_text 
+    9  cd Downloads/
+   10  ls
+   11  chmod 755 netbeans-8.0-linux.sh 
+   12  ls
+   13  cd ../netbeans/
+   14  ls
+   15  ls -l
+   16  ./netbeans-8.0-linux.sh 
+   17  sudo apt-get install openjdk-7-jre
+   18  sudo apt-get install openjdk-7-jdk
+   19  ./netbeans-8.0-linux.sh 
+   20  top
+   21  pwd
+   22  ls /usr/local/sbin/
+   23  ls /usr/local/bin
+   24  ls
+   25  ls netbeans
+   26  ls netbeans-8.0/
+   27  ./netbeans-8.0/uninstall.sh 
+   28  ls
+   29  ls netbeans/
+   30  ./netbeans/netbeans-8.0-linux.sh 
+   31  mvn help
+   32  sudo apt-get install mysql-server
+   33  mysql
+   34  mysql -p
+   35  sudo mysql
+   36  mysql -u -p
+   37  mysql -p
+   38  mysql root
+   39  mysql root -p
+   40  mysql -u root
+   41  mysql -u root -p
+   42  vim /etc/mysql/my.cnf 
+   43  sudo apt-get install vim
+   44  vim /etc/mysql/my.cnf 
+   45  sudo netstat -tap | grep mysql
+   46  ps
+   47  netstat | grep mysql
+   48  sudo netstat -tap | grep mysql
+   49  netstat 
+   50  sudo netstat -tap | grep mysql
+   51  pwd
+   52  ls
+   53  vim Downloads/download
+   54  string Downloads/download
+   55  vim Downloads/download
+   56  strings Downloads/download 
+   57  rm Downloads/download 
+   58  mysql -u root p
+   59  mysql -u root
+   60  mysql -u root -p
+   61  cd Downloads/
+   62  strings mkyong 
+   63  sudo netstat -tap | grep mysql
+   64  ps aux | grep
+   65  sudo netstat -tap | grep mysql
+   66  ps aux | grep 10476
+   67  ps aux | grep 1046
+   68  sudo netstat -tap | grep mysql
+   69  cd UFT/CSC309Web/PRESENTATION/group011/309project/csc309project/profiles/
+   70  vim templates/profiles/user.html 
+   71  ls
+   72  pwd
+   73  ls
+   74  cd ../
+   75  ls
+   76  find navbar *
+   77  ls
+   78  cd ../../
+   79  ls
+   80  cd ../
+   81  ls
+   82  cd ../../CSC309Web/309project/csc309project/csc309project/templates/
+   83  vim navbar.html 
+   84  php
+   85  ls
+   86  pwd
+   87  ls
+   88  php
+   89  sudo apt-get install php-cli
+   90  sudo apt-get install php5-cli
+   91  ls
+   92  cd Desktop/
+   93  php compareTimes.php 
+   94  clear
+   95  php compareTimes.php 
+   96  clear
+   97  php compareTimes.php 
+   98  python 
+   99  cd Desktop/
+  100  python diagonals.py 
+  101  man killall
+  102  ps aux | grep finder
+  103  ps aux | grep Finder
+  104  man dd
+  105  ls
+  106  cd ../../cdrom/
+  107  ls
+  108  fdisk
+  109  fdisk -l
+  110  ls /media/anton/New\ Volume/Raw\ image/
+  111  ls -l /media/anton/New\ Volume/Raw\ image/
+  112  ls -l /media/anton/New\ Volume/Rawimage/
+  113  python 
+  114  python
+  115  python3
+  116  sudo apt-get install python python-tk idle python-pmw python-imaging
+  117  python3
+  118  idle
+  119  git
+  120  sudo apt-get install git
+  121  ls
+  122  cd UFT/CSC301/
+  123  git clone https://github.com/csc301ab/test-repo-tutorial
+  124  git commit -m "Addintg a.txt"
+  125  ls
+  126  echo "sad" > test-repo-tutorial/a.txt
+  127  git commit -m "Addintg a.txt"
+  128  cd test-repo-tutorial/
+  129  git commit -m "Addintg a.txt"
+  130  git status
+  131  git add a.txt 
+  132  git commit -m "Addintg a.txt"
+  133  history
+  134  git status
+  135  git commit -m "addding a.txt"
+  136  git config --global user.email "anton.bondar@mail.utoronto.ca"
+  137  git commit -m "addding a.txt"
+  138  git checkout -b feature1
+  139  echo "for feature 1" > b.txt
+  140  git commit -m "b.ttx"
+  141  git b.txt
+  142  git add b.txt
+  143  git commit -m "b.ttx"
+  144  git status
+  145  git checkout master
+  146  git status
+  147  git checkout feature1
+  148  git push origin master
+  149  git log
+  150  history
+  151  git config --global user.name "csc309ab"
+  152  git status
+  153  git reset --soft
+  154  git status
+  155  git checkout master
+  156  git reset --soft
+  157  git status
+  158  ls
+  159  cd UFT/CSC301/
+  160  ls
+  161  mkdir tut1
+  162  mv gitcommands tut1/
+  163  ls
+  164  vim gitcommands~ 
+  165  vim tut1/gitcommands 
+  166  rm gitcommands~ 
+  167  mv -r test-repo-tutorial/ tut1/
+  168  mv  test-repo-tutorial/ tut1/
+  169  ls
+  170  git clone https://github.com/csc301-fall2014/Ex1-UTM-Team2-Ex1-
+  171  cd UFT/CSC301/
+  172  cd Ex1-UTM-Team2-Ex1-/
+  173  git rebase origin/master
+  174  git status
+  175  git fetch origin
+  176  git status
+  177  git diff
+  178  clear
+  179  git rebase origin/master
+  180  git status
+  181  git rebase --continue
+  182  git status
+  183  git rebase --continue
+  184  git push origin csc301ab_Djikstra
+  185  git branch djikstra_backup
+  186  git checkout djikstra_backup
+  187  git push origin djikstra_backup
+  188  history
+  189  cd UFT/CSC301/Ex1-UTM-Team2-Ex1-/
+  190  git checkout master
+  191  git pull
+  192  cd UFT/CSC301/Ex1-UTM-Team2-Ex1-/
+  193  git checkout master
+  194  git pull
+  195  git branch
+  196  git reset --hard HEAD~1
+  197  git pull
+  198  git reset --hard HEAD~1
+  199  git branch --help
+  200  git branch -m master master-old
+  201  git branc
+  202  git branch
+  203  git checkout master
+  204  git pull origin master
+  205  git log
+  206  git diff
+  207  git reset --hard HEAD
+  208  git status
+  209  git reset --hard HEAD
+  210  git status
+  211  git add -u
+  212  git commit
+  213  git push
+  214  git pull
+  215  git push
+  216  git log
+  217  git branch
+  218  git pull origin master
+  219  git push origin master
+  220  python3
+  221  cd UFT/CSC384/a1/
+  222  python3 waterjugs.py 
+  223  python waterjugs.py 
+  224  ls
+  225  python
+  226  python3
+  227  ps
+  228  ps -u bondaran
+  229  ps aux|grep bondaran
+  230  ps aux|grep fuelmaze
+  231  kill -9 9264
+  232  kill -11 9264
+  233  ps aux|grep fuelmaze
+  234  cd UFT/CSC384/a1/
+  235  ls
+  236  python3 fuelmaze.py 
+  237  ps aux|grep fuelmaze
+  238  clear
+  239  python3 fuelmaze.py 
+  240  clear
+  241  python3 fuelmaze.py 
+  242  clear
+  243  python3 fuelmaze.py 
+  244  clear
+  245  python3 fuelmaze.py 
+  246  clear
+  247  python3 fuelmaze.py 
+  248  clear
+  249  python3 fuelmaze.py 
+  250  ps aux|grep fuelmaze
+  251  clear
+  252  python3 fuelmaze.py 
+  253  clear
+  254  python3 fuelmaze.py 
+  255  clear
+  256  python3 fuelmaze.py 
+  257  clear
+  258  python3 fuelmaze.py 
+  259  clear
+  260  python3 fuelmaze.py 
+  261  clear
+  262  python3 fuelmaze.py 
+  263  clear
+  264  python3 fuelmaze.py 
+  265  clear
+  266  python3 fuelmaze.py 
+  267  clear
+  268  python3 fuelmaze.py 
+  269  python3 fuelmaze.py
+  270  vim output 
+  271  python3
+  272  clear
+  273  python3 fuelmaze.py > output 
+  274  vim output 
+  275  python3 fuelmaze.py > output 
+  276  vim output 
+  277  python3 fuelmaze.py > output 
+  278  vim output 
+  279  python3 fuelmaze.py > output 
+  280  vim output 
+  281  python3 fuelmaze.py > output 
+  282  vim output 
+  283  python3 fuelmaze.py > output 
+  284  vim output 
+  285  python3 fuelmaze.py > output 
+  286  vim output 
+  287  python3 fuelmaze.py > output 
+  288  vim output 
+  289  python3 fuelmaze.py
+  290  python3 fuelmaze.py > output 
+  291  vim output 
+  292  python3 fuelmaze.py
+  293  clear
+  294  python3 fuelmaze.py
+  295  clear
+  296  python3 fuelmaze.py
+  297  clear
+  298  python3 fuelmaze.py
+  299  clear
+  300  python3 fuelmaze.py
+  301  python3 fuelmaze.py > output 
+  302  vim output 
+  303  python3 fuelmaze.py > output 
+  304  vim output 
+  305  python3 fuelmaze.py > output 
+  306  vim output 
+  307  clear
+  308  python3 fuelmaze.py > output 
+  309  clear
+  310  python3 fuelmaze.py > output 
+  311  vim output 
+  312  python3 fuelmaze.py
+  313  clear
+  314  python3 fuelmaze.py
+  315  clear
+  316  python3 fuelmaze.py
+  317  vim output 
+  318  clear
+  319  python3 fuelmaze.py
+  320  vim output 
+  321  python3 fuelmaze.py > output 
+  322  vim output 
+  323  python3 fuelmaze.py > output 
+  324  vim output 
+  325  python3 fuelmaze.py > output 
+  326  vim output 
+  327  clear
+  328  python3 fuelmaze.py
+  329  clear
+  330  python3 fuelmaze.py
+  331  cd UFT/CSC384/a1/
+  332  python3 fuelmaze.py 
+  333  cd UFT/CSC384/a1/
+  334  ls
+  335  python3 fuelmaze.py 
+  336  clear
+  337  python3 fuelmaze.py 
+  338  clear
+  339  python3 fuelmaze.py 
+  340  clear
+  341  python3 fuelmaze.py 
+  342  clear
+  343  python3 fuelmaze.py 
+  344  clear
+  345  python3 fuelmaze.py 
+  346  python3.4
+  347  ls /var/crash/
+  348  vim /var/crash/.lock 
+  349  vim /var/crash/_sbin_plymouthd.0.
+  350  vim /var/crash/_sbin_plymouthd.0.crash 
+  351  vim /var/crash/_sbin_plymouthd.0.upload
+  352  vim /var/crash/_sbin_plymouthd.0.uploaded 
+  353  rm  /var/crash/*
+  354  ls /var/crash/
+  355  sudo rm /var/crash/*
+  356  ls /var/crash/
+  357  ls /etc/default/apport 
+  358  /etc/default/apport 
+  359  sudo /etc/default/apport 
+  360  sudo ls /etc/default/apport 
+  361  gksudo gedit /etc/default/apport 
+  362  python3
+  363  python3.4
+  364  telnetd
+  365  telnet
+  366  man telnet
+  367  ps aux | grep sublime
+  368  cd UFT/CSC384/a1/
+  369  python taskscheduling.py 
+  370  python3 taskscheduling.py 
+  371  clear
+  372  python3 taskscheduling.py 
+  373  clear
+  374  python3 taskscheduling.py 
+  375  clear
+  376  python3 taskscheduling.py 
+  377  clear
+  378  python3 taskscheduling.py 
+  379  clear
+  380  python3 taskscheduling.py 
+  381  clear
+  382  python3 taskscheduling.py 
+  383  clear
+  384  python3 taskscheduling.py 
+  385  clear
+  386  python3 taskscheduling.py 
+  387  ps aux | grep sublime
+  388  clear
+  389  python3 taskscheduling.py 
+  390  clear
+  391  python3 taskscheduling.py 
+  392  clear
+  393  python3 taskscheduling.py 
+  394  python3 schedulingtests.py 
+  395  clear
+  396  python3 schedulingtests.py 
+  397  clear
+  398  python3 schedulingtests.py 
+  399  clear
+  400  python3 schedulingtests.py 
+  401  clear
+  402  python3 schedulingtests.py 
+  403  clear
+  404  python3 schedulingtests.py 
+  405  python3
+  406  clear
+  407  python3
+  408  clear
+  409  python3 schedulingtests.py 
+  410  python3 taskscheduling.py 
+  411  clear
+  412  python3 taskscheduling.py 
+  413  clear
+  414  python3 taskscheduling.py 
+  415  clear
+  416  python3 taskscheduling.py 
+  417  clear
+  418  python3 taskscheduling.py 
+  419  clear
+  420  python3 taskscheduling.py 
+  421  clear
+  422  python3 schedulingtests.py 
+  423  cd UFT/CSC301/
+  424  ls
+  425  git clone https://github.com/priyatam/springmvc-bootstrap.git
+  426  ls
+  427  rm -r SpringMVC/
+  428  ls
+  429  exit
+  430  cd UFT/CSC301/
+  431  git -username
+  432  git -user
+  433  git clone https://github.com/csc301-fall2014/Proj-UTM-Team2-repo.git
+  434  rm /var/crash/*
+  435  sudo rm /var/crash/*
+  436  vim /var/crash/.lock 
+  437  sudo rm /var/crash/.lock 
+  438  ls -l /var/crash/
+  439  sudo vim /etc/default/apport 
+  440  exit
+  441  ls
+  442  exit
+  443  sudo add-apt-repository ppa:webupd8team/sublime-text-2
+  444  sudo apt-get update
+  445  sudo apt-get install sublime-text
+  446  sublime-text 
+  447  man ln
+  448  ls /usr/bin/sublime-text 
+  449  /usr/bin/sublime-text 
+  450  exit
+  451  ls
+  452  echo "" > brackets.py
+  453  vim brackets.py 
+  454  python
+  455  python brackets.py 
+  456  clear
+  457  python brackets.py 
+  458  clear
+  459  python brackets.py 
+  460  clear
+  461  python brackets.py 
+  462  clear
+  463  python brackets.py 
+  464  clear
+  465  python brackets.py 
+  466  clear
+  467  python brackets.py 
+  468  clear
+  469  python brackets.py 
+  470  clear
+  471  python brackets.py 
+  472  python
+  473  python brackets.py 
+  474  clear
+  475  python brackets.py 
+  476  clear
+  477  python brackets.py 
+  478  clear
+  479  python brackets.py 
+  480  clear
+  481  python brackets.py 
+  482  python
+  483  clear
+  484  python
+  485  clear
+  486  python brackets.py 
+  487  clear
+  488  python brackets.py 
+  489  clear
+  490  python brackets.py 
+  491  clear
+  492  python brackets.py 
+  493  clear
+  494  python brackets.py 
+  495  python 
+  496  clear
+  497  python brackets.py 
+  498  clear
+  499  python brackets.py 
+  500  clear
+  501  python brackets.py 
+  502  clear
+  503  python brackets.py 
+  504  clear
+  505  python brackets.py 
+  506  clear
+  507  python brackets.py 
+  508  rm brackets.py 
+  509  python3
+  510  cd UFT/CSC301/Proj-UTM-Team2-repo/
+  511  git reset --hard
+  512  git reset --hard HEAD~1
+  513  git pull
+  514  nautilus .
+  515  git status
+  516  git reset --hard HEAD~1
+  517  git pull
+  518  rm -rf src/main/java/com/ggmsg/
+  519  git pull
+  520  git pull master
+  521  git pull origin master
+  522  git status
+  523  git add -u
+  524  git commit -m "fixing stuff"
+  525  git push
+  526  git push origin master
+  527  git pull
+  528  git rebase origin/master
+  529  git rebase --continue
+  530  git status
+  531  git loq
+  532  git log
+  533  git push origin master
+  534  ping google.com
+  535  git push origin master
+  536  cd UFT/CSC301/Proj-UTM-Team2-repo/
+  537  git diff
+  538  git reset --hard HEAD~1
+  539  git pull
+  540  python
+  541  ls
+  542  echo "" > binrep.py
+  543  vim binrep.py 
+  544  rm binrep.py 
+  545  python binrep.py 
+  546  python
+  547  python binrep.py 
+  548  python
+  549  python binrep.py 
+  550  python
+  551  python3
+  552  python
+  553  tree UFT
+  554  sudo apt-get install tree
+  555  echo $JAVA_HOME
+  556  echo $PATH
+  557  mvn 
+  558  sudo apt-get install maven2
+  559  ps
+  560  sudo apt-get install maven3
+  561  sudo apt-get install maven2
+  562  cd UFT/CSC490
+  563  ls
+  564  cd websitepy/
+  565  python
+  566  cd UFT/CSC490/websitepy/
+  567  python
+  568  ls
+  569  cd UFT/CSC490/
+  570  ls
+  571  mkdir websitepy
+  572  cd websitepy/
+  573  echo "" > helloworld.py
+  574  vim helloworld.py 
+  575  echo "" > app.yaml
+  576  vim app.yaml 
+  577  python
+  578  pip
+  579  sudo apt-get install pip
+  580  sudo apt-get install python-pip
+  581  ls
+  582  ./google_appengine/dev_appserver.py ./
+  583  ps
+  584  cd UFT/CSC490/websitepy/
+  585  ./google_appengine/dev_appserver.py ./
+  586  ps
+  587  python3
+  588  cd UFT/CSC490/websitepy/
+  589  ./google_appengine/dev_appserver.py ./shuttleweb/
+  590  ./google_appengine/appcfg.py update shuttleweb/
+  591  ./google_appengine/dev_appserver.py ./shuttleweb/
+  592  cd UFT/CSC490/websitepy/
+  593  ./google_appengine/dev_appserver.py ./shuttleweb/
+  594  python3
+  595  pip install Flask
+  596  sudo pip install Flask
+  597  pip install virtualenv
+  598  sudo pip install virtualenv
+  599  python 
+  600  heroku
+  601  wget -q0- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+  602  wget -q0 -https://toolbelt.heroku.com/install-ubuntu.sh | sh
+  603  wget -q0 https://toolbelt.heroku.com/install-ubuntu.sh | sh
+  604  wget https://toolbelt.heroku.com/install-ubuntu.sh | sh
+  605  pwd
+  606  wget https://toolbelt.heroku.com/install-ubuntu.sh ./
+  607  ls
+  608  ./Downloads/install_ubuntu.sh
+  609  ls
+  610  vim install-ubuntu.sh
+  611  ./install-ubuntu.sh
+  612  sudo ./install-ubuntu.sh
+  613  ./install-ubuntu.sh
+  614  install-ubuntu.sh
+  615  sudo install_ubuntu.sh
+  616  sudo sh install_ubuntu.sh
+  617  sh install_ubuntu.sh
+  618* wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add
+  619  sudo -k
+  620  sudo sh<<SCRIPT
+echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
+wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
+apt-get update
+apt-get install -y heroku-toolbelt
+
+
+  621  ls
+  622  cd UFT/CSC490/
+  623  ls
+  624  mkdir shuttlebus
+  625  cd shuttlebus/
+  626  virtualenv venv
+  627  source venv/bin/activate
+  628  pip install gunicorn
+  629  ls
+  630  ls venv/
+  631  cp ../FlaskIntro/* ./
+  632  cp -r ../FlaskIntro/* ./
+  633  ls
+  634  rm schema.sql 
+  635  ls
+  636  echo "web: gunicorn shuttlebus:app --log-file=-" Procfile
+  637  echo "web: gunicorn shuttlebus:app --log-file=-" > Procfile
+  638  ls
+  639  echo Procfile 
+  640  cat Procfile 
+  641  foreman start
+  642  clear
+  643  foreman start
+  644  heroku login
+  645  foreman start
+  646* virtualenv di
+  647  deactivate 
+  648  heroku login
+  649  source venv/bin/activate
+  650  ls
+  651  foreman start
+  652  deactivate
+  653  virtualenv venv --no-site-packages
+  654  ls
+  655  source venv/bin/activate
+  656  foreman start
+  657  pip freeze > requirements.txt
+  658  cat requirements.txt 
+  659  foreman start
+  660  cat requirements.txt 
+  661  cat Procfile 
+  662  python
+  663  echo "Flask==0.10.1" >> Pocfile
+  664  cat Procfile 
+  665  rm Pocfile 
+  666  echo "Flask==0.10.1" >> requirements.txt 
+  667  foreman start
+  668  ls
+  669  mv shuttle.py shuttlebus.py
+  670  foreman start
+  671  vim requirements.txt 
+  672  foreman start
+  673  cat Procfile 
+  674  ls
+  675  vim disable/
+  676  cat Procfile 
+  677  pip install Flask gunicorn
+  678  foreman start
+  679  venv
+  680  git init 
+  681  git add .
+  682  git commit -m "init"
+  683  heroku create
+  684  git push heroku master
+  685  ps
+  686  ls -l
+  687  git init
+  688  git add .
+  689  ls
+  690  git commit -m "init"
+  691  heroku create
+  692  rm -r .git/
+  693  rm -rf .git/
+  694  ls
+  695  git init
+  696  git add .
+  697  ls
+  698  git commit -m "init"
+  699  heroku create
+  700  git push heroku master
+  701  heroku ps
+  702  heroku open
+  703  git remote rm heroku
+  704  heroku git:remote -a shuttlebus
+  705  ls
+  706  history
+  707  ls -l
+  708  heroku log
+  709  heroku logs
+  710  history
+  711  pip install pymongo
+  712  foreman start
+  713  foreman start&
+  714  ls
+  715  rm -r disable
+  716  ls
+  717  ps
+  718  foreman end
+  719  foreman finish
+  720  foreman stop
+  721  kill -9 18925 18932
+  722  ps
+  723  foreman start &
+  724  ps
+  725  kill -9 18953 18955 18962
+  726  python shuttlebus.py
+  727  [A
+  728  python shuttlebus.py
+  729  clear
+  730  python shuttlebus.py
+  731  clear
+  732  python shuttlebus.py
+  733  heroku python
+  734  heroku run python
+  735  vim shuttlebus.py
+  736  heroku open
+  737  git commit -m "added mongolab test"
+  738  git add .
+  739  python
+  740  vim requirements.txt 
+  741  git add all
+  742  git add .
+  743  git add --all
+  744  git commit -m "added mongolab test"
+  745  git push heroku master
+  746  heroku ps
+  747  heroku open
+  748  history
+  749  ls
+  750  history > historylog
