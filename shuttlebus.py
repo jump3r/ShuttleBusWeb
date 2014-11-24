@@ -76,9 +76,12 @@ def Index():
 
 @app.route('/SavePhoneNumber', methods=['POST'])
 def SavePhoneNumber():
-
-	new_number = request.form['phone_number']
+	result = {}
+	new_number = request.form['phone_number'].strip()
 	
+	if len(new_number) == 0:
+		result['snackbar_notification'] = "Your cannot have an empty phone number."
+		return dumps(result)
 	#Change all sms listeners to the new nubmer
 	#all_subscribed_buses = []
 	bus_res_to_update = []
@@ -97,27 +100,25 @@ def SavePhoneNumber():
 		if len(bus_res_to_update) != 0:
 			QueryDAO.UpdateBusSMSListeners(bus_res_to_update)
 	else:
-		from bus_utils import getBusesSubscribedTo
-		
+				
 		session["phone_number"] = new_number
 		#bus_res_to_update = getBusesSubscribedTo(session) #buses user is subscribed to and they have not arrived
 		#subscribedto_not_arrived = GetSubscribedToBusesNotArrivedYet()
-		
-	
+			
 	#Get all phone numbers
 	#Find current
-	result = "<div>Your phone number has been updated. Currently you are not subscribed to any bus SMS notifications</div>"	
+	result["snackbar_notification"] = "Your phone number has been updated. Currently you are not subscribed to any bus SMS notifications"	
 	if len(bus_res_to_update) != 0:
-		result = "<div>Your phone number has been updated. Currently you are subscribed to SMS notification for bus"
-		result += " #{}"*len(bus_res_to_update) + "."
-		result = result.format(*[bus['bus_id'] for bus in bus_res_to_update])	
+		result["snackbar_notification"] = "Your phone number has been updated. Currently you are subscribed to SMS notification for bus"
+		result["snackbar_notification"] += " #{}"*len(bus_res_to_update) + "."
+		result["snackbar_notification"] = result["snackbar_notification"].format(*[bus['bus_id'] for bus in bus_res_to_update])	
 
-	return result
-
+	return dumps(result)
+	
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
 	#app.logger.debug(request.remote_addr)		
-	#app.logger.debug(session)		
+	app.logger.debug(session)		
 	
 	result = {}
 	busid = int(request.form['busid'])
@@ -143,7 +144,7 @@ def UserCount():
 			QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
 		else:
 			result['snackbar_notification'] = "You were added to the shuttle bus. Thank you for sharing your intention."
-		result['wtf'] = 'wtf3'
+		
 		return dumps(result)
 	
 	user_trip_counter = session[busid]		
@@ -271,28 +272,34 @@ def BusTestImage():
 def BusHB():
 	
 	exception_message = "EXCEPTION OCCURED"
+	print request.form.keys()
 	try:
 		if len(request.form) == 1:
 			
 			key_val_list = request.form.keys()[0].split(',')
 
 			busid,lon,lat = None, None, None
+			print key_val_list[0]
 			if key_val_list[0] == "mode:gsm":
-				busid,lon,lat = parse_bushb_gsm(key_val_list[1:])
+				busid,lon,lat = parse_bushb_gsm(key_val_list[1:])				
 			else:
 				busid,lon,lat = parse_bushb_gps(key_val_list[1:])									
 			
 			if None in [busid, lon, lat]:
 				raise Exception("One of POST key is not found")
-			
-			QueryDAO.BusHBLog(busid, [lon, lat])
+			print busid, lon, lat
+
+			if lon == 0.0 or lat == 0.0:
+				raise Exception("Lon or Lat is zero. Keeping previous location")
+			else:
+				QueryDAO.BusHBLog(busid, [lon, lat])
 
 			bus = QueryDAO.GetBusByID(busid)
 
 			stop_is_changed = check_next_bus_stop(bus)
-
+			print "STOP IS CHANGED? "+str(stop_is_changed)
 			if stop_is_changed:
-				QueryDAO.resetBusSeatsCounterAndStatus(busid)  #resets 	
+				QueryDAO.resetBusSeatsCounterAndStatus(busid)  
 			elif bus['status'] == 'inactive':
 				bus['status'] = 'active'
 				QueryDAO.updateBusById(bus)
@@ -304,6 +311,7 @@ def BusHB():
 	except Exception as e:
 		print exception_message
 		print e
+		return "<div>{}.</div>".format(e)
 	
 	return "<div>True</div>"
 
@@ -350,5 +358,5 @@ def page_not_found(error):
 app.secret_key = '\xafrLJh\xbf\xf7\xdb\x83S\xa3\xa2\xb7\x0b.\xbao2%q4\xf8`\xff'
 if __name__ == '__main__':
 	app.debug = True
-	app.run()#threaded=True)
+	app.run(threaded=True)
 

@@ -245,8 +245,11 @@ class QueryDAO:
 		
 		res["status"] = "active"
 
+		print "TWILIO"
+		print res['sms_listeners']
 		t = twilio_utils.Twilio()
-		t.notifyUsers(res['sms_listeners'])
+		t.notifyUsers(res['sms_listeners'], res['bus_id'])
+		print "TWILIO END"
 		res['sms_listeners'] = []
 
 		col.update({'_id':res['_id']}, res )

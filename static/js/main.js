@@ -39,13 +39,18 @@ function getInfoWindowContent(snapshot,bus){
 }
 
 function addBusMarker(bus, snapshot, title, map){
-
+    
+    var bounce = 0;
+    if (bus['status'] == 'active'){
+        bounce = google.maps.Animation.BOUNCE;
+    }
+    
     var marker = new google.maps.Marker(
                         {
                             position: new google.maps.LatLng(bus['lonlat'][0], bus['lonlat'][1]),
                             map: map,
                             title: title,
-                            animation: google.maps.Animation.BOUNCE, // DROP
+                            animation: bounce, // DROP
                             //icon: {url:'yo.jpg', size: new google.maps.Size(5, 5)},
                             //icon: {path: google.maps.SymbolPath.CIRCLE,scale: 5},
                             icon:'glyphicons_031_bus.png'
@@ -242,7 +247,7 @@ function initialize()
             }
             
         });       
-    }, 10000);
+    }, 100);//10000);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -279,11 +284,12 @@ function addUserCount(busid){
         }
         
     });
-    /*
+    
     request.fail(function(jqXHR, textStatus ) {
-        alert( "Request failed: " + textStatus );
+        //alert( "Request failed: " + textStatus );
+        console.log("addUserCount Failed. Error: "+textStatus);
     });
-    */
+    
 }
 
 function smsNotifications(onof){
@@ -305,15 +311,17 @@ function savePhoneNumber(){
         });
     $.snackbar({content: 'Processing ...', time: 300});
     request.done(function( msg ) {  
-        
-        var msg = $.parseHTML(msg)[0];      
-        var msg = msg.innerHTML;        
+        var msg = JSON.parse(msg);;        
+        //var msg = $.parseHTML(msg)[0];      
+        //var msg = msg.innerHTML;        
                 
-        $.snackbar({content: msg, time: 300});
+        $.snackbar({content: msg['snackbar_notification'], time: 300});
     });
 
     request.fail(function(jqXHR, textStatus ) {
-        alert( "Request failed: " + textStatus );
+        //alert( "Request failed: " + textStatus );
+        console.log("savePhoneNumber failed. Error: "+textStatus);
+
     });
 }
 
@@ -322,4 +330,5 @@ $(document).ready(function(){
         if(e.keyCode==13)
             savePhoneNumber();
     });
+    smsNotifications('OFF');
 });

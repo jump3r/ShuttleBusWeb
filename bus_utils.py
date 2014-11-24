@@ -69,8 +69,8 @@ def parse_bushb_gsm(bushb):
     busid,lon,lat = None, None, None
     
     busid = int(bushb[0].strip().split(':')[1])
-    lon = float(bushb[1].strip())
-    lat = float(bushb[2].strip())
+    lon = float(bushb[2].strip())
+    lat = float(bushb[1].strip())
 
     return (busid,lon,lat)
 
@@ -78,7 +78,7 @@ def parse_bushb_gps(bushb_list):
     #mode:gps,busid:1,lon:12.3,lat:12.3
     #adjust lon lat
     busid,lon,lat = None, None, None
-    for key_val in key_val_list:
+    for key_val in bushb_list:
 
         k, v = key_val.split(':')
         k, v = k.strip(), v.strip()

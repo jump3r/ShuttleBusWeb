@@ -10,12 +10,14 @@ class Twilio:
 		self.token = "e611d70513cd12ffaf92c28cc9fa1e8f"
 		self.client = TwilioRestClient(self.sid, self.token)		
 
-	def notifyUsers(numbers, bus = None, message = "The bus #{} has arrived."):
-		message = message.format(bus)
+	def notifyUsers(self, numbers, bus_id, message = "The bus #{} has arrived."):
+		print numbers, bus_id, message
+		message = message.format(str(bus_id))
 		for number in numbers:
 			if "+1" not in number:
 				number = "+1" + number
 			try:
-				client.messages.create(body=message, to=number, from_="+16475593044")
+				print number
+				self.client.messages.create(body=message, to=number, from_="+16475593044")
 			except twilio.TwilioRestException as e:
 				print e
