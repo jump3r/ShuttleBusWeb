@@ -78,7 +78,7 @@ def addStatus():
         'last_hb_time': datetime.datetime.utcnow(),
         'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
         'next_stop_index': 1, #0,
-        'lonlat': [43.548043,-79.66095],#[43.6170021,-79.506403],#middle
+        'lonlat': [43.6170021,-79.506403],#middle
         'status': 'active',        
     },    
     {

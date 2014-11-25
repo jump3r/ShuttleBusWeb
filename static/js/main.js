@@ -220,17 +220,18 @@ function initialize()
     //addStopMarker([43.572523, -79.583995],"qwer",map)
     //bus_maker_map[1].setPosition(new google.maps.LatLng( 43.784712,-79.185948 ))
 
-    setInterval(function(){       
+    setInterval(function(){
+        
 
-        var requestBusesGeo = $.ajax({
+        var request = $.ajax({
                 url: 'BusesGeo',
                 type: 'GET',
         });
 
-        requestBusesGeo.done(function( msg ) {  
-            
+        request.done(function( msg ) {  
+
             buses_json = JSON.parse(msg);
-            console.log(buses_json);
+            
             for(bus_index in buses_json){
 
                 var bus = buses_json[bus_index];
@@ -238,44 +239,16 @@ function initialize()
                 var lat = bus['lonlat'][1];
                 
                 var bus_id = bus['bus_id'];
-                
-                if (bus_id in bus_maker_map){                    
+                if (bus_id in bus_maker_map){
                     bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
                     preFetchDistance(bus);
-
-                }                
+                }
+                
             }
             
         });       
-        requestBusesGeo.fail(function(jqXHR, textStatus ) {
-        
-            console.log("BusesGeo Failed. Error: "+textStatus);
-        });
+    }, 100);//10000);
 
-/*
-        var requestSeatsCounter = $.ajax({
-                url: 'SeatsCounter',
-                type: 'GET',
-        });
-
-        requestSeatsCounter.done(function( msg ) {              
-            var buses_json = JSON.parse(msg);
-            
-            for(bus_id in buses_json){
-                var seats_num = buses_json[bus_id];                
-                
-                $('#'+'seats_lg_bus'+bus_id).html(seats_num);
-                $('#'+'seats_xs_bus'+bus_id).html(seats_num);    
-            }
-            
-        });
-        requestSeatsCounter.fail(function(jqXHR, textStatus ) {
-        
-        console.log("SeatsCounter Failed. Error: "+textStatus);
-        });
-*/
-
-    }, 1000);//10000);
     
 }
 

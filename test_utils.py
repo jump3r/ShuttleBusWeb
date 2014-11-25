@@ -70,11 +70,11 @@ def simulated_demo():
 		UTM_STGEORGE.reverse()
 		num -= 1
 
-simulated_demo()
+#simulated_demo()
 #coord = [43.548043,-79.66095] #UTM
-#coord = [43.662892,-79.395656] #ST.
-#coord.reverse()
-#BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
+coord = [43.662892,-79.395656] #ST.
+coord.reverse()
+BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
 #BusImageHB()
 
 
