@@ -9,8 +9,7 @@ def UserBusIntetion():
 
 def BusHB(lonlat, busid=1, method = "GPS"):
 	#payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]} 
-	if method == "GSM":
-		lonlat.reverse()
+	if method == "GSM":		
 		payload = "mode:gsm,busid:{}, {},{},2014//11/23,20:04:50".format(busid,*lonlat)
 	else:		
 		payload = 'mode:gps,busid:{},lon:{},lat:{}'.format(busid,*lonlat)
@@ -60,21 +59,21 @@ def BusImageHB():
 def simulated_demo():
 	from bus_coord_route_demo import UTM_STGEORGE
 	import time
-	num = 2
+	num = 1
 	while num != 0:
-		for coord in UTM_STGEORGE:
-			#coord.reverse()
+		for coord in UTM_STGEORGE:			
 			coord = coord[:]
+			coord.reverse()
 			BusHB(coord , busid=1, method="GSM")
 			time.sleep(0.5)
 		UTM_STGEORGE.reverse()
 		num -= 1
 
-#simulated_demo()
+simulated_demo()
 #coord = [43.548043,-79.66095] #UTM
-coord = [43.662892,-79.395656] #ST.
-coord.reverse()
-BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
+#coord = [43.662892,-79.395656] #ST.
+#coord.reverse()
+#BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
 #BusImageHB()
 
 

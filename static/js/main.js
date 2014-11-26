@@ -219,9 +219,8 @@ function initialize()
 
     //addStopMarker([43.572523, -79.583995],"qwer",map)
     //bus_maker_map[1].setPosition(new google.maps.LatLng( 43.784712,-79.185948 ))
-
-    setInterval(function(){
-        
+    
+    setInterval(function(){        
 
         var request = $.ajax({
                 url: 'BusesGeo',
@@ -233,23 +232,53 @@ function initialize()
             buses_json = JSON.parse(msg);
             
             for(bus_index in buses_json){
-
                 var bus = buses_json[bus_index];
-                var lon = bus['lonlat'][0];
-                var lat = bus['lonlat'][1];
+
+                //Make strings coparable to those fetched with ajax
+                var lon = String(bus['lonlat'][0]).substring(0,9);
+                var lat = String(bus['lonlat'][1]).substring(0,9);
                 
                 var bus_id = bus['bus_id'];
                 if (bus_id in bus_maker_map){
-                    bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
-                    preFetchDistance(bus);
-                }
-                
-            }
-            
-        });       
-    }, 100);//10000);
 
+                    var bus_pos = bus_maker_map[bus_id].position;
+                    var onmap_pos_lon = String(bus_pos.k).substring(0,9);
+                    var onmap_pos_lat = String(bus_pos.B).substring(0,9);
+
+                    if (onmap_pos_lon != lon || onmap_pos_lat != lat){
+                        //bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
+                        //preFetchDistance(bus);
+                        console.log("Changed from:"+onmap_pos_lon +" "+ onmap_pos_lat);
+                        console.log("Changed to  :"+lon +" "+ lat);
+                    }
+                    else{
+                        console.log("Didnt change");                        
+                    }
+                }                
+            }            
+        });       
+    }, 5000);
     
+    setInterval(function(){
+        var requestSeatsCounter = $.ajax({
+                    url: 'SeatsCounter',
+                    type: 'GET',
+            });
+        requestSeatsCounter.done(function( msg ) {              
+            var buses_json = JSON.parse(msg);
+            
+            for(bus_id in buses_json){
+                var seats_num = buses_json[bus_id];                
+                
+                $('#'+'seats_lg_bus'+bus_id).html(seats_num);
+                $('#'+'seats_xs_bus'+bus_id).html(seats_num);    
+            }            
+        });
+        requestSeatsCounter.fail(function(jqXHR, textStatus ) {        
+            console.log("SeatsCounter Failed. Error: "+textStatus);
+        });
+    }, 5000);
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

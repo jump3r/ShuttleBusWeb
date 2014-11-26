@@ -125,7 +125,7 @@ def clearAllCollections():
 	client = pymongo.MongoClient(MONGODB_URI)
 	db = client[DEFAULT_DB]
 
-	db.busid_map.remove({})
+	#db.busid_map.remove({})
 	db.bus_stops.remove({})
 	db.bus_status.remove({})
 	db.bus_reservations.remove({})
@@ -165,7 +165,7 @@ def clearAllCollections():
 '''
 if __name__ == '__main__':
 	clearAllCollections()
-	addBusMap()
+	#addBusMap()
 	addBusStops()	
 	addStatus()
 	addImageDB()

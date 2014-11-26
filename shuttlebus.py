@@ -40,11 +40,12 @@ def ForgetMe():
 
 @app.route('/night', methods=['GET'])
 def IndexNight():	
-	return Index(night = True)
+	#Nav bar background-color: #727581;
+	return Index(night = True, navcolor = {"background-color":"background-color: #727581;"})
 
 
 @app.route('/', methods=['GET'])
-def Index(night = False):	
+def Index(night = False, navcolor = {"background-color": ""}):	
 	print session
 	userip = request.remote_addr
 	buses_geo = QueryDAO.GetBusesGeo()	
@@ -83,7 +84,8 @@ def Index(night = False):
 	schedule['UFT'] = {'AM': UFT_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UFT_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
 	return render_template('shuttlebus.html', buses_geo = buses_geo, buses_geo_len = buses_geo_len, stops_geo = stops_geo, 
 							map_style_aray = map_style_aray, seats_by_bus=seats_by_bus, 
-							tooltips = tooltips, schedule = schedule)
+							tooltips = tooltips, schedule = schedule, navcolor = navcolor)
+
 
 @app.route('/SavePhoneNumber', methods=['POST'])
 def SavePhoneNumber():
@@ -110,8 +112,7 @@ def SavePhoneNumber():
 
 		if len(bus_res_to_update) != 0:
 			QueryDAO.UpdateBusSMSListeners(bus_res_to_update)
-	else:
-				
+	else:				
 		session["phone_number"] = new_number
 		#bus_res_to_update = getBusesSubscribedTo(session) #buses user is subscribed to and they have not arrived
 		#subscribedto_not_arrived = GetSubscribedToBusesNotArrivedYet()
@@ -125,12 +126,14 @@ def SavePhoneNumber():
 		result["snackbar_notification"] = result["snackbar_notification"].format(*[bus['bus_id'] for bus in bus_res_to_update])	
 
 	return dumps(result)
+
 	
 @app.route('/SeatsCounter', methods=['GET'])
 def GetSeatsCounter():
 	bus_reservations = QueryDAO.GetSeatsByBusID()
 
 	return dumps(bus_reservations)
+
 
 @app.route('/UserCount', methods=['POST'])
 def UserCount():	
@@ -192,6 +195,72 @@ def UserCount():
 	result['seats_num'] = str(bus_res['seats_counter'])
 	
 	return dumps(result)
+
+
+@app.route('/BusHB', methods=['POST'])
+def BusHB():
+	
+	exception_message = "EXCEPTION OCCURED"
+	print request.form.keys()
+	try:
+		if len(request.form) == 1:
+			
+			key_val_list = request.form.keys()[0].split(',')
+
+			busid,lon,lat = None, None, None
+			print key_val_list[0]
+			if key_val_list[0] == "mode:gsm":
+				busid,lon,lat = parse_bushb_gsm(key_val_list[1:])				
+			else:
+				busid,lon,lat = parse_bushb_gps(key_val_list[1:])									
+			
+			if None in [busid, lon, lat]:
+				raise Exception("One of POST keys is not found")
+			print busid, lon, lat
+
+			if lon == 0.0 or lat == 0.0:
+				raise Exception("Lon or Lat is zero. Keeping previous location")
+			else:
+				QueryDAO.BusHBLog(busid, [lon, lat])
+
+			bus = QueryDAO.GetBusByID(busid)
+
+			stop_is_changed = check_next_bus_stop(bus)
+			
+			if stop_is_changed:
+				QueryDAO.resetBusSeatsCounterAndStatus(busid)  
+			elif bus['status'] == 'inactive':
+				bus['status'] = 'active'
+				QueryDAO.updateBusById(bus)
+
+		else:
+			exception_message = "Number of arguments in POST list is not matching"
+			raise Exception(exception_message)
+		
+	except Exception as e:
+		print exception_message
+		print e
+		return "<div>{}.</div>".format(e)
+	
+	return "<div>True</div>"
+
+
+@app.route('/BusesGeo', methods=['GET'])
+def BusesGeo():
+	
+	buses_geo = QueryDAO.GetBusesGeo()
+
+	return dumps(buses_geo)
+
+
+@app.route('/BusRouteChangeHB', methods=['POST'])
+def BusRouteChangeHB():	
+
+	stop1,stop2 = request.form['route'].split()
+	busid = int(request.form['busid'])
+	QueryDAO.BusRegisterRoute(busid, [stop1, stop2])
+
+	return "<div>True</div>"
 
 
 @app.route('/BusImageHB', methods=['POST'])
@@ -284,81 +353,6 @@ def BusTestImage():
 	img = '<img alt="sample" src="data:image/png;charset=utf-8;base64,{0}">'.format(chunk)
 	
 	return img
-
-@app.route('/BusHB', methods=['POST'])
-def BusHB():
-	
-	exception_message = "EXCEPTION OCCURED"
-	print request.form.keys()
-	try:
-		if len(request.form) == 1:
-			
-			key_val_list = request.form.keys()[0].split(',')
-
-			busid,lon,lat = None, None, None
-			print key_val_list[0]
-			if key_val_list[0] == "mode:gsm":
-				busid,lon,lat = parse_bushb_gsm(key_val_list[1:])				
-			else:
-				busid,lon,lat = parse_bushb_gps(key_val_list[1:])									
-			
-			if None in [busid, lon, lat]:
-				raise Exception("One of POST key is not found")
-			print busid, lon, lat
-
-			if lon == 0.0 or lat == 0.0:
-				raise Exception("Lon or Lat is zero. Keeping previous location")
-			#else:
-			#	QueryDAO.BusHBLog(busid, [lon, lat])
-
-			bus = QueryDAO.GetBusByID(busid)
-
-			stop_is_changed = check_next_bus_stop(bus)
-			
-			if stop_is_changed:
-				QueryDAO.resetBusSeatsCounterAndStatus(busid)  
-			elif bus['status'] == 'inactive':
-				bus['status'] = 'active'
-				QueryDAO.updateBusById(bus)
-
-		else:
-			exception_message = "Number of arguments in POST list is not matching"
-			raise Exception(exception_message)
-		
-	except Exception as e:
-		print exception_message
-		print e
-		return "<div>{}.</div>".format(e)
-	
-	return "<div>True</div>"
-
-
-@app.route('/BusesGeo', methods=['GET'])
-def BusesGeo():
-	
-	buses_geo = QueryDAO.GetBusesGeo()
-
-	return dumps(buses_geo)
-
-'''
-@app.route('/StopsGeo', methods=['GET'])
-def StopsGeo():
-	
-	campuses_geo = QueryDAO.GetStopsGeo()
-		
-	return dumps(campuses_geo)
-'''
-
-@app.route('/BusRouteChangeHB', methods=['POST'])
-def BusRouteChangeHB():	
-
-	stop1,stop2 = request.form['route'].split()
-	busid = int(request.form['busid'])
-	QueryDAO.BusRegisterRoute(busid, [stop1, stop2])
-
-	return "<div>True</div>"
-
-
 
 '''
 @app.route('/logout')
