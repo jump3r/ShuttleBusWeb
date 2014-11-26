@@ -41,7 +41,7 @@ function getInfoWindowContent(snapshot,bus){
 function addBusMarker(bus, snapshot, title, map){
     
     var bounce = 0;
-    if (bus['status'] == 'active'){
+    if (bus['status'] != 'Inactive'){
         bounce = google.maps.Animation.BOUNCE;
     }
     

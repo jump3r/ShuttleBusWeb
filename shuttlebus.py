@@ -8,7 +8,7 @@ import pymongo
 from bson.json_util import dumps
 from queryDAO import QueryDAO
 
-from bus_utils import check_next_bus_stop
+from bus_utils import check_next_bus_stop, check_if_on_campus
 from bus_utils import check_last_hb_within_min_time
 from bus_utils import TOOLTIP_FOR_QUESTION_MARK, TOOLTIP_FOR_BUTTON
 from bus_utils import parse_bushb_gsm, parse_bushb_gps
@@ -226,11 +226,22 @@ def BusHB():
 			bus = QueryDAO.GetBusByID(busid)
 
 			stop_is_changed = check_next_bus_stop(bus)
-			
+			is_within_campus = check_if_on_campus(bus)
 			if stop_is_changed:
 				QueryDAO.resetBusSeatsCounterAndStatus(busid)  
-			elif bus['status'] == 'inactive':
-				bus['status'] = 'active'
+				bus['status'] = 'On campus'
+				QueryDAO.updateBusById(bus)
+
+			elif bus['status'] == 'Inactive' and is_within_campus:
+				bus['status'] = 'On campus'
+				QueryDAO.updateBusById(bus)
+
+			elif bus['status'] == 'Inactive' and not is_within_campus:
+				bus['status'] = 'Omw'
+				QueryDAO.updateBusById(bus)
+
+			elif bus['status'] == 'On campus' and not is_within_campus:
+				bus['status'] = 'Omw'
 				QueryDAO.updateBusById(bus)
 
 		else:

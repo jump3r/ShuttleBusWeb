@@ -36,8 +36,7 @@ def changeNextStopIndex(stop_index):
 
 def check_next_bus_stop(bus):
     
-    #bus = QueryDAO.GetBusesStatus()[0]
-    print bus['bus_id']
+        
     curr_loc = bus['lonlat']
     ns_name, ns_loc = bus['stops_list'][bus['next_stop_index']]
 
@@ -48,6 +47,20 @@ def check_next_bus_stop(bus):
         return True
 
     return False  
+
+def check_if_on_campus(bus):
+
+    #Within Destination Campus
+    curr_loc = bus['lonlat']
+    ns_name, ns_loc = bus['stops_list'][bus['next_stop_index']]
+    if haversine(curr_loc, ns_loc) <= IS_BUS_CLOSE_ENOUGH:
+        return True
+    #Within Origin Campus
+    ns_name, ns_loc = bus['stops_list'][changeNextStopIndex(bus['next_stop_index'])]
+    if haversine(curr_loc, ns_loc) <= IS_BUS_CLOSE_ENOUGH:
+        return True
+
+    return False
 
 def check_last_hb_within_min_time(buses_geo):
 
