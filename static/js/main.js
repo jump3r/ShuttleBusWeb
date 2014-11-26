@@ -220,6 +220,7 @@ function initialize()
     //addStopMarker([43.572523, -79.583995],"qwer",map)
     //bus_maker_map[1].setPosition(new google.maps.LatLng( 43.784712,-79.185948 ))
     
+    //Fetch bus position and redraw it on the map
     setInterval(function(){        
 
         var request = $.ajax({
@@ -259,6 +260,7 @@ function initialize()
         });       
     }, 5000);
     
+    //Fetch and update bus seats 
     setInterval(function(){
         var requestSeatsCounter = $.ajax({
                     url: 'SeatsCounter',
