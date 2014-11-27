@@ -237,11 +237,11 @@ def BusHB():
 				QueryDAO.updateBusById(bus)
 
 			elif bus['status'] == 'Inactive' and not is_within_campus:
-				bus['status'] = 'Omw'
+				bus['status'] = 'On Route'
 				QueryDAO.updateBusById(bus)
 
 			elif bus['status'] == 'On campus' and not is_within_campus:
-				bus['status'] = 'Omw'
+				bus['status'] = 'On Route'
 				QueryDAO.updateBusById(bus)
 
 		else:
