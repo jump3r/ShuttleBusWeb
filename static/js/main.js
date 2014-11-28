@@ -8,7 +8,9 @@ var directionsDisplay = null;// = new google.maps.DirectionsRenderer();
 
 $('[data-toggle="tooltip"]').tooltip();
 
-function addStopMarker(latlng, title, map){
+function addStopMarker(stop, title, map){
+    var latlng = stop['lonlat'];
+    var stopName = stop['name'];
     var marker = new google.maps.Marker(
                         {
                             position: new google.maps.LatLng(latlng[0], latlng[1]),
@@ -20,17 +22,15 @@ function addStopMarker(latlng, title, map){
                             //icon:'library-icon-white.png'
                         }
                 );
-
-    var infowindow = new google.maps.InfoWindow({
-        content: "",                      
-      });
-    /*
-    //DRAW CAMPUS IMAGE
+    
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map,marker);
-        //draw direction
-    });
-    */
+
+        var contentString = "<img src='/" + stopName + ".jpg' alt='None'>";
+        marker.infoWindow = new google.maps.InfoWindow({
+                            content: contentString,                             
+                            });        
+        marker.infoWindow.open(map,marker);
+    });  
 }
 
 function getInfoWindowContent(snapshot,bus){
@@ -68,8 +68,7 @@ function addBusMarker(bus, snapshot, title, map){
         var contentString = getInfoWindowContent(snapshot, bus);
         marker.infoWindow = new google.maps.InfoWindow({
                             content: contentString,                             
-                            });
-        
+                            });        
         marker.infoWindow.open(map,marker);
     });                    
 }
@@ -97,8 +96,7 @@ function preFetchDistance(bus){
             $('#'+'duration'+bus['bus_id']).html(duration);
 
             $('#'+'distance_menu'+bus['bus_id']).html('Distance: '+distance);
-            $('#'+'duration_menu'+bus['bus_id']).html('Arrival Time: '+duration);
-            
+            $('#'+'duration_menu'+bus['bus_id']).html('Arrival Time: '+duration);            
         }
     });
 }
@@ -151,12 +149,10 @@ function addTraffic(map){
     trafficLayer.setMap(map);               
 }
 
-
 function triggerMarker(bus_id){
     new google.maps.event.trigger( bus_maker_map[bus_id], 'click' );
     
-    document.location.hash="google_map";    
-    
+    document.location.hash="google_map";        
 }
 
 function unCollapseMenu(){
@@ -178,7 +174,7 @@ function initStops(map){
 
       for(stop_index in stops_json){
         stop = stops_json[stop_index];
-        addStopMarker( stop['lonlat'], stop['name'], map );                 
+        addStopMarker( stop, stop['name'], map );                 
       }
 }
 
