@@ -61,7 +61,7 @@ function addBusMarker(bus, snapshot, title, map){
     
     google.maps.event.addListener(marker, 'click', function() {
 
-        if (bus['status'] == 'active'){
+        if (bus['status'] != 'Inactive'){
             drawRoute(bus['lonlat'] , bus['stops_list'][bus['next_stop_index']][1])
         }
 
@@ -111,6 +111,7 @@ function drawRoute(start , end){
       };
     
     directionsService.route(request, function(result, status) {
+
         if (status == google.maps.DirectionsStatus.OK) {
             
             var distance = result.routes[0].legs[0].distance;

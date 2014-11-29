@@ -63,15 +63,19 @@ def Index(night = False, navcolor = {"background-color": ""}):
 	#MAP STYLE
 	local_time = time.localtime().tm_hour	
 	if local_time > 18 or local_time < 5 or night:
-		map_style_aray = map_styles.greyStyleArray
+		map_style_array = map_styles.greyStyleArray
+		navcolor = {"background-color":"background-color: #727581;"}		
 	elif local_time >= 5 or local_time <= 18:
-		map_style_aray = map_styles.dayStyleArray
+		map_style_array = map_styles.dayStyleArray
+
 	#Server is not on east coast
 	if time.tzname != ('EST', 'EDT'):
-		map_style_aray = map_styles.dayStyleArray
+		map_style_array = map_styles.dayStyleArray
+		
 	#Overwrite time
-	if night:
-		map_style_aray = map_styles.greyStyleArray
+	if night:		
+		map_style_array = map_styles.greyStyleArray
+		navcolor = {"background-color":"background-color: #727581;"}
 
 	#INFO FOR INFO BOXES
 	tooltips = {}
@@ -83,7 +87,7 @@ def Index(night = False, navcolor = {"background-color": ""}):
 	schedule['UTM'] = {'AM': UTM_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UTM_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
 	schedule['UFT'] = {'AM': UFT_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UFT_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
 	return render_template('shuttlebus.html', buses_geo = buses_geo, buses_geo_len = buses_geo_len, stops_geo = stops_geo, 
-							map_style_aray = map_style_aray, seats_by_bus=seats_by_bus, 
+							map_style_array = map_style_array, seats_by_bus=seats_by_bus, 
 							tooltips = tooltips, schedule = schedule, navcolor = navcolor)
 
 
