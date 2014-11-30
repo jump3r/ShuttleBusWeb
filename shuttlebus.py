@@ -38,6 +38,31 @@ def ForgetMe():
 
 	return redirect(url_for('Index'))
 
+@app.route('/presentation', methods=['GET'])
+def DemoPresentation():	
+	youtube_link = QueryDAO.getYoutubeVideo()
+
+	return render_template('presentation.html', youtube_link = youtube_link )
+
+@app.route('/controlpanel', methods=['GET'])
+def DemoControlPanel():		
+
+	return render_template('controlpanel.html')
+
+@app.route('/DemoAction', methods=['POST'])
+def DemoAction():		
+	action = request.form['action'].strip()
+	if action == "START":
+		QueryDAO.updateDBrefreshRate(0.5)
+		from test_utils import simulated_demo
+		simulated_demo()				
+		
+	elif action == "STOP":
+		QueryDAO.updateDBrefreshRate(-1.0)		
+		
+	return "<div>True</div>"
+
+
 @app.route('/night', methods=['GET'])
 def IndexNight():	
 	#Nav bar background-color: #727581;

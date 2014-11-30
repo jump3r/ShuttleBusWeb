@@ -4,7 +4,7 @@ import pymongo
 import requests
 import os
 
-MONGODB_URI = 'mongodb://shuttlebus:ST.Gshuttle@ds048537.mongolab.com:48537/mongo_db1' 
+MONGODB_URI = 'mongodb://uftshuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
 if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
 	MONGODB_URI = 'mongodb://localhost:27017'
 
@@ -15,7 +15,7 @@ DEFAULT_DB = 'mongo_db1'
 def addBusRefreshRateDEMO():
 	SEED_DATA = [
 		{
-			'js_update': 2000, 	#2 sec
+			'js_update': 1000, 	#2 sec
 			'db_update': 0.5 	#0.5 sec
 		}
 	]
@@ -24,6 +24,9 @@ def addBusRefreshRateDEMO():
 	
 	col = db['bus_update_params']
 	col.insert(SEED_DATA)
+
+	col = db['video_link']
+	col.insert([{'youtube_embedded_link': '//www.youtube.com/embed/jAlDMYyWPis'}])
 
 	client.close()
 
@@ -117,6 +120,7 @@ def clearAllCollections():
 	db = client[DEFAULT_DB]
 
 	#db.busid_map.remove({})
+	db.bus_update_params.remove({})
 	db.bus_stops.remove({})
 	db.bus_status.remove({})
 	db.bus_reservations.remove({})
@@ -155,9 +159,10 @@ def clearAllCollections():
     
 '''
 if __name__ == '__main__':
-	clearAllCollections()
-	addBusRefreshRateDEMO()
+	clearAllCollections()	
 	#addBusMap()
+
+	addBusRefreshRateDEMO()
 	addBusStops()	
 	addStatus()
 	addImageDB()

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">    
+    <head>
+    	<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://fezvrasta.github.io/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
+
+        <link href="http://fezvrasta.github.io/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
+        <link href="http://fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">
+                        
+        <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="http://fezvrasta.github.io/snackbarjs/dist/snackbar.min.js"></script>        
+
+        <script>
+        	function StartDemo(){
+	        	var request = $.ajax({
+	                          url: 'DemoAction',
+	                          type: 'POST',	
+	                          data: {'action': 'START'},                          
+	                          dataType: 'html'
+	                        });
+	    		request.done(function(msg){
+	    			//alert( msg );
+	    		});
+
+    			request.fail(function(jqXHR, textStatus ) {
+			        alert( "Request failed: " + textStatus );			        
+			    });
+    		}
+    		function StopDemo(){
+	        	var request = $.ajax({
+	                          url: 'DemoAction',
+	                          type: 'POST',
+	                          data: {'action': 'STOP'},	                          
+	                          dataType: 'html'
+	                        });
+	    		request.done(function(msg){
+	    			//alert( msg );
+	    		});
+
+    			request.fail(function(jqXHR, textStatus ) {
+			        alert( "Request failed: " + textStatus );			        
+			    });
+    		}
+        </script>
+    </head>
+
+    <body>
+    	<div id="wrap">
+
+        <!-- NAVABAR-->
+        <div class="navbar navbar-inverse navbar-fixed-top" >
+          <div class="container">
+            <div class="navbar-header"> 
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  
+                </button>
+                <a class="navbar-brand" href="">UFT Home: Demo Control Panel</a>
+                
+            </div>
+            <div id="collapsable_menu_navbar" class="navbar-collapse collapse navbar-responsive-collapse">  
+                <ul class="nav navbar-nav"></ul>
+                <ul class="nav navbar-nav visible-xs"></ul>                
+            </div>                           
+          </div>
+        </div>
+
+        <div class="container">
+            
+            <div class="col-md-12">
+                <hr class="soften" style='margin-bottom: 0px;'>
+
+                <div class="container well bs-component" style="padding-top: 15px;">  
+                	<div class="row">
+                    	<button class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="" data-original-title="START" type="button" onclick="StartDemo()">START DEMO</button>                	
+                	</div>
+
+                	<div class="row">                	
+                    	<button class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="" data-original-title="STOP" type="button" onclick="StopDemo()">STOP DEMO</button>
+                	</div>
+                </div>
+        	</div>
+
+    	</div>
+    </body>
+</html>

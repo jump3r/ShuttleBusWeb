@@ -6,12 +6,37 @@ import os
 import base64
 import twilio_utils
 
-MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
+MONGODB_URI = 'mongodb://uftshuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
 if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
 	MONGODB_URI = 'mongodb://localhost:27017'
 DEFAULT_DB = 'mongo_db1'
 
 class QueryDAO:
+	#DEMO METHODS
+	@staticmethod
+	def updateDBrefreshRate(refresh_val):
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+
+		col = db['bus_update_params']
+		bus_obj = col.find().next()
+
+		bus_obj["db_update"] = refresh_val
+		bus_obj["js_update"] = 2000
+		col.update({'_id':bus_obj['_id']},bus_obj)
+
+		client.close()
+	
+	@staticmethod
+	def getYoutubeVideo():
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+
+		col = db['video_link']
+		video = col.find().next()
+
+		return video['youtube_embedded_link']
+
 	@staticmethod
 	def getJSBusUpdateRate_ForDemo():
 		client = pymongo.MongoClient(MONGODB_URI)
@@ -35,6 +60,8 @@ class QueryDAO:
 		client.close()
 
 		return float(bus_obj['db_update'])
+	#END DEMO METHODS
+
 
 	@staticmethod
 	def testGridFS(form_keys):
