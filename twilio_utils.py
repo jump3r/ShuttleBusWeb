@@ -6,9 +6,10 @@ from twilio.rest import TwilioRestClient
 class Twilio:
 
 	def __init__(self):
-		self.sid = "AC362db56d14ff05dcb567fedb7d5967f3"
-		self.token = "e611d70513cd12ffaf92c28cc9fa1e8f"
-		self.client = TwilioRestClient(self.sid, self.token)		
+		self._sid = "AC54401f287c346b42136690f09b365661"#"AC362db56d14ff05dcb567fedb7d5967f3"
+		self._token = "a23ab47138f9bd26808b43e4d12bde69"#"e611d70513cd12ffaf92c28cc9fa1e8f"
+		self._from = "+15878003353"#"+16475593044"
+		self.client = TwilioRestClient(self._sid, self._token)		
 
 	def notifyUsers(self, numbers, bus_id, message = "The bus #{} has arrived on campus."):
 		print numbers, bus_id, message
@@ -18,6 +19,6 @@ class Twilio:
 				number = "+1" + number
 			try:
 				print number
-				self.client.messages.create(body=message, to=number, from_="+16475593044")
+				self.client.messages.create(body=message, to=number, from_=self._from)
 			except twilio.TwilioRestException as e:
 				print e

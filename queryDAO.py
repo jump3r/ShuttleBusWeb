@@ -268,14 +268,12 @@ class QueryDAO:
 			res['trips_counter'] = 0
 		
 		res["status"] = "active"
-
-		print "TWILIO"
+		
 		print res['sms_listeners']
 		t = twilio_utils.Twilio()
-		t.notifyUsers(res['sms_listeners'], res['bus_id'])
-		print "TWILIO END"
+		t.notifyUsers(res['sms_listeners'], res['bus_id'])		
+		
 		res['sms_listeners'] = []
-
 		col.update({'_id':res['_id']}, res )
 
 		client.close()

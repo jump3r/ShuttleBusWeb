@@ -85,11 +85,11 @@ def simulated_demo():
 		num -= 1
 
 #simulated_demo()
-#coord = [43.548043,-79.66095] #UTM
+coord = [43.548043,-79.66095] #UTM
 #coord = [43.662892,-79.395656] #ST.
 #coord = [43.6170021,-79.506403] #middle
-#coord.reverse()
-#BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
+coord.reverse()
+BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
 #BusImageHB()
 
 
