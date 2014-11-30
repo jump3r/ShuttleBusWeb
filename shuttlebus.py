@@ -25,7 +25,7 @@ import time
 app = Flask(__name__, static_url_path = "", static_folder = "static")
 
 
-@app.route('/ForgetMe', methods=['GET'])
+@app.route('/forgetme', methods=['GET'])
 def ForgetMe():
 	
 	keys_to_del = []

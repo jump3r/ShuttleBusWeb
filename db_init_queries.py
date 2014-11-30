@@ -4,7 +4,7 @@ import pymongo
 import requests
 import os
 
-MONGODB_URI = 'mongodb://shuttlebus:uftshuttle@ds048537.mongolab.com:48537/mongo_db1' 
+MONGODB_URI = 'mongodb://shuttlebus:ST.Gshuttle@ds048537.mongolab.com:48537/mongo_db1' 
 if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
 	MONGODB_URI = 'mongodb://localhost:27017'
 
@@ -31,7 +31,7 @@ def addBusRefreshRateDEMO():
 def addBusStops():
 	SEED_DATA = [
 	    {
-	        'name': 'UFT',
+	        'name': 'ST.G',
 	        'lonlat': [43.662892,-79.395656]
 	    },
 	    {
@@ -67,7 +67,7 @@ def addStatus():
     {
         'bus_id': 1,	 
         'last_hb_time': datetime.datetime.utcnow(),
-        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+        'stops_list': [['UTM',[43.548043,-79.66095]],['ST.G',[43.662892,-79.395656]]],
         'next_stop_index': 0, #1, #0,
         'lonlat': [43.6170021,-79.506403],#middle
         'status': 'On Route',        
@@ -75,7 +75,7 @@ def addStatus():
     {
         'bus_id': 3,	 
         'last_hb_time': datetime.datetime.utcnow(),
-        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+        'stops_list': [['UTM',[43.548043,-79.66095]],['ST.G',[43.662892,-79.395656]]],
         'next_stop_index': 0,
         'lonlat': [43.662048, -79.396069],
         'status': 'Inactive',        
@@ -83,7 +83,7 @@ def addStatus():
     {
 	  	'bus_id': 2,
 	  	'last_hb_time': datetime.datetime.utcnow(),
-	  	'stops_list': [['SHER',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+	  	'stops_list': [['SHER',[43.548043,-79.66095]],['ST.G',[43.662892,-79.395656]]],
 	  	'next_stop_index': 1,
 	    'lonlat': [43.487488, -79.687614],
 	    'status': 'Inactive'
@@ -128,7 +128,7 @@ def clearAllCollections():
 {
   	'bus_id': 2,
   	'last_hb_time': datetime.datetime.utcnow(),
-  	'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+  	'stops_list': [['UTM',[43.548043,-79.66095]],['ST.G',[43.662892,-79.395656]]],
   	'next_stop_index': 1,
     'lonlat': [43.548043,-79.66095],
     'status': ''
@@ -136,7 +136,7 @@ def clearAllCollections():
 {
     'bus_id': 3,
     'last_hb_time': datetime.datetime.utcnow(),
-    'stops_list': [['UFT',[43.662892,-79.395656]], ['UFTS', [43.784712,-79.185998]]],
+    'stops_list': [['ST.G',[43.662892,-79.395656]], ['ST.GS', [43.784712,-79.185998]]],
     'next_stop_index': 0,
     'lonlat': [43.784712,-79.185998],
     'status': ''
@@ -147,7 +147,7 @@ def clearAllCollections():
     {
         'bus_id': 2,	 
         'last_hb_time': datetime.datetime.utcnow(),
-        'stops_list': [['UTM',[43.548043,-79.66095]],['UFT',[43.662892,-79.395656]]],
+        'stops_list': [['UTM',[43.548043,-79.66095]],['ST.G',[43.662892,-79.395656]]],
         'next_stop_index': 1,
         'lonlat': [43.548043,-79.66095], #43.6335225,-79.5410157
         'status': 'active',        

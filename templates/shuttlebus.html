@@ -73,6 +73,7 @@
                                         <span class="label label-warning" id="duration_menu{{ bus['bus_id'] }}"></span>
                                         <span class="label label-warning">Seats Reserved: 
                                             <span id="seats_xs_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}</span>
+                                            <span>/45</span>
                                         </span>
                                         
                                     
@@ -159,7 +160,7 @@
                                                             </h5>
                                                             <h5><span id="distance{{ bus['bus_id'] }}">Unknown</span></h5>
                                                             <h5><span id="duration{{ bus['bus_id'] }}">Unknown</span></h5>
-                                                            <h5><span id="seats_lg_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}</span>
+                                                            <h5><span id="seats_lg_bus{{ bus['bus_id'] }}">{{ seats_by_bus[bus['bus_id']] }}<span>/45</span></span>
                                                                 <button class="btn btn-warning" style="margin-top: 0px; 
                                                                                                         margin-left: 0px;
                                                                                                         margin-bottom: 0px;
@@ -183,7 +184,7 @@
                                                 {% else %} 
                                                     onclick="addUserCount({{ bus['bus_id'] }});"
                                                 {% endif %}         
-                                                    >Add Myself To Next Bus
+                                                    >Add Me To Next Bus
                                                     </button>
                                                 </div>
                                             </div>
