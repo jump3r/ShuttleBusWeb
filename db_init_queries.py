@@ -9,30 +9,21 @@ if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
 	MONGODB_URI = 'mongodb://localhost:27017'
 
 #MONGODB_URI = 'mongodb://localhost:27017'
+
 DEFAULT_DB = 'mongo_db1'
 
-
-def addBusMap():
+def addBusRefreshRateDEMO():
 	SEED_DATA = [
-	    {
-	        'bus_id': 1,
-	        'bus_map': 11        
-	    },
-	    {
-	        'bus_id': 2,
-	        'bus_map': 22
-	    },
-	    {
-	        'bus_id': 3,
-	        'bus_map': 33
-	    }
+		{
+			'js_update': 2000, 	#2 sec
+			'db_update': 0.5 	#0.5 sec
+		}
 	]
-
 	client = pymongo.MongoClient(MONGODB_URI)
 	db = client[DEFAULT_DB]
 	
-	songs = db['busid_map']
-	songs.insert(SEED_DATA)
+	col = db['bus_update_params']
+	col.insert(SEED_DATA)
 
 	client.close()
 
@@ -56,8 +47,8 @@ def addBusStops():
 	client = pymongo.MongoClient(MONGODB_URI)
 	db = client[DEFAULT_DB]
 
-	songs = db['bus_stops']
-	songs.insert(SEED_DATA)
+	col = db['bus_stops']
+	col.insert(SEED_DATA)
 
 	client.close()	
 
@@ -66,8 +57,8 @@ def addImageDB():
 	client = pymongo.MongoClient(MONGODB_URI)
 	db = client[DEFAULT_DB]
 
-	songs = db['bus_images']
-	songs.insert([{'time': datetime.datetime.utcnow(), 'image': 'None'}])
+	col = db['bus_images']
+	col.insert([{'time': datetime.datetime.utcnow(), 'image': 'None'}])
 
 	client.close()
 
@@ -106,7 +97,7 @@ def addStatus():
 	bus_status = db['bus_status']
 	bus_status.insert(SEED_DATA)
 
-
+	
 	bus_reservations = db['bus_reservations']
 	all_reservations = []
 	for bus in SEED_DATA:
@@ -118,7 +109,7 @@ def addStatus():
 		}
 		all_reservations.append(d)
 	bus_reservations.insert(all_reservations)
-
+	
 	client.close()	
 
 def clearAllCollections():
@@ -165,6 +156,7 @@ def clearAllCollections():
 '''
 if __name__ == '__main__':
 	clearAllCollections()
+	addBusRefreshRateDEMO()
 	#addBusMap()
 	addBusStops()	
 	addStatus()

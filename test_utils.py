@@ -55,26 +55,41 @@ def BusImageHB():
 	#print r.text
 	#r = requests.post(website, headers=headers, data=chunk2)
 	#print r.text
+
+
+def test_getXXBusUpdateRate_ForDemo():
+	from queryDAO import QueryDAO
+
+	db_update = QueryDAO.getDBBusUpdateRate_ForDemo()
+	js_update = QueryDAO.getJSBusUpdateRate_ForDemo()
+
+	return db_update,js_update
+
 	
 def simulated_demo():
+	import queryDAO
 	from bus_coord_route_demo import UTM_STGEORGE
 	import time
-	num = 1
+	TIME_TO_SLEEP = queryDAO.getDBBusUpdateRate_ForDemo()
+	num = 2
 	while num != 0:
 		for coord in UTM_STGEORGE:			
 			coord = coord[:]
 			coord.reverse()
-			BusHB(coord , busid=1, method="GSM")
-			time.sleep(0.5)
+			BusHB(coord , busid=1, method="GSM")			
+
+			time.sleep(TIME_TO_SLEEP)
+			TIME_TO_SLEEP = queryDAO.getDBBusUpdateRate_ForDemo()
+
 		UTM_STGEORGE.reverse()
 		num -= 1
 
 #simulated_demo()
-coord = [43.548043,-79.66095] #UTM
+#coord = [43.548043,-79.66095] #UTM
 #coord = [43.662892,-79.395656] #ST.
 #coord = [43.6170021,-79.506403] #middle
-coord.reverse()
-BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
+#coord.reverse()
+#BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
 #BusImageHB()
 
 

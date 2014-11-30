@@ -13,6 +13,30 @@ DEFAULT_DB = 'mongo_db1'
 
 class QueryDAO:
 	@staticmethod
+	def getJSBusUpdateRate_ForDemo():
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+
+		col = db['bus_update_params']
+		bus_obj = col.find().next()
+
+		client.close()
+
+		return int(bus_obj['js_update'])
+
+	@staticmethod
+	def getDBBusUpdateRate_ForDemo():
+		client = pymongo.MongoClient(MONGODB_URI)
+		db = client[DEFAULT_DB]
+
+		col = db['bus_update_params']
+		bus_obj = col.find().next()
+
+		client.close()
+
+		return float(bus_obj['db_update'])
+
+	@staticmethod
 	def testGridFS(form_keys):
 		from gridfs import GridFS
 

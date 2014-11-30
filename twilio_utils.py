@@ -10,7 +10,7 @@ class Twilio:
 		self.token = "e611d70513cd12ffaf92c28cc9fa1e8f"
 		self.client = TwilioRestClient(self.sid, self.token)		
 
-	def notifyUsers(self, numbers, bus_id, message = "The bus #{} has arrived."):
+	def notifyUsers(self, numbers, bus_id, message = "The bus #{} has arrived on campus."):
 		print numbers, bus_id, message
 		message = message.format(str(bus_id))
 		for number in numbers:

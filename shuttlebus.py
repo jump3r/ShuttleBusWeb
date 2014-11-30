@@ -82,13 +82,16 @@ def Index(night = False, navcolor = {"background-color": ""}):
 	tooltips['?'] = TOOLTIP_FOR_QUESTION_MARK
 	tooltips['btn'] = TOOLTIP_FOR_BUTTON
 
+	#BUS REFRESH RATE
+	bus_update_rate = QueryDAO.getJSBusUpdateRate_ForDemo();
+
 	#SCHEDULE FROM
 	schedule = {}
 	schedule['UTM'] = {'AM': UTM_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UTM_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
 	schedule['UFT'] = {'AM': UFT_WEEKDAY_TIME.split('*')[0].replace(" am",","), 'PM': UFT_WEEKDAY_TIME.split('*')[1].replace(" pm",",")}
 	return render_template('shuttlebus.html', buses_geo = buses_geo, buses_geo_len = buses_geo_len, stops_geo = stops_geo, 
-							map_style_array = map_style_array, seats_by_bus=seats_by_bus, 
-							tooltips = tooltips, schedule = schedule, navcolor = navcolor)
+							map_style_array = map_style_array, seats_by_bus=seats_by_bus, tooltips = tooltips, 
+							schedule = schedule, navcolor = navcolor, bus_update_rate = bus_update_rate)
 
 
 @app.route('/SavePhoneNumber', methods=['POST'])

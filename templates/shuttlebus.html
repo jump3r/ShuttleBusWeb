@@ -240,16 +240,11 @@
              University of Toronto Shuttle Buses - The smartest way to get around.
         </div>
 
-        
-        
-        
-        
-        
-
         <script>
             var GLOB_BUSES = {{ buses_geo|tojson|safe }}
             var GLOB_STOPS = {{ stops_geo|tojson|safe }}
             var GLOB_MAP_STYLE = {{ map_style_array|tojson|safe }}
+            var BUS_UPDATE_RATE = {{ bus_update_rate|tojson|safe }}
         </script>
 
     </body>

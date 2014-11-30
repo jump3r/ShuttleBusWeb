@@ -226,7 +226,7 @@ function initialize()
         });
 
         request.done(function( msg ) {  
-
+            
             buses_json = JSON.parse(msg);
             
             for(bus_index in buses_json){
@@ -244,18 +244,16 @@ function initialize()
                     var onmap_pos_lat = String(bus_pos.B).substring(0,9);
 
                     if (onmap_pos_lon != lon || onmap_pos_lat != lat){
-                        //bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
-                        //preFetchDistance(bus);
-                        console.log("Changed from:"+onmap_pos_lon +" "+ onmap_pos_lat);
-                        console.log("Changed to  :"+lon +" "+ lat);
+                        bus_maker_map[bus_id].setPosition(new google.maps.LatLng( lon, lat ))
+                        preFetchDistance(bus);
+                        //console.log("Changed from:"+onmap_pos_lon +" "+ onmap_pos_lat);
+                        //console.log("Changed to  :"+lon +" "+ lat);
                     }
-                    else{
-                        console.log("Didnt change");                        
-                    }
+                    
                 }                
             }            
         });       
-    }, 5000);
+    }, BUS_UPDATE_RATE);
     
     //Fetch and update bus seats 
     setInterval(function(){
