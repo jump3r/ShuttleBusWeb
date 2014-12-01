@@ -12,6 +12,7 @@ if 'RUN_LOCAL' in os.environ and os.environ['RUN_LOCAL'] == 'yes':
 DEFAULT_DB = 'mongo_db1'
 
 class QueryDAO:
+
 	#DEMO METHODS
 	@staticmethod
 	def updateDBrefreshRate(refresh_val):
@@ -60,6 +61,7 @@ class QueryDAO:
 		client.close()
 
 		return float(bus_obj['db_update'])
+
 	#END DEMO METHODS
 
 

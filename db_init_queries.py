@@ -31,6 +31,23 @@ def addBusRefreshRateDEMO():
 	client.close()
 
 
+def addTwilioAccountParams():
+	SEED_DATA = [
+		{
+			'sid': "AC074c197fe069111df524fca591f78e5e",
+			'token': "2fca76bac0c4cf3c120d35491e72bc38",
+			'from': "+14378002210"
+		}
+	]
+	client = pymongo.MongoClient(MONGODB_URI)
+	db = client[DEFAULT_DB]
+	
+	col = db['twilio_params']
+	col.insert(SEED_DATA)
+
+	client.close()
+
+
 def addBusStops():
 	SEED_DATA = [
 	    {
@@ -120,6 +137,7 @@ def clearAllCollections():
 	db = client[DEFAULT_DB]
 
 	#db.busid_map.remove({})
+	db.twilio_params.remove({})
 	db.bus_update_params.remove({})
 	db.bus_stops.remove({})
 	db.bus_status.remove({})
@@ -162,6 +180,7 @@ if __name__ == '__main__':
 	clearAllCollections()	
 	#addBusMap()
 
+	addTwilioAccountParams()
 	addBusRefreshRateDEMO()
 	addBusStops()	
 	addStatus()

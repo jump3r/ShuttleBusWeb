@@ -35,7 +35,7 @@ def ForgetMe():
 
 	for k in keys_to_del:
 		session.pop(k)
-
+	print session
 	return redirect(url_for('Index'))
 
 @app.route('/presentation', methods=['GET'])
@@ -54,8 +54,8 @@ def DemoAction():
 	action = request.form['action'].strip()
 	if action == "START":
 		QueryDAO.updateDBrefreshRate(0.5)
-		from test_utils import simulated_demo
-		simulated_demo()				
+		#from test_utils import simulated_demo
+		#simulated_demo()				
 		
 	elif action == "STOP":
 		QueryDAO.updateDBrefreshRate(-1.0)		
@@ -86,6 +86,7 @@ def Index(night = False, navcolor = {"background-color": ""}):
 	seats_by_bus = QueryDAO.GetSeatsByBusID()
 	
 	#MAP STYLE
+	'''
 	local_time = time.localtime().tm_hour	
 	if local_time > 18 or local_time < 5 or night:
 		map_style_array = map_styles.greyStyleArray
@@ -96,8 +97,8 @@ def Index(night = False, navcolor = {"background-color": ""}):
 	#Server is not on east coast
 	if time.tzname != ('EST', 'EDT'):
 		map_style_array = map_styles.dayStyleArray
-		
-	#Overwrite time
+	'''
+	map_style_array = map_styles.dayStyleArray
 	if night:		
 		map_style_array = map_styles.greyStyleArray
 		navcolor = {"background-color":"background-color: #727581;"}
@@ -185,7 +186,9 @@ def UserCount():
 	busid = str(busid) 
 
 	if busid not in session: # busid needs to be a str
-		session[busid] = bus_res['trips_counter']
+		print "NOT IN SESSION"
+		session[busid] = str(bus_res['trips_counter'])
+		print session
 		bus_res['seats_counter'] +=1
 		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
 		#result = "<div id='seats_num'>"+str(bus_res['seats_counter'])+"</div>"
@@ -199,14 +202,14 @@ def UserCount():
 		
 		return dumps(result)
 	
-	user_trip_counter = session[busid]		
-	bus_trip_counter = bus_res['trips_counter']	
+	user_trip_counter = str( session[busid] )
+	bus_trip_counter = str(bus_res['trips_counter'])
 	
 	if user_trip_counter != bus_trip_counter:
 		
 		session[busid] = bus_trip_counter #Update to what trip user is registering to
 		bus_res['seats_counter'] +=1		
-		if to_sms_subscribe:
+		if to_sms_subscribe and "phone_number" in session:
 			bus_res['sms_listeners'].append(session["phone_number"])
 		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
 		

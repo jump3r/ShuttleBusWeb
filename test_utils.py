@@ -6,21 +6,6 @@ def UserBusIntetion():
 	print r.text
 
 
-
-def BusHB(lonlat, busid=1, method = "GPS"):
-	#payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]} 
-	if method == "GSM":		
-		payload = "mode:gsm,busid:{}, {},{},2014//11/23,20:04:50".format(busid,*lonlat)
-	else:		
-		payload = 'mode:gps,busid:{},lon:{},lat:{}'.format(busid,*lonlat)
-	print payload
-	headers = {'content-type': 'application/x-www-form-urlencoded'}
-	website = "http://localhost:5000/BusHB"
-	#website = "http://shuttlebus.herokuapp.com/BusHB"
-	r = requests.post(website,headers=headers, data=payload)
-	
-	print r.text
-
 def BusRouteChangeHB():
     payload = {'busid': 1, 'route': 'UTM UFT'}
     r = requests.post('http://localhost:5000/BusRouteChangeHB',data=payload)
@@ -65,6 +50,19 @@ def test_getXXBusUpdateRate_ForDemo():
 
 	return db_update,js_update
 
+def BusHB(lonlat, busid=1, method = "GPS"):
+	#payload = {'busid': busid, 'lon': lonlat[0], 'lat':lonlat[1]} 
+	if method == "GSM":		
+		payload = "mode:gsm,busid:{}, {},{},2014//11/23,20:04:50".format(busid,*lonlat)
+	else:		
+		payload = 'mode:gps,busid:{},lon:{},lat:{}'.format(busid,*lonlat)
+	print payload
+	headers = {'content-type': 'application/x-www-form-urlencoded'}
+	website = "http://localhost:5000/BusHB"
+	#website = "http://shuttlebus.herokuapp.com/BusHB"
+	r = requests.post(website,headers=headers, data=payload)
+	
+	print r.text
 	
 def simulated_demo(tripsnum = 2):
 	from queryDAO import QueryDAO
@@ -89,11 +87,11 @@ def simulated_demo(tripsnum = 2):
 		tripsnum -= 1
 
 #simulated_demo()
-#coord = [43.548043,-79.66095] #UTM
+coord = [43.548043,-79.66095] #UTM
 #coord = [43.662892,-79.395656] #ST.
 #coord = [43.6170021,-79.506403] #middle
-#coord.reverse()
-#BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
+coord.reverse()
+BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
 #BusImageHB()
 
 
