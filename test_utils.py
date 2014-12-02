@@ -58,8 +58,8 @@ def BusHB(lonlat, busid=1, method = "GPS"):
 		payload = 'mode:gps,busid:{},lon:{},lat:{}'.format(busid,*lonlat)
 	print payload
 	headers = {'content-type': 'application/x-www-form-urlencoded'}
-	website = "http://localhost:5000/BusHB"
-	#website = "http://shuttlebus.herokuapp.com/BusHB"
+	#website = "http://localhost:5000/BusHB"
+	website = "http://shuttlebus.herokuapp.com/BusHB"
 	r = requests.post(website,headers=headers, data=payload)
 	
 	print r.text
@@ -86,19 +86,11 @@ def simulated_demo(tripsnum = 2):
 		UTM_STGEORGE.reverse()
 		tripsnum -= 1
 
-#simulated_demo()
-coord = [43.548043,-79.66095] #UTM
+#simulated_demo(10)
+
 #coord = [43.662892,-79.395656] #ST.
 #coord = [43.6170021,-79.506403] #middle
-coord.reverse()
-BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
+#coord = [43.548043,-79.66095] #UTM
+#coord.reverse()
+#BusHB(coord , busid=1, method="GSM") #43.548043,-79.66095
 #BusImageHB()
-
-
-'''
-import datetime
-s = datetime.datetime.utcnow()
-e = datetime.datetime.utcnow()
-mins = str(e - s).split(':')[1]
-'''
-	

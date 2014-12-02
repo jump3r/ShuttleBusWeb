@@ -131,6 +131,7 @@ def SavePhoneNumber():
 	#Change all sms listeners to the new nubmer
 	#all_subscribed_buses = []
 	bus_res_to_update = []
+	print session
 	if "phone_number" in session:
 
 		old_number = session["phone_number"]
@@ -210,9 +211,11 @@ def UserCount():
 		session[busid] = bus_trip_counter #Update to what trip user is registering to
 		bus_res['seats_counter'] +=1		
 		if to_sms_subscribe and "phone_number" in session:
+			print "PHONE IN SESSION"
 			bus_res['sms_listeners'].append(session["phone_number"])
-		QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
-		
+			QueryDAO.addNextTripBusLoad(bus_res) #Update bus counter	
+		else:
+			print "PHONE NOT IN SESSION"
 
 	elif user_trip_counter == bus_trip_counter and to_sms_subscribe:
 		
