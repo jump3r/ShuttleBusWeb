@@ -64,7 +64,7 @@ class QueryDAO:
 
 	#END DEMO METHODS
 
-
+	#IMAGE DAO
 	@staticmethod
 	def testGridFS(form_keys):
 		from gridfs import GridFS
@@ -93,6 +93,7 @@ class QueryDAO:
 		collection.insert(image)
 
 		client.close()
+	#END IMAGE DAO
 
 	@staticmethod
 	def getMappedId(busid, db):
@@ -115,6 +116,7 @@ class QueryDAO:
 		
 		return bus_id
 
+	#BusDAO
 	@staticmethod
 	def GetBusByID(bus_id):
 		client = pymongo.MongoClient(MONGODB_URI)
@@ -215,6 +217,7 @@ class QueryDAO:
 
 		return all_buses
 
+	# updateBusDAO
 	@staticmethod
 	def UpdateBusStatus(bus):
 		client = pymongo.MongoClient(MONGODB_URI)
@@ -377,10 +380,3 @@ class QueryDAO:
 
 
 
-
-#print QueryDAO.GetAllBusReservations()
-#QueryDAO.addNextTripBusLoad(1)
-#QueryDAO.BusHBLog(1,33)
-
-#QueryDAO.GetBusesStatus()
-#QueryDAO.GetBusByID(1)
