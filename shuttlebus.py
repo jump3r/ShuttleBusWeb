@@ -44,24 +44,6 @@ def DemoPresentation():
 
 	return render_template('presentation.html', youtube_link = youtube_link )
 
-@app.route('/controlpanel', methods=['GET'])
-def DemoControlPanel():		
-
-	return render_template('controlpanel.html')
-
-@app.route('/DemoAction', methods=['POST'])
-def DemoAction():		
-	action = request.form['action'].strip()
-	if action == "START":
-		QueryDAO.updateDBrefreshRate(0.5)
-		#from test_utils import simulated_demo
-		#simulated_demo()				
-		
-	elif action == "STOP":
-		QueryDAO.updateDBrefreshRate(-1.0)		
-		
-	return "<div>True</div>"
-
 
 @app.route('/night', methods=['GET'])
 def IndexNight():	
@@ -85,19 +67,7 @@ def Index(night = False, navcolor = {"background-color": ""}):
 	#SEATS FOR EACH BUS
 	seats_by_bus = QueryDAO.GetSeatsByBusID()
 	
-	#MAP STYLE
-	'''
-	local_time = time.localtime().tm_hour	
-	if local_time > 18 or local_time < 5 or night:
-		map_style_array = map_styles.greyStyleArray
-		navcolor = {"background-color":"background-color: #727581;"}		
-	elif local_time >= 5 or local_time <= 18:
-		map_style_array = map_styles.dayStyleArray
-
-	#Server is not on east coast
-	if time.tzname != ('EST', 'EDT'):
-		map_style_array = map_styles.dayStyleArray
-	'''
+	#MAP STYLE	
 	map_style_array = map_styles.dayStyleArray
 	if night:		
 		map_style_array = map_styles.greyStyleArray
